@@ -1,0 +1,9 @@
+---
+import { Icon } from 'astro-icon/components'
+
+const icons = ['html5', 'css3', 'javascript', 'react', 'threejs']
+---
+
+<div class="h-20 flex gap-4">
+  {icons.map((icon) => <Icon name={icon} class="w-auto h-10" />)}
+</div>

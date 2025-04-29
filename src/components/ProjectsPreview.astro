@@ -1,0 +1,26 @@
+---
+import { Picture } from 'astro:assets'
+
+const { projects } = Astro.props
+---
+
+<div class="flex flex-row flex-wrap gap-10">
+  {
+    projects.map((project) => (
+      <a class="project-link" href={project.href}>
+        <Picture src={project.image.src} alt={project.image.alt} inferSize />{' '}
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .project-link {
+    display: inline-block;
+    width: calc(50% - (var(--spacing) * 5));
+  }
+
+  picture img {
+    width: 100%;
+  }
+</style>

@@ -1,11 +1,152 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import ScrollIcon from '@/components/ScrollIcon.astro'
+import Three from '../components/Three.astro'
+import Layout from '../layouts/Layout.astro'
+import TechStackIcons from '@/components/TechStackIcons.astro'
+import GridContent from '@/components/GridContent.astro'
+import Section from '@/components/Section.astro'
+import ContentHeader from '@/components/ContentHeader.astro'
+import ContentParagraph from '@/components/ContentParagraph.astro'
+import ProjectsPreview from '@/components/ProjectsPreview.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+  <Three />
+
+  <ScrollIcon />
+
+  <!-- <section class="introduction-dummy" data-model-id="0">
+    <GridContent className="h-screen" variant="full" />
+  </section>
+  <section class="introduction-dummy" data-model-id="1">
+    <GridContent className="h-screen" variant="full" />
+  </section>
+  <section class="introduction-dummy" data-model-id="2">
+    <GridContent className="h-screen" variant="full" />
+  </section>
+  <section class="introduction-dummy" data-model-id="3">
+    <GridContent className="h-screen" variant="full" />
+  </section>
+  <section class="introduction-dummy" data-model-id="4">
+    <GridContent className="h-screen" variant="full" />
+  </section>
+  <section class="introduction-dummy" data-model-id="5">
+    <GridContent className="h-screen" variant="full" />
+  </section>
+  <section class="introduction-dummy" data-model-id="6">
+    <GridContent className="h-screen" variant="full" />
+  </section>
+  <section class="introduction-dummy" data-model-id="7">
+    <GridContent className="h-screen" variant="full" />
+  </section> -->
+
+  <Section className="introduction-general" data-model-id="8">
+    <GridContent className="h-screen" variant="b">
+      <h1>About me</h1>
+      <p>
+        I'm passionate about technology—I love to create. Storytelling, emotion, mystery: these are the words that shape
+        my approach to creativity and art. I work with both code and sound, exploring the space where audio synthesis
+        and generative visuals meet. I'm deeply inspired by the natural world—its patterns, rhythms, and quiet
+        complexity often find their way into my work. Through immersive digital experiences and ambient compositions, I
+        aim to evoke feeling, spark curiosity, and invite a moment of reflection.
+      </p>
+    </GridContent>
+  </Section>
+
+  <Section className="introduction-development" data-model-id="9">
+    <GridContent className="h-screen" variant="a">
+      <h1>Web Development</h1>
+      <p>
+        I'm a skilled front-end developer with a strong focus on immersive, interactive web experiences. I specialize in
+        crafting visually engaging interfaces using modern tools and frameworks, often blending animation, WebGL, and
+        responsive design to create websites that feel alive and intuitive. I enjoy pushing the boundaries of what’s
+        possible in the browser—turning ideas into experiences that are both functional and emotionally resonant.
+      </p>
+      <!-- <h2>Tech Stack</h2> -->
+      <TechStackIcons />
+    </GridContent>
+    <GridContent variant="full">
+      <ProjectsPreview
+        projects={[
+          { href: '/', image: { src: 'https://picsum.photos/400?random=1', alt: 'picture alt' } },
+          { href: '/', image: { src: 'https://picsum.photos/400?random=2', alt: 'picture alt' } },
+          { href: '/', image: { src: 'https://picsum.photos/400?random=3', alt: 'picture alt' } },
+        ]}
+      />
+    </GridContent>
+  </Section>
+
+  <Section className="introduction-new-media" data-model-id="10">
+    <GridContent className="h-screen" variant="b">
+      <h1>New Media & Immersive Installations</h1>
+      <p>
+        I’m fascinated by the potential of immersive environments to blur the lines between the digital and physical.
+        Using tools like TouchDesigner, it's possible to create responsive systems that connect light, sound, and
+        movement—turning spaces into living, reactive experiences. These formats offer a unique way to tell stories,
+        provoke emotion, and engage the senses beyond the screen.
+      </p>
+    </GridContent>
+  </Section>
 </Layout>
+
+<!-- <div class="loading"></div> -->
+
+<script>
+  let isScrolling = false
+  let scrollTimeout: any = null
+
+  document.addEventListener('DOMContentLoaded', (e) => {
+    const sections = document.querySelectorAll('section')
+    // const introSections = Array.from(sections).filter((section) => parseInt(section.dataset.modelId || '-1') <= 7)
+    // const mainSections = Array.from(sections).filter((section) => parseInt(section.dataset.modelId || '-1') > 7)
+
+    const animateSection = (element: Element, modelId: any) => {
+      isScrolling = true
+
+      const id = modelId
+
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+
+      // create custom events
+      const swapModelEvent = new CustomEvent('swap-target', {
+        detail: {
+          targetId: parseInt(id),
+        },
+      })
+
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => {
+        isScrolling = false
+      }, 200)
+
+      // dispatch the events
+      console.log('dispatching id ::: ', id)
+      document.dispatchEvent(swapModelEvent)
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const element: HTMLElement = entry.target as HTMLElement
+        const modelId = parseInt(element.dataset.modelId || '-1')
+
+        if (modelId < 0) return
+
+        console.log(entry.intersectionRatio)
+
+        // if (entry.isIntersecting && !isScrolling) {
+        //   animateSection(entry.target, modelId)
+        // }
+      })
+    }) // fire when 1% of section is visible
+
+    sections.forEach((section) => {
+      observer.observe(section)
+    })
+  })
+</script>

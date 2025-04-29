@@ -1,0 +1,22 @@
+---
+const { variant = 'h1' } = Astro.props
+const Element = variant
+---
+
+<Element>
+  <slot />
+</Element>
+
+<style>
+  h1 {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: calc(var(--spacing) * 2);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: calc(var(--spacing));
+  }
+</style>

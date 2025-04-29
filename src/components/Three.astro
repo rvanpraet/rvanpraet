@@ -1,0 +1,38 @@
+<div class="experience">
+  <canvas class="experience__canvas"></canvas>
+
+  <script>
+    import Experience from '@/webgl/Experience'
+    import World from '@/webgl/World'
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const dummySection = document.querySelector('.introduction-dummy')
+
+      setTimeout(() => {
+        dummySection?.scrollIntoView({ behavior: 'instant', block: 'start' })
+      }, 100)
+
+      new Experience(document.querySelector('canvas.experience__canvas'), World)
+    })
+  </script>
+</div>
+
+<style>
+  .experience {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  canvas {
+    display: block;
+    /* position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh; */
+  }
+</style>
