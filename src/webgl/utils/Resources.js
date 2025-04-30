@@ -112,8 +112,6 @@ export default class Resources extends EventEmitter {
     const geometry = new TextGeometry(text, params)
     geometry.computeBoundingBox()
     geometry.computeBoundingSphere()
-    console.log('TextGeometry BoundingBox:', geometry.boundingBox)
-    console.log('TextGeometry BoundingSphere:', geometry.boundingSphere)
 
     const material = new THREE.MeshBasicMaterial({ color: 'white' })
     const mesh = new THREE.Mesh(geometry, material)

@@ -18,48 +18,50 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
 
   <ScrollIcon />
 
-  <!-- <section class="introduction-dummy" data-model-id="0">
+  <Section className="introduction-dummy" data-model-id="0">
     <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy" data-model-id="1">
-    <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy" data-model-id="2">
-    <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy" data-model-id="3">
-    <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy" data-model-id="4">
-    <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy" data-model-id="5">
-    <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy" data-model-id="6">
-    <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy" data-model-id="7">
-    <GridContent className="h-screen" variant="full" />
-  </section> -->
-
-  <Section className="introduction-general" data-model-id="8">
-    <GridContent className="h-screen" variant="b">
-      <h1>About me</h1>
-      <p>
-        I'm passionate about technology—I love to create. Storytelling, emotion, mystery: these are the words that shape
-        my approach to creativity and art. I work with both code and sound, exploring the space where audio synthesis
-        and generative visuals meet. I'm deeply inspired by the natural world—its patterns, rhythms, and quiet
-        complexity often find their way into my work. Through immersive digital experiences and ambient compositions, I
-        aim to evoke feeling, spark curiosity, and invite a moment of reflection.
-      </p>
-    </GridContent>
   </Section>
+  <Section className="introduction-dummy" data-model-id="1">
+    <GridContent className="h-screen" variant="full" />
+  </Section>
+  <Section className="introduction-dummy" data-model-id="2">
+    <GridContent className="h-screen" variant="full" />
+  </Section>
+  <Section className="introduction-dummy" data-model-id="3">
+    <GridContent className="h-screen" variant="full" />
+  </Section>
+  <Section className="introduction-dummy" data-model-id="4">
+    <GridContent className="h-screen" variant="full" />
+  </Section>
+  <Section className="introduction-dummy" data-model-id="5">
+    <GridContent className="h-screen" variant="full" />
+  </Section>
+  <Section className="introduction-dummy" data-model-id="6">
+    <GridContent className="h-screen" variant="full" />
+  </Section>
+  <Section className="introduction-dummy-last" data-model-id="7">
+    <GridContent className="h-screen" variant="full" />
+  </Section>
+
+  <div class="content-wrapper relative">
+    <Section className="introduction-general absolute inset-0 w-full h-full" data-model-id="8">
+      <GridContent className="h-screen" variant="b">
+        <h1 id="igh">About me</h1>
+        <p id="igt">
+          I'm passionate about technology—I love to create. Storytelling, emotion, mystery: these are the words that
+          shape my approach to creativity and art. I work with both code and sound, exploring the space where audio
+          synthesis and generative visuals meet. I'm deeply inspired by the natural world—its patterns, rhythms, and
+          quiet complexity often find their way into my work. Through immersive digital experiences and ambient
+          compositions, I aim to evoke feeling, spark curiosity, and invite a moment of reflection.
+        </p>
+      </GridContent>
+    </Section>
+  </div>
 
   <Section className="introduction-development" data-model-id="9">
     <GridContent className="h-screen" variant="a">
-      <h1>Web Development</h1>
-      <p>
+      <h1 id="idh">Web Development</h1>
+      <p id="idt">
         I'm a skilled front-end developer with a strong focus on immersive, interactive web experiences. I specialize in
         crafting visually engaging interfaces using modern tools and frameworks, often blending animation, WebGL, and
         responsive design to create websites that feel alive and intuitive. I enjoy pushing the boundaries of what’s
@@ -95,58 +97,225 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
 <!-- <div class="loading"></div> -->
 
 <script>
+  import gsap from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  import { lerp } from 'three/src/math/MathUtils.js'
+  // import { ScrollTrigger } from 'gsap/all'
   let isScrolling = false
   let scrollTimeout: any = null
 
-  document.addEventListener('DOMContentLoaded', (e) => {
-    const sections = document.querySelectorAll('section')
-    // const introSections = Array.from(sections).filter((section) => parseInt(section.dataset.modelId || '-1') <= 7)
-    // const mainSections = Array.from(sections).filter((section) => parseInt(section.dataset.modelId || '-1') > 7)
+  gsap.registerPlugin(ScrollTrigger)
 
-    const animateSection = (element: Element, modelId: any) => {
-      isScrolling = true
+  // Only start building scroll listeners when the THREE World is ready
+  document.addEventListener('world-ready', () => {
+    const introductionSections = document.querySelectorAll('.introduction-dummy')
 
-      const id = modelId
+    introductionSections.forEach((section: HTMLElement) => {
+      ScrollTrigger.create({
+        trigger: section,
+        markers: {
+          indent: 100,
+        },
+        snap: 0.5,
+        onEnter: () => {
+          console.log('onEnter introduction slide')
+          const id = section.dataset.modelId
+          // create custom events
+          const swapModelEvent = new CustomEvent('swap-target', {
+            detail: {
+              targetId: parseInt(id),
+            },
+          })
+          // dispatch the events
+          document.dispatchEvent(swapModelEvent)
+        },
+        onEnterBack: () => {
+          console.log('onEnter BACK introduction slide')
 
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      })
-
-      // create custom events
-      const swapModelEvent = new CustomEvent('swap-target', {
-        detail: {
-          targetId: parseInt(id),
+          // create custom events
+          const id = section.dataset.modelId
+          const swapModelEvent = new CustomEvent('swap-target', {
+            detail: {
+              targetId: parseInt(id),
+            },
+          })
+          // dispatch the events
+          document.dispatchEvent(swapModelEvent)
         },
       })
+    })
 
-      clearTimeout(scrollTimeout)
-      scrollTimeout = setTimeout(() => {
-        isScrolling = false
-      }, 200)
+    // Last introduction slide
+    const lastIntroEl: HTMLElement = document.querySelector('.introduction-dummy-last')
+    ScrollTrigger.create({
+      trigger: lastIntroEl,
+      // snap: 0.5,
+      onEnter: () => {
+        console.log('onEnter LAST introduction slide')
+        // create custom events
+        const id = lastIntroEl.dataset.modelId
+        const swapModelEvent = new CustomEvent('swap-target', {
+          detail: {
+            targetId: parseInt(id),
+          },
+        })
 
-      // dispatch the events
-      console.log('dispatching id ::: ', id)
-      document.dispatchEvent(swapModelEvent)
-    }
+        document.dispatchEvent(swapModelEvent)
+      },
+      onEnterBack: () => {
+        console.log('onEnterBack LAST introduction slide')
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const element: HTMLElement = entry.target as HTMLElement
-        const modelId = parseInt(element.dataset.modelId || '-1')
+        // Stop the scrolling
+        window.lenis.stop()
+        // Change background model
+        const id = lastIntroEl.dataset.modelId
+        const swapModelEvent = new CustomEvent('swap-target', {
+          detail: {
+            targetId: parseInt(id),
+          },
+        })
+        document.dispatchEvent(swapModelEvent)
 
-        if (modelId < 0) return
+        // Reverse the timeline
+        aboutTL.reverse()
 
-        console.log(entry.intersectionRatio)
+        // Scroll to the middle of the container after the timeline is complete
+        // Seems to work better with a timeout rather than onReverseComplete of gsap's timeline
+        setTimeout(() => {
+          window.lenis.scrollTo(lastIntroEl, {
+            offset: 0,
+            // lock: true,
+            // duration: 0.5,
+            immediate: true,
+            onComplete: (self) => {
+              self.options.lerp = 1
+              self.start()
+            },
+          })
+        }, 1500)
+      },
+    })
 
-        // if (entry.isIntersecting && !isScrolling) {
-        //   animateSection(entry.target, modelId)
-        // }
-      })
-    }) // fire when 1% of section is visible
+    // About slide logic
+    const aboutWrapper: HTMLElement = document.querySelector('.introduction-general')
 
-    sections.forEach((section) => {
-      observer.observe(section)
+    // Create timeline, paused by default
+    const aboutTL = gsap.timeline({
+      paused: true,
+      onStart: () => {
+        window.lenis.stop()
+      },
+      onComplete: () => {
+        window.lenis.start()
+      },
+      onReverseComplete: () => {
+        aboutTL.pause()
+        window.lenis.start()
+      },
+    })
+
+    // Define animation
+    aboutTL.fromTo(
+      '#igh',
+      { x: 1000 },
+      {
+        x: 0,
+        duration: 0.75,
+      }
+    )
+    aboutTL.fromTo(
+      '#igt',
+      { x: 1000 },
+      {
+        x: 0,
+        duration: 0.75,
+      },
+      '<0.4'
+    )
+
+    // Manual ScrollTrigger to detect entry, but NOT tied to tl
+    ScrollTrigger.create({
+      trigger: aboutWrapper,
+      onEnter: () => {
+        console.log('entered FIRST content')
+
+        // Dispatch custom event
+        const id = aboutWrapper.dataset.modelId
+        const swapModelEvent = new CustomEvent('swap-target', {
+          detail: {
+            targetId: parseInt(id),
+          },
+        })
+        document.dispatchEvent(swapModelEvent)
+
+        // Lenis scroll and timeline resume after scroll completes
+        window.lenis.scrollTo(aboutWrapper, {
+          offset: 0,
+          force: true,
+          lock: true,
+          duration: 0.5,
+          onStart: () => {
+            console.log('started scrollTo')
+          },
+          onComplete: (self) => {
+            console.log('completed scrollTo')
+            self.options.lerp = 0.1
+            aboutTL.progress(0)
+            aboutTL.play()
+          },
+        })
+      },
+    })
+
+    // Dev content logic
+    const devWrapper: HTMLElement = document.querySelector('.introduction-development')
+
+    // Create timeline, paused by default
+    const devTL = gsap.timeline({
+      paused: true,
+      onStart: () => {
+        window.lenis.stop()
+      },
+      onComplete: () => {
+        window.lenis.start()
+      },
+      onReverseComplete: () => {
+        devTL.pause()
+        window.lenis.start()
+      },
+    })
+
+    devTL.fromTo('#idh', { x: -1000 }, { x: 0, duration: 0.75 })
+    devTL.fromTo('#idt', { x: -1000 }, { x: 0, duration: 0.75 }, '<0.4')
+
+    ScrollTrigger.create({
+      trigger: devWrapper,
+      onEnter: () => {
+        console.log('entered DEV content')
+
+        aboutTL.reverse()
+
+        // Dispatch custom event
+        const id = devWrapper.dataset.modelId
+        const swapModelEvent = new CustomEvent('swap-target', {
+          detail: {
+            targetId: parseInt(id),
+          },
+        })
+        document.dispatchEvent(swapModelEvent)
+
+        // Lenis scroll and timeline resume after scroll completes
+        window.lenis.scrollTo(devWrapper, {
+          offset: 0,
+          force: true,
+          lock: true,
+          immediate: true,
+          onComplete: (self) => {
+            devTL.progress(0)
+            devTL.play()
+          },
+        })
+      },
     })
   })
 </script>
