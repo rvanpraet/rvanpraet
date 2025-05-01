@@ -1,31 +1,28 @@
 import GUI from 'lil-gui'
-import Stats from './Stats';
-
+import Stats from './Stats'
 
 export default class Debug {
-
-  static instance;
+  static instance
 
   constructor() {
     // this.active = window.location.hash === '#debug';
-    this.active = true;
+    this.active = true
 
     if (this.active) {
-      this.gui = new GUI();
-      this.stats = new Stats(false);
+      this.gui = new GUI()
+      // this.stats = new Stats(false);
     }
   }
 
   static getInstance() {
     if (!Debug.instance) {
-      Debug.instance = new Debug();
+      Debug.instance = new Debug()
     }
 
-    return Debug.instance;
+    return Debug.instance
   }
 
-
   dispose() {
-    this.stats.dispose();
+    this.stats.dispose()
   }
 }

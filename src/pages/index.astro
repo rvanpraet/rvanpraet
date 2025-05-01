@@ -16,22 +16,22 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
 
   <ScrollIcon />
 
-  <Section className="introduction-dummy" data-model-id="0">
+  <Section className="introduction-dummy relative z-10" data-model-id="0">
     <GridContent className="h-screen" variant="full" />
   </Section>
-  <Section className="introduction-dummy" data-model-id="1">
+  <Section className="introduction-dummy relative z-10" data-model-id="1">
     <GridContent className="h-screen" variant="full" />
   </Section>
-  <Section className="introduction-dummy" data-model-id="2">
+  <Section className="introduction-dummy relative z-10" data-model-id="2">
     <GridContent className="h-screen" variant="full" />
   </Section>
-  <Section className="introduction-dummy" data-model-id="3">
+  <Section className="introduction-dummy relative z-10" data-model-id="3">
     <GridContent className="h-screen" variant="full" />
   </Section>
-  <Section className="introduction-dummy" data-model-id="4">
+  <Section className="introduction-dummy relative z-10" data-model-id="4">
     <GridContent className="h-screen" variant="full" />
   </Section>
-  <Section className="introduction-dummy" data-model-id="5">
+  <Section className="introduction-dummy relative z-10" data-model-id="5">
     <GridContent className="h-screen" variant="full" />
   </Section>
   <Section className="introduction-dummy relative z-10" data-model-id="6">
@@ -111,7 +111,7 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
   import { step } from 'three/tsl'
 
   const lenis = new Lenis({
-    lerp: 0.8,
+    lerp: 1,
   })
 
   lenis.on('scroll', ScrollTrigger.update)
@@ -154,14 +154,28 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
     introductionSections.forEach((section: HTMLElement) => {
       ScrollTrigger.create({
         trigger: section,
-        snap: {
-          snapTo: 0.5,
-          duration: 0.15,
-        },
+        // snap: {
+        //   snapTo: 0.5,
+        //   duration: 0.15,
+        // },
         onEnter: () => {
+          lenis.scrollTo(section, {
+            offset: -200,
+            lerp: 1,
+            lock: true,
+            force: true,
+            duration: 0.5,
+          })
           swapModel(section.dataset.modelId)
         },
         onEnterBack: () => {
+          lenis.scrollTo(section, {
+            offset: 200,
+            lerp: 1,
+            lock: true,
+            force: true,
+            duration: 0.5,
+          })
           swapModel(section.dataset.modelId)
         },
       })
@@ -193,7 +207,7 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
         lenis.options.lerp = 0.03
       },
       onLeave: () => {
-        lenis.options.lerp = 0.8
+        lenis.options.lerp = 1
         lenis.scrollTo(devPreviewEl, {
           offset: window.innerHeight * 0.5,
           lock: true,
@@ -205,7 +219,7 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
         })
       },
       onLeaveBack: () => {
-        lenis.options.lerp = 0.8
+        lenis.options.lerp = 1
         swapModel(7)
       },
       onUpdate: (self) => {
@@ -277,7 +291,7 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
           if (direction < 0 && targetIndex === 0) {
             // Only when
             lenis.options.lerp = 0.03
-            gsap.to(window, { entropy: MAX_ENTROPY * 0.9, duration: tweenDuration + 2 })
+            gsap.to(window, { entropy: MAX_ENTROPY, duration: tweenDuration + 2 })
           }
         },
         onComplete: () => {
@@ -351,7 +365,7 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
         })
       },
       onEnterBack: () => {
-        lenis.options.lerp = 0.8
+        lenis.options.lerp = 1
       },
       onLeave: () => {
         lenis.options.lerp = 0.1

@@ -1,30 +1,27 @@
-import Handler from './abstract/Handler.js';
-import * as THREE from 'three';
+import Handler from './abstract/Handler.js'
+import * as THREE from 'three'
 
 // Post Processing
-import PostProcessing from './postprocessing';
+import PostProcessing from './postprocessing'
 
 export default class Renderer extends Handler {
-
-  static instance;
+  static instance
 
   static getInstance(_options) {
     if (!Renderer.instance) {
-      Renderer.instance = new Renderer(_options);
+      Renderer.instance = new Renderer(_options)
     }
 
-    return Renderer.instance;
+    return Renderer.instance
   }
 
   constructor() {
-    super(Renderer.id);
+    super(Renderer.id)
 
-
-    this.debug = this.experience.debug;
-    this.canvas = this.experience.canvas;
-    this.camera = this.experience.camera;
-    this.scene = this.experience.scene;
-
+    this.debug = this.experience.debug
+    this.canvas = this.experience.canvas
+    this.camera = this.experience.camera
+    this.scene = this.experience.scene
 
     // Debug
 
@@ -32,25 +29,23 @@ export default class Renderer extends Handler {
       this.debugFolder = this.debug.gui.addFolder('renderer')
     }
 
-    this.init();
+    this.init()
   }
-
 
   init() {
     this.webglRenderer = new THREE.WebGLRenderer({
       canvas: this.experience.canvas,
       powerPreference: 'high-performance',
-    });
+    })
 
-    this.webglRenderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.webglRenderer.toneMappingExposure = 1;
+    this.webglRenderer.toneMapping = THREE.ACESFilmicToneMapping
+    this.webglRenderer.toneMappingExposure = 1
 
-    this.webglRenderer.setSize(this.sizes.width, this.sizes.height);
-    this.webglRenderer.setPixelRatio(this.sizes.pixelRatio);
+    this.webglRenderer.setSize(this.sizes.width, this.sizes.height)
+    this.webglRenderer.setPixelRatio(this.sizes.pixelRatio)
 
-    this.setDebug();
+    this.setDebug()
   }
-
 
   setupPostProcessing() {
     this.postprocessing = PostProcessing.getInstance({
@@ -59,71 +54,55 @@ export default class Renderer extends Handler {
       camera: this.camera,
       sizes: this.sizes,
       debug: this.debug,
-    });
+    })
   }
-
 
   onWorldLoaded() {
-    this.setupPostProcessing();
+    this.setupPostProcessing()
   }
-
 
   resize() {
-    if (!this.webglRenderer) return;
+    if (!this.webglRenderer) return
 
-    this.webglRenderer.setSize(this.sizes.width, this.sizes.height);
-    this.webglRenderer.setPixelRatio(this.sizes.pixelRatio);
+    this.webglRenderer.setSize(this.sizes.width, this.sizes.height)
+    this.webglRenderer.setPixelRatio(this.sizes.pixelRatio)
 
-    this.postprocessing.resize();
+    this.postprocessing.resize()
   }
-
 
   update(state) {
-    if (!this.webglRenderer) return;
+    if (!this.webglRenderer) return
 
-    this.webglRenderer.clear();
+    this.webglRenderer.clear()
 
-    this.debug.active && this.debug.stats.beforeRender();
+    // this.debug.active && this.debug.stats.beforeRender();
 
-    if (this.postprocessing) this.postprocessing.update(state);
+    if (this.postprocessing) this.postprocessing.update(state)
 
-    this.debug.active && this.debug.stats.afterRender();
+    // this.debug.active && this.debug.stats.afterRender();
   }
-
 
   setDebug() {
     // Debug
     if (this.debug.active) {
-
       // Set Stats
-      this.debug.stats.setRenderPanel(this.webglRenderer.getContext());
+      // this.debug.stats.setRenderPanel(this.webglRenderer.getContext());
 
       this.debugFolder
-        .add(
-          this.webglRenderer,
-          'toneMapping',
-          {
-            'NoToneMapping': THREE.NoToneMapping,
-            'LinearToneMapping': THREE.LinearToneMapping,
-            'ReinhardToneMapping': THREE.ReinhardToneMapping,
-            'CineonToneMapping': THREE.CineonToneMapping,
-            'ACESFilmicToneMapping': THREE.ACESFilmicToneMapping
-          }
-        )
+        .add(this.webglRenderer, 'toneMapping', {
+          NoToneMapping: THREE.NoToneMapping,
+          LinearToneMapping: THREE.LinearToneMapping,
+          ReinhardToneMapping: THREE.ReinhardToneMapping,
+          CineonToneMapping: THREE.CineonToneMapping,
+          ACESFilmicToneMapping: THREE.ACESFilmicToneMapping,
+        })
         .onChange(() => {
           this.scene.traverse((_child) => {
-            if (_child instanceof THREE.Mesh)
-              _child.material.needsUpdate = true
+            if (_child instanceof THREE.Mesh) _child.material.needsUpdate = true
           })
         })
 
-      this.debugFolder
-        .add(
-          this.webglRenderer,
-          'toneMappingExposure'
-        )
-        .min(0)
-        .max(10)
+      this.debugFolder.add(this.webglRenderer, 'toneMappingExposure').min(0).max(10)
     }
   }
 }

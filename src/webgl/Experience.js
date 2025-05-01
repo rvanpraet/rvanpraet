@@ -71,7 +71,7 @@ export default class Experience {
   }
 
   update(state) {
-    if (this.debug.active) this.debug.stats.update()
+    // if (this.debug.active) this.debug.stats.update()
     if (this.camera.target) this.camera.update()
     if (this.renderer.webglRenderer) this.renderer.update(state)
     if (this.world) this.world.update(state)
