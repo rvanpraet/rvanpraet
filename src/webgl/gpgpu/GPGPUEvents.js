@@ -2,79 +2,78 @@ import * as THREE from 'three'
 import { MeshBVH, acceleratedRaycast } from 'three-mesh-bvh'
 
 export default class GPGPUEvents {
-    constructor(mouse, camera, mesh, uniforms) {
-        this.camera = camera
-        this.mouse = mouse
-        this.geometry = mesh.geometry
-        this.uniforms = uniforms
-        this.mesh = mesh
+  constructor(mouse, camera, mesh, uniforms) {
+    this.camera = camera
+    this.mouse = mouse
+    this.geometry = mesh.geometry
+    this.uniforms = uniforms
+    this.mesh = mesh
 
-        // Mouse
+    // Mouse
 
-        this.mouseSpeed = 0
+    this.mouseSpeed = 0
 
-        this.init()
-    }
+    this.init()
+  }
 
-    init() {
-        this.setupMouse()
-    }
+  init() {
+    this.setupMouse()
+  }
 
-    setupMouse() {
-        const geometry = new THREE.PlaneGeometry(20, 20)
+  setupEntropy() {
+    this.entropy = window.entropy
+  }
 
-        THREE.Mesh.prototype.raycast = acceleratedRaycast
+  setupMouse() {
+    const geometry = new THREE.PlaneGeometry(20, 20)
 
-        geometry.boundsTree = new MeshBVH(geometry)
-        this.geometry.boundsTree = new MeshBVH(this.geometry)
+    THREE.Mesh.prototype.raycast = acceleratedRaycast
 
-        this.raycaster = new THREE.Raycaster()
-        this.raycaster.firstHitOnly = true
-        this.raycasterMesh = new THREE.Mesh(
-            geometry,
-            new THREE.MeshBasicMaterial()
-        )
+    geometry.boundsTree = new MeshBVH(geometry)
+    this.geometry.boundsTree = new MeshBVH(this.geometry)
 
-        this.mouse.on('mousemove', (cursorPosition) => {
-            this.raycaster.setFromCamera(cursorPosition, this.camera)
+    this.raycaster = new THREE.Raycaster()
+    this.raycaster.firstHitOnly = true
+    this.raycasterMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial())
 
-            const intersects = this.raycaster.intersectObjects([
-                this.raycasterMesh,
-            ])
+    this.mouse.on('mousemove', (cursorPosition) => {
+      this.raycaster.setFromCamera(cursorPosition, this.camera)
 
-            if (intersects.length > 0) {
-                const worldPoint = intersects[0].point.clone()
+      const intersects = this.raycaster.intersectObjects([this.raycasterMesh])
 
-                this.mouseSpeed = 1
+      if (intersects.length > 0) {
+        const worldPoint = intersects[0].point.clone()
 
-                this.uniforms.velocityUniforms.uMouse.value = worldPoint
-            }
-        })
-    }
+        this.mouseSpeed = 1
 
-    update() {
-        if (!this.mouse.cursorPosition) return // Don't update if cursorPosition is undefined
+        this.uniforms.velocityUniforms.uMouse.value = worldPoint
+      }
+    })
+  }
 
-        this.mouseSpeed *= 0.95
+  update() {
+    if (!this.mouse.cursorPosition) return // Don't update if cursorPosition is undefined
 
-        if (this.uniforms.velocityUniforms.uMouseSpeed)
-            this.uniforms.velocityUniforms.uMouseSpeed.value = this.mouseSpeed
-    }
+    this.mouseSpeed *= 0.95
+    this.entropy = window.entropy
 
-    updateRaycasterMesh(mesh) {
-        // const isRaycasterPlane = true
-        const isRaycasterPlane = mesh.userData.hasPlaneRaycast
-        this.geometry = isRaycasterPlane
-            ? new THREE.PlaneGeometry(20, 20)
-            : mesh.geometry
+    // Velocity uniform updates
+    if (this.uniforms.velocityUniforms.uMouseSpeed) this.uniforms.velocityUniforms.uMouseSpeed.value = this.mouseSpeed
+    if (this.uniforms.velocityUniforms.uEntropy) this.uniforms.velocityUniforms.uEntropy.value = this.entropy
 
-        this.geometry.boundsTree = new MeshBVH(this.geometry)
-        this.raycasterMesh.clear()
-        this.raycasterMesh = new THREE.Mesh(
-            this.geometry,
-            new THREE.MeshBasicMaterial({})
-        )
+    // Position uniform updates
+    if (this.uniforms.positionUniforms.uEntropy) this.uniforms.positionUniforms.uEntropy.value = this.entropy
+  }
 
-        // isRaycasterPlane && this.raycasterMesh.translateZ(8.999)
-    }
+  updateRaycasterMesh(mesh) {
+    // const isRaycasterPlane = true
+    const isRaycasterPlane = mesh.userData.hasPlaneRaycast
+    this.geometry = isRaycasterPlane ? new THREE.PlaneGeometry(20, 20) : mesh.geometry
+
+    this.geometry.boundsTree = new MeshBVH(this.geometry)
+    this.raycasterMesh.clear()
+    this.raycasterMesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({}))
+
+    // isRaycasterPlane && this.raycasterMesh.translateZ(8.999)
+  }
 }

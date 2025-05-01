@@ -2,15 +2,12 @@
 const { className, ...rest } = Astro.props
 ---
 
-<section class={className + ' grid grid-cols-4 md:grid-cols-6 lg:grid-cols-12'} {...rest}>
+<section class={'px-6 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-12' + ' ' + className} {...rest}>
   <slot />
 </section>
 
 <style>
   section {
-    position: relative;
-    /* min-height: 100vh; */
-    padding: 24px;
     z-index: 1;
   }
 </style>

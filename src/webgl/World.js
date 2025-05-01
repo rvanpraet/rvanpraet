@@ -32,10 +32,10 @@ export default class Mask extends Handler {
 
     this.params = {
       color: new THREE.Color('#ffffff'),
-      size: 3.0,
+      size: 6.0,
       minAlpha: 0.1,
       maxAlpha: 0.8,
-      force: 0.5,
+      force: 0.375,
     }
 
     this.init()
@@ -74,6 +74,7 @@ export default class Mask extends Handler {
       debug: this.debug,
       params: this.params,
       targets: [...this.models],
+      particleMask: this.resources.textures.mask,
     })
   }
 

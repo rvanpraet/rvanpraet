@@ -2,8 +2,8 @@
 const { className, variant = 'full' } = Astro.props
 
 const variantClasses = {
-  a: 'content-variant-a col-start-1 col-span-4 md:col-span-6 lg:col-span-6',
-  b: 'content-variant-b col-start-1 col-span-4 md:col-span-6 lg:col-start-7 lg:col-span-6',
+  a: 'content-variant-a col-start-1 col-span-4 md:col-span-6 lg:col-span-5',
+  b: 'content-variant-b col-start-1 col-span-4 md:col-span-6 lg:col-start-7 lg:col-span-5',
   center: '',
   full: 'content-full col-start-1 col-span-4 md:col-span-6 lg:col-span-12',
 }
@@ -36,7 +36,7 @@ const classes = variantClasses[variant]
   }
 
   :global(.grid-content p) {
-    font-size: var(--text-base);
+    font-size: var(--text-lg);
     font-weight: var(--font-weight-light);
     margin-bottom: calc(var(--spacing) * 4);
   }

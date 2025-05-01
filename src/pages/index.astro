@@ -5,8 +5,6 @@ import Layout from '../layouts/Layout.astro'
 import TechStackIcons from '@/components/TechStackIcons.astro'
 import GridContent from '@/components/GridContent.astro'
 import Section from '@/components/Section.astro'
-import ContentHeader from '@/components/ContentHeader.astro'
-import ContentParagraph from '@/components/ContentParagraph.astro'
 import ProjectsPreview from '@/components/ProjectsPreview.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -36,17 +34,19 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
   <Section className="introduction-dummy" data-model-id="5">
     <GridContent className="h-screen" variant="full" />
   </Section>
-  <Section className="introduction-dummy" data-model-id="6">
+  <Section className="introduction-dummy relative z-10" data-model-id="6">
     <GridContent className="h-screen" variant="full" />
   </Section>
-  <Section className="introduction-dummy-last" data-model-id="7">
+  <Section className="introduction-dummy relative z-10" data-model-id="7">
     <GridContent className="h-screen" variant="full" />
   </Section>
 
-  <div class="content-wrapper relative">
+  <div class="introduction-entropy relative z-10"></div>
+
+  <div class="content-wrapper relative z-10 h-screen">
     <Section className="introduction-general absolute inset-0 w-full h-full" data-model-id="8">
       <GridContent className="h-screen" variant="b">
-        <h1 id="igh">About me</h1>
+        <h1 id="igh">ABOUT ME</h1>
         <p id="igt">
           I'm passionate about technology—I love to create. Storytelling, emotion, mystery: these are the words that
           shape my approach to creativity and art. I work with both code and sound, exploring the space where audio
@@ -56,20 +56,27 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
         </p>
       </GridContent>
     </Section>
+
+    <Section className="introduction-development absolute inset-0 w-full h-full" data-model-id="9">
+      <GridContent className="h-screen" variant="a">
+        <h1 id="idh">WEB DEVELOPMENT</h1>
+        <p id="idt">
+          I'm a skilled front-end developer with a strong focus on immersive, interactive web experiences. I specialize
+          in crafting visually engaging interfaces using modern tools and frameworks, often blending animation, WebGL,
+          and responsive design to create websites that feel alive and intuitive. I enjoy pushing the boundaries of
+          what’s possible in the browser—turning ideas into experiences that are both functional and emotionally
+          resonant.
+        </p>
+        <!-- <h2>Tech Stack</h2> -->
+        <TechStackIcons />
+      </GridContent>
+    </Section>
+
+    <!-- <div id="about-dummy" class="h-screen"></div> -->
+    <!-- <div id="dev-dummy" class="h-screen"></div> -->
   </div>
 
-  <Section className="introduction-development" data-model-id="9">
-    <GridContent className="h-screen" variant="a">
-      <h1 id="idh">Web Development</h1>
-      <p id="idt">
-        I'm a skilled front-end developer with a strong focus on immersive, interactive web experiences. I specialize in
-        crafting visually engaging interfaces using modern tools and frameworks, often blending animation, WebGL, and
-        responsive design to create websites that feel alive and intuitive. I enjoy pushing the boundaries of what’s
-        possible in the browser—turning ideas into experiences that are both functional and emotionally resonant.
-      </p>
-      <!-- <h2>Tech Stack</h2> -->
-      <TechStackIcons />
-    </GridContent>
+  <Section className="introduction-development-previews relative z-10">
     <GridContent variant="full">
       <ProjectsPreview
         projects={[
@@ -81,10 +88,10 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
     </GridContent>
   </Section>
 
-  <Section className="introduction-new-media" data-model-id="10">
+  <Section className="introduction-new-media relative z-10" data-model-id="10">
     <GridContent className="h-screen" variant="b">
-      <h1>New Media & Immersive Installations</h1>
-      <p>
+      <h1 id="inmh" class="uppercase">New Media & Immersive Installations</h1>
+      <p id="inmt">
         I’m fascinated by the potential of immersive environments to blur the lines between the digital and physical.
         Using tools like TouchDesigner, it's possible to create responsive systems that connect light, sound, and
         movement—turning spaces into living, reactive experiences. These formats offer a unique way to tell stories,
@@ -99,222 +106,259 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
 <script>
   import gsap from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
-  import { lerp } from 'three/src/math/MathUtils.js'
-  // import { ScrollTrigger } from 'gsap/all'
-  let isScrolling = false
-  let scrollTimeout: any = null
+
+  import Lenis from 'lenis'
+  import { step } from 'three/tsl'
+
+  const lenis = new Lenis({
+    lerp: 0.8,
+  })
+
+  lenis.on('scroll', ScrollTrigger.update)
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000)
+  })
+
+  const MAX_ENTROPY = 0.01
+  window.entropy = 0
+
+  document.addEventListener('DOMContentLoaded', () => {
+    lenis.scrollTo(document.documentElement, {
+      offset: 0,
+      immediate: true,
+    })
+  })
 
   gsap.registerPlugin(ScrollTrigger)
 
   // Only start building scroll listeners when the THREE World is ready
   document.addEventListener('world-ready', () => {
+    // Swap model function
+    function swapModel(targetId: string | number) {
+      const swapModelEvent = new CustomEvent('swap-target', {
+        detail: {
+          targetId: typeof targetId === 'string' ? parseInt(targetId) : targetId,
+        },
+      })
+      document.dispatchEvent(swapModelEvent)
+    }
+
+    // Introduction section Scroll Triggers
+
     const introductionSections = document.querySelectorAll('.introduction-dummy')
+    const lastIntroEl: HTMLElement = document.querySelector('.introduction-dummy-last')
+    const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
+    const contentScrollEl: HTMLElement = document.querySelector('.content-wrapper')
+    const devPreviewEl: HTMLElement = document.querySelector('.introduction-development-previews')
 
     introductionSections.forEach((section: HTMLElement) => {
       ScrollTrigger.create({
         trigger: section,
-        markers: {
-          indent: 100,
+        snap: {
+          snapTo: 0.5,
+          duration: 0.15,
         },
-        snap: 0.5,
         onEnter: () => {
-          console.log('onEnter introduction slide')
-          const id = section.dataset.modelId
-          // create custom events
-          const swapModelEvent = new CustomEvent('swap-target', {
-            detail: {
-              targetId: parseInt(id),
-            },
-          })
-          // dispatch the events
-          document.dispatchEvent(swapModelEvent)
+          swapModel(section.dataset.modelId)
         },
         onEnterBack: () => {
-          console.log('onEnter BACK introduction slide')
-
-          // create custom events
-          const id = section.dataset.modelId
-          const swapModelEvent = new CustomEvent('swap-target', {
-            detail: {
-              targetId: parseInt(id),
-            },
-          })
-          // dispatch the events
-          document.dispatchEvent(swapModelEvent)
+          swapModel(section.dataset.modelId)
         },
       })
     })
 
     // Last introduction slide
-    const lastIntroEl: HTMLElement = document.querySelector('.introduction-dummy-last')
-    ScrollTrigger.create({
-      trigger: lastIntroEl,
-      // snap: 0.5,
-      onEnter: () => {
-        console.log('onEnter LAST introduction slide')
-        // create custom events
-        const id = lastIntroEl.dataset.modelId
-        const swapModelEvent = new CustomEvent('swap-target', {
-          detail: {
-            targetId: parseInt(id),
-          },
-        })
+    // ScrollTrigger.create({
+    //   trigger: lastIntroEl,
+    //   onEnter: () => {
+    //     lenis.options.lerp = 0.03
+    //     swapModel(lastIntroEl.dataset.modelId)
+    //   },
+    //   onEnterBack: () => {},
+    // })
 
-        document.dispatchEvent(swapModelEvent)
+    ScrollTrigger.create({
+      trigger: entropyEl,
+      start: 'center center',
+      end: '+=200%',
+      pin: true,
+      // markers: {
+      //   indent: 500,
+      // },
+      onEnter: () => {
+        lenis.options.lerp = 0.02
+        // swapModel(lastIntroEl.dataset.modelId)
       },
       onEnterBack: () => {
-        console.log('onEnterBack LAST introduction slide')
-
-        // Stop the scrolling
-        window.lenis.stop()
-        // Change background model
-        const id = lastIntroEl.dataset.modelId
-        const swapModelEvent = new CustomEvent('swap-target', {
-          detail: {
-            targetId: parseInt(id),
+        lenis.options.lerp = 0.03
+      },
+      onLeave: () => {
+        lenis.options.lerp = 0.8
+        lenis.scrollTo(devPreviewEl, {
+          offset: window.innerHeight * 0.5,
+          lock: true,
+          force: true,
+          duration: 1,
+          onComplete: () => {
+            window.entropy = 0
           },
         })
-        document.dispatchEvent(swapModelEvent)
+      },
+      onLeaveBack: () => {
+        lenis.options.lerp = 0.8
+        swapModel(7)
+      },
+      onUpdate: (self) => {
+        console.log('last element update ::: ', self.progress)
 
-        // Reverse the timeline
-        aboutTL.reverse()
-
-        // Scroll to the middle of the container after the timeline is complete
-        // Seems to work better with a timeout rather than onReverseComplete of gsap's timeline
-        setTimeout(() => {
-          window.lenis.scrollTo(lastIntroEl, {
-            offset: 0,
-            // lock: true,
-            // duration: 0.5,
-            immediate: true,
-            onComplete: (self) => {
-              self.options.lerp = 1
-              self.start()
-            },
-          })
-        }, 1500)
+        // window.entropy = (1 - Math.abs(2 * self.progress - 1)) * 0.01
+        window.entropy = self.progress * MAX_ENTROPY
       },
     })
 
-    // About slide logic
-    const aboutWrapper: HTMLElement = document.querySelector('.introduction-general')
-
-    // Create timeline, paused by default
-    const aboutTL = gsap.timeline({
+    // GSAP Timeline
+    const icons = Array.from(document.querySelectorAll('.tech-icon'))
+    const scrollerTL = gsap.timeline({
       paused: true,
-      onStart: () => {
-        window.lenis.stop()
-      },
-      onComplete: () => {
-        window.lenis.start()
-      },
-      onReverseComplete: () => {
-        aboutTL.pause()
-        window.lenis.start()
-      },
     })
+
+    let isTweening = false
+    let currentIndex = 0
+    const tlBlocks = ['initAbout', 'aboutEntered', 'devEntered', 'tlComplete']
+
+    // const devPreviewEl: HTMLElement = document.querySelector('.introduction-development-previews')
+
+    // Function to handle scroll events within the pinned container to animate between blocks of content
+    function handlePinContainerScroll({ progress, direction }) {
+      // Check if we are animating or if we should be animating
+      if (isTweening) return
+
+      const targetIndex = currentIndex + direction
+
+      if (targetIndex < 0 || targetIndex >= tlBlocks.length) return
+
+      // Start the animation
+      isTweening = true
+
+      // Get the labels from the predefined label blocks array
+      const fromLabel = tlBlocks[currentIndex]
+      const toLabel = tlBlocks[targetIndex]
+
+      // Set the new current index
+      currentIndex = targetIndex
+
+      // Calculate the tween duration by looking up the label time values
+      const tweenDuration = Math.abs(scrollerTL.labels[toLabel] - scrollerTL.labels[fromLabel])
+
+      const targetModelId = targetIndex + 7 //TODO: This magic number should be better fool-proofed
+      if (targetModelId > 7) swapModel(targetModelId)
+
+      // Kill previous tweens
+      gsap.killTweensOf(scrollerTL)
+
+      // Animation blocks translate to scrolling one pageheight of content
+      // While the animation block is playing we want to scroll to the corresponding page position
+
+      const lastSectionOffset = targetIndex === tlBlocks.length - 1 ? 15 : 0 // Small offset to preview the next section at the end of animation
+
+      // Scroll to corresponding page position (and lock the scroll)
+      lenis.scrollTo(devPreviewEl, {
+        lerp: 1, // No slowing down to prevent triggering a new scroll animation
+        offset: -window.innerHeight * (tlBlocks.length - targetIndex) + lastSectionOffset, // The corresponding position is based off next section block calculating backwards
+        lock: true,
+        force: true,
+        duration: tweenDuration * 0.9, // Slight shorter duration to prevent triggering a new scroll animation
+      })
+
+      // Animate !
+      scrollerTL.tweenFromTo(fromLabel, toLabel, {
+        duration: tweenDuration,
+        onStart: () => {
+          if (direction < 0 && targetIndex === 0) {
+            // Only when
+            lenis.options.lerp = 0.03
+            gsap.to(window, { entropy: MAX_ENTROPY * 0.9, duration: tweenDuration + 2 })
+          }
+        },
+        onComplete: () => {
+          isTweening = false
+        },
+      })
+    }
 
     // Define animation
-    aboutTL.fromTo(
-      '#igh',
-      { x: 1000 },
+    scrollerTL.addLabel('initAbout')
+    scrollerTL.from('#igh', { x: 1000, ease: 'power1.inOut', duration: 1.25 })
+    scrollerTL.from('#igt', { x: 1000, ease: 'power1.inOut', duration: 0.9 }, '<0.4')
+
+    scrollerTL.addLabel('aboutEntered')
+
+    scrollerTL.to('#igh', { x: 1000, ease: 'power1.inOut', duration: 1.25 })
+    scrollerTL.to('#igt', { x: 1000, ease: 'power1.inOut', duration: 1 }, '<0.2')
+
+    scrollerTL.addLabel('queueDevelopment', '-=1.5')
+
+    scrollerTL.from('#idh', { x: -1000, ease: 'power1.inOut', duration: 1.3 }, 'queueDevelopment')
+    scrollerTL.from('#idt', { x: -1000, ease: 'power1.inOut', duration: 0.7 }, '<0.6')
+    scrollerTL.from(
+      icons,
       {
-        x: 0,
-        duration: 0.75,
-      }
-    )
-    aboutTL.fromTo(
-      '#igt',
-      { x: 1000 },
-      {
-        x: 0,
-        duration: 0.75,
+        scale: 0,
+        duration: 0.5,
+        stagger: 0.1, // delay between each icon's animation
+        ease: 'power1.inOut',
       },
-      '<0.4'
+      '<0.3'
     )
 
-    // Manual ScrollTrigger to detect entry, but NOT tied to tl
+    scrollerTL.addLabel('devEntered')
+
+    scrollerTL.to('#idt', { x: -1000, ease: 'power1.inOut', duration: 1.4 })
+    scrollerTL.to('#idh', { x: -1000, ease: 'power1.inOut', duration: 1.1 }, '<0.3')
+    scrollerTL.to(
+      [...icons.reverse()],
+      {
+        scale: 0,
+        duration: 0.5,
+        stagger: 0.1, // delay between each icon's animation
+        ease: 'power1.inOut',
+      },
+      'devEntered'
+    )
+
+    scrollerTL.addLabel('tlComplete')
+
+    // Pinned container for introduction and development (TODO: New Media in same container and project previews all mixed?)
     ScrollTrigger.create({
-      trigger: aboutWrapper,
+      trigger: contentScrollEl,
+      start: 'center center',
+      end: '+=300%',
+      pin: true,
+      scrub: true,
       onEnter: () => {
-        console.log('entered FIRST content')
-
-        // Dispatch custom event
-        const id = aboutWrapper.dataset.modelId
-        const swapModelEvent = new CustomEvent('swap-target', {
-          detail: {
-            targetId: parseInt(id),
-          },
-        })
-        document.dispatchEvent(swapModelEvent)
-
-        // Lenis scroll and timeline resume after scroll completes
-        window.lenis.scrollTo(aboutWrapper, {
-          offset: 0,
+        window.entropy = 0
+        // currentIndex = 0
+      },
+      onLeaveBack: () => {
+        console.log('leave back pin element')
+        currentIndex = 0
+        lenis.scrollTo(entropyEl, {
+          offset: -window.innerHeight * 0.5,
+          lerp: 0.03,
           force: true,
           lock: true,
-          duration: 0.5,
-          onStart: () => {
-            console.log('started scrollTo')
-          },
-          onComplete: (self) => {
-            console.log('completed scrollTo')
-            self.options.lerp = 0.1
-            aboutTL.progress(0)
-            aboutTL.play()
-          },
+          duration: 2,
         })
       },
-    })
-
-    // Dev content logic
-    const devWrapper: HTMLElement = document.querySelector('.introduction-development')
-
-    // Create timeline, paused by default
-    const devTL = gsap.timeline({
-      paused: true,
-      onStart: () => {
-        window.lenis.stop()
+      onEnterBack: () => {
+        lenis.options.lerp = 0.8
       },
-      onComplete: () => {
-        window.lenis.start()
+      onLeave: () => {
+        lenis.options.lerp = 0.1
+        currentIndex = tlBlocks.length - 1
       },
-      onReverseComplete: () => {
-        devTL.pause()
-        window.lenis.start()
-      },
-    })
-
-    devTL.fromTo('#idh', { x: -1000 }, { x: 0, duration: 0.75 })
-    devTL.fromTo('#idt', { x: -1000 }, { x: 0, duration: 0.75 }, '<0.4')
-
-    ScrollTrigger.create({
-      trigger: devWrapper,
-      onEnter: () => {
-        console.log('entered DEV content')
-
-        aboutTL.reverse()
-
-        // Dispatch custom event
-        const id = devWrapper.dataset.modelId
-        const swapModelEvent = new CustomEvent('swap-target', {
-          detail: {
-            targetId: parseInt(id),
-          },
-        })
-        document.dispatchEvent(swapModelEvent)
-
-        // Lenis scroll and timeline resume after scroll completes
-        window.lenis.scrollTo(devWrapper, {
-          offset: 0,
-          force: true,
-          lock: true,
-          immediate: true,
-          onComplete: (self) => {
-            devTL.progress(0)
-            devTL.play()
-          },
-        })
+      onUpdate: (self) => {
+        handlePinContainerScroll({ ...self })
       },
     })
   })

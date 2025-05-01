@@ -8,7 +8,7 @@ import vertexShader from './shaders/vertex.glsl?raw'
 import fragmentShader from './shaders/fragment.glsl?raw'
 
 export default class GPGPU {
-  constructor({ size, camera, renderer, mouse, scene, model, sizes, debug, targets, params }) {
+  constructor({ size, camera, renderer, mouse, scene, model, sizes, debug, targets, params, particleMask }) {
     this.camera = camera // Camera
     this.renderer = renderer // Renderer
     this.mouse = mouse // Mouse, our cursor position
@@ -18,7 +18,8 @@ export default class GPGPU {
     this.model = model // Mesh from which we will sample the particles
     this.debug = debug // Debug
     this.params = params // Parameters for the GPGPU
-    this.targets = targets
+    this.targets = targets // Different attraction targets
+    this.particleMask = particleMask // Particle mask
 
     this.init()
   }
@@ -39,6 +40,7 @@ export default class GPGPU {
 
     const positionTexture = this.utils.getPositionTexture()
     const velocityTexture = this.utils.getVelocityTexture()
+    const randomInfoTexture = this.utils.createRandomData()
 
     this.positionVariable = this.gpgpuCompute.addVariable('uCurrentPosition', simFragment, positionTexture)
     this.velocityVariable = this.gpgpuCompute.addVariable('uCurrentVelocity', simFragmentVelocity, velocityTexture)
@@ -51,6 +53,14 @@ export default class GPGPU {
       velocityUniforms: this.velocityVariable.material.uniforms,
     }
 
+    // Position uniforms
+    this.uniforms.positionUniforms.uEntropy = { value: 0 }
+    this.uniforms.positionUniforms.uTime = { value: 0 }
+    this.uniforms.positionUniforms.uInfo = { value: randomInfoTexture }
+
+    // Velocity uniforms
+    this.uniforms.velocityUniforms.uEntropy = { value: 0 }
+    this.uniforms.velocityUniforms.uInfo = { value: randomInfoTexture }
     this.uniforms.velocityUniforms.uMouse = {
       value: this.mouse.cursorPosition,
     }
@@ -87,10 +97,12 @@ export default class GPGPU {
         uResolution: {
           value: new THREE.Vector2(this.sizes.width, this.sizes.height),
         },
+        uMask: { value: this.particleMask },
         uParticleSize: { value: this.params.size },
         uColor: { value: this.params.color },
         uMinAlpha: { value: this.params.minAlpha },
         uMaxAlpha: { value: this.params.maxAlpha },
+        uEntropy: { value: 0 },
       },
       vertexShader,
       fragmentShader,
@@ -124,6 +136,7 @@ export default class GPGPU {
     this.gpgpuCompute.compute()
     this.events.update()
     this.uniforms.velocityUniforms.uTime.value = state.time
+    this.uniforms.positionUniforms.uTime.value = state.time
   }
 
   swapTarget(targetIndex) {
