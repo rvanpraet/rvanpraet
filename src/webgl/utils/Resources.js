@@ -7,9 +7,9 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js'
 import * as THREE from 'three'
 
 // Assets
-import reinaldPath from '../assets/models/reinald1.obj?url'
-import codingPath from '../assets/models/coding.glb?url'
-import particleTexture from '../assets/textures/particle2.png'
+import reinaldPath from '/webgl/assets/models/reinald1.obj?url'
+import codingPath from '/webgl/assets/models/coding.glb?url'
+import particleTexture from '/webgl/assets/textures/particle2.png'
 
 const modelConfig = {
   reinald: {
