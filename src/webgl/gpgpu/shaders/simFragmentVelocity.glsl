@@ -131,18 +131,18 @@ void main() {
   vec3 noise = curlNoise(position) * 0.002;
   vec3 transitionNoise = curlNoise(vec3(position.x * 1.0, position.y * 10.0, position.z * 5.0)) * 0.005;
 
-  // if (uEntropy > 0.0) {
-  //   float rVar = 0.3 + info.z * 0.7;
-  //   float r = 500.0 * rVar;
-  //   // position.x = cos(uTime + info.x * M_PI * 2.0) * r * uEntropy;
-  //   // position.y = sin(uTime + info.x * M_PI * 2.0) * r * uEntropy;
+  if (uEntropy > 0.0) {
+    float rVar = 0.3 + info.z * 0.7;
+    float r = 500.0 * rVar;
+    // position.x = cos(uTime + info.x * M_PI * 2.0) * r * uEntropy;
+    // position.y = sin(uTime + info.x * M_PI * 2.0) * r * uEntropy;
 
-  //   float entropy = clamp(uEntropy, 0.5 * 0.01, 1.0 * 0.01);
+    float entropy = clamp(uEntropy, 0.5 * 0.01, 1.0 * 0.01);
 
-  //   target.x = cos(uTime + info.x * M_PI * 2.0) * r * entropy;
-  //   target.y = sin(uTime + info.x * M_PI * 2.0) * r * entropy;
-  //   target.z = info.z * 2.0 - 1.0;
-  // }
+    target.x = cos(uTime + info.x * M_PI * 2.0) * r * entropy;
+    target.y = sin(uTime + info.x * M_PI * 2.0) * r * entropy;
+    target.z = (info.z * 2.0 - 1.0) * entropy;
+  }
 
   // Particle attraction to shape force
   vec3 direction = normalize(target - position);
