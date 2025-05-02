@@ -36,6 +36,9 @@ export default class Renderer extends Handler {
     this.webglRenderer = new THREE.WebGLRenderer({
       canvas: this.experience.canvas,
       powerPreference: 'high-performance',
+      // antialias: false,
+      // stencil: false,
+      // depth: false,
     })
 
     this.webglRenderer.toneMapping = THREE.ACESFilmicToneMapping

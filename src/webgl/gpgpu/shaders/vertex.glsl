@@ -3,15 +3,17 @@ varying vec3 vPosition;
 
 uniform float uParticleSize;
 uniform sampler2D uPositionTexture;
+uniform sampler2D uInfo;
 
 void main() {
   vUv = uv;
 
   vec3 newpos = position;
 
-  vec4 color = texture2D(uPositionTexture, vUv);
+  vec4 info = texture2D(uInfo, vUv);
+  vec4 positionDT = texture2D(uPositionTexture, vUv);
 
-  newpos.xyz = color.xyz;
+  newpos.xyz = positionDT.xyz;
 
   vPosition = newpos;
 

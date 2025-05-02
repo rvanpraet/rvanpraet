@@ -103,6 +103,7 @@ export default class GPGPU {
         uMinAlpha: { value: this.params.minAlpha },
         uMaxAlpha: { value: this.params.maxAlpha },
         uEntropy: { value: 0 },
+        uInfo: { value: this.uniforms.positionUniforms.uInfo.value },
       },
       vertexShader,
       fragmentShader,
