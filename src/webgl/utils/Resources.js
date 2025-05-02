@@ -7,9 +7,9 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js'
 import * as THREE from 'three'
 
 // Assets
-import reinaldPath from '/public/webgl/assets/models/reinald1.obj?url'
-import codingPath from '/public/webgl/assets/models/coding.glb?url'
-import particleTexture from '/public/webgl/assets/textures/particle2.png'
+import reinaldPath from '/webgl/assets/models/reinald1.obj?url'
+import codingPath from '/webgl/assets/models/coding.glb?url'
+import particleTexture from '/webgl/assets/textures/particle2.png'
 
 const modelConfig = {
   reinald: {
@@ -74,7 +74,7 @@ export default class Resources extends EventEmitter {
     this.textures = {
       mask: textureLoader.load(particleTexture.src),
     }
-    loader.load('/src/webgl/assets/fonts/DM_Sans_SemiBold.json', (font) => {
+    loader.load('/webgl/assets/fonts/DM_Sans_SemiBold.json', (font) => {
       this.font = font
       this.loadModelResources() // Load model resources after initial resources are loaded
       // this.emit('ready')
