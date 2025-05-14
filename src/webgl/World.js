@@ -2,6 +2,7 @@ import Experience from './Experience.js'
 import Handler from './abstract/Handler.js'
 import * as THREE from 'three'
 import GPGPU from './gpgpu/GPGPU.js'
+import { isMobileDevice } from '@/scripts/utils.js'
 
 export default class Mask extends Handler {
   static instance
@@ -32,7 +33,7 @@ export default class Mask extends Handler {
 
     this.params = {
       color: new THREE.Color('#ffffff'),
-      size: 18.0,
+      size: isMobileDevice() ? 100.0 : 18.0,
       minAlpha: 0.3,
       maxAlpha: 0.8,
       force: 0.4,
@@ -64,7 +65,7 @@ export default class Mask extends Handler {
 
   setupGPGPU() {
     this.gpgpu = new GPGPU({
-      size: 200,
+      size: isMobileDevice() ? 50 : 256,
       camera: this.camera.target,
       renderer: this.renderer.webglRenderer,
       mouse: this.mouse,

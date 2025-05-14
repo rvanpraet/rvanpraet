@@ -9,7 +9,7 @@ import * as THREE from 'three'
 // Assets
 import reinaldPath from '/webgl/assets/models/reinald1.obj?url'
 import codingPath from '/webgl/assets/models/coding.glb?url'
-import particleTexture from '/webgl/assets/textures/particle3.png?url'
+import particleTexture from '/webgl/assets/textures/particle2.png?url'
 import fontPath from '/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 
 const modelConfig = {

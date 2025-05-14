@@ -129,7 +129,7 @@ void main() {
 
   // Curl noise
   vec3 noise = curlNoise(position) * 0.002;
-  vec3 transitionNoise = curlNoise(vec3(position.x * 1.0, position.y * 10.0, position.z * 5.0)) * 0.005;
+  vec3 transitionNoise = curlNoise(vec3(position.x * 1.0, position.y * 10.0, position.z * 5.0) * info.w) * 0.005;
 
   if (uEntropy > 0.0) {
     float rVar = 0.3 + info.z * 0.7;
@@ -161,7 +161,8 @@ void main() {
 
   velocity.x += cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025; // Adds extra wiggle
 
-  vec3 attraction = (direction * falloff * 0.05 + transitionNoise * falloff * 3.5) * step(0.001, dist);
+  vec3 attraction =
+    (direction * falloff * 0.05 + transitionNoise * clamp(falloff, 0.005, 1.0) * 3.5) * step(0.001, dist);
   velocity += attraction; // Force that pushes particles towards their current target
 
   // Mouse repel force
