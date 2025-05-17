@@ -6,23 +6,34 @@ import TechStackIcons from '@/components/TechStackIcons.astro'
 import GridContent from '@/components/GridContent.astro'
 import Section from '@/components/Section.astro'
 import ProjectsPreview from '@/components/ProjectsPreview.astro'
+import Introduction from '@/components/Introduction.astro'
+import ExperienceLoader from '@/components/ExperienceLoader.astro'
+import InlineHighlight from '@/components/InlineHighlight.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
+  <ExperienceLoader />
+
   <Three />
 
   <ScrollIcon />
 
-  <Section className="introduction-dummy relative z-10" data-model-id="0">
+  <section class="introduction-dummy relative z-10" data-model-id="0">
     <GridContent className="h-screen" variant="full" />
-  </Section>
-  <Section className="introduction-dummy relative z-10" data-model-id="1">
+  </section>
+  <section class="introduction-dummy relative z-10" data-model-id="1">
     <GridContent className="h-screen" variant="full" />
-  </Section>
-  <Section className="introduction-dummy relative z-10" data-model-id="2">
+  </section>
+  <section class="introduction-dummy relative z-10" data-model-id="2">
+    <GridContent className="h-screen" variant="full" />
+  </section>
+
+  <div class="introduction-entropy relative z-10"></div>
+
+  <!-- <Section className="introduction-dummy relative z-10" data-model-id="2">
     <GridContent className="h-screen" variant="full" />
   </Section>
   <Section className="introduction-dummy relative z-10" data-model-id="3">
@@ -39,67 +50,82 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
   </Section>
   <Section className="introduction-dummy relative z-10" data-model-id="7">
     <GridContent className="h-screen" variant="full" />
-  </Section>
-
-  <div class="introduction-entropy relative z-10"></div>
+  </Section> -->
 
   <div class="content-wrapper relative z-10 h-screen">
     <Section className="introduction-general absolute inset-0 w-full h-full" data-model-id="8">
-      <GridContent className="h-screen" variant="b">
-        <h1 id="igh">ABOUT ME</h1>
-        <p id="igt">
-          I'm passionate about technology—I love to create. Storytelling, emotion, mystery: these are the words that
-          shape my approach to creativity and art. I work with both code and sound, exploring the space where audio
-          synthesis and generative visuals meet. I'm deeply inspired by the natural world—its patterns, rhythms, and
-          quiet complexity often find their way into my work. Through immersive digital experiences and ambient
-          compositions, I aim to evoke feeling, spark curiosity, and invite a moment of reflection.
-        </p>
-      </GridContent>
+      <h1 id="igh" class="row-start-3 col-start-6 col-span-6">
+        AB<span class="mx-2"><span class="text-green wave-y-1 mx-4">O</span><span class="wave-y-2 mx-4">U</span></span
+        ><InlineHighlight color="white">T</InlineHighlight>
+      </h1>
+
+      <p id="igt1" class="row-start-7 col-start-6 col-span-6">
+        I'm passionate about technology—<InlineHighlight className="mx-16" color="white"
+          >I love to create.</InlineHighlight
+        >Storytelling, emotion, mystery: these are the words that shape my approach to<InlineHighlight className="mx-12"
+          >creativity and art.</InlineHighlight
+        >I work with both<InlineHighlight className="mx-12" color="green">code and sound</InlineHighlight>as means to
+        translate my vision to the world.
+      </p>
+      <p id="igt2" class="row-start-9 col-start-8 col-span-5">
+        Inspired by the<InlineHighlight className="mx-16" color="green">natural world</InlineHighlight>, its patterns,
+        rhythms and quiet complexity often<InlineHighlight className="mx-12" color="white"
+          >find their way</InlineHighlight
+        > into my work.<br />Through<InlineHighlight className="mx-12" color="red">immersion and art</InlineHighlight>I
+        aim to evoke feeling,<InlineHighlight className="mx-12" color="yellow">spark</InlineHighlight>curiosity, and
+        invite a<InlineHighlight className="ml-12" color="white">moment of reflection.</InlineHighlight>
+      </p>
     </Section>
 
     <Section className="introduction-development absolute inset-0 w-full h-full" data-model-id="9">
-      <GridContent className="h-screen" variant="a">
-        <h1 id="idh">WEB DEVELOPMENT</h1>
-        <p id="idt">
-          I'm a skilled front-end developer with a strong focus on immersive, interactive web experiences. I specialize
-          in crafting visually engaging interfaces using modern tools and frameworks, often blending animation, WebGL,
-          and responsive design to create websites that feel alive and intuitive. I enjoy pushing the boundaries of
-          what’s possible in the browser—turning ideas into experiences that are both functional and emotionally
-          resonant.
-        </p>
-        <!-- <h2>Tech Stack</h2> -->
-        <TechStackIcons />
-      </GridContent>
-    </Section>
+      <h1 id="idh" class="row-start-3 col-start-1 col-span-12">
+        C<span class="mx-4 wave-y-1 text-yellow">O</span>DIN<InlineHighlight color="white">G</InlineHighlight>
+      </h1>
 
-    <!-- <div id="about-dummy" class="h-screen"></div> -->
-    <!-- <div id="dev-dummy" class="h-screen"></div> -->
-  </div>
-
-  <Section className="introduction-development-previews relative z-10">
-    <GridContent variant="full">
-      <ProjectsPreview
-        projects={[
-          { href: '/', image: { src: 'https://picsum.photos/400?random=1', alt: 'picture alt' } },
-          { href: '/', image: { src: 'https://picsum.photos/400?random=2', alt: 'picture alt' } },
-          { href: '/', image: { src: 'https://picsum.photos/400?random=3', alt: 'picture alt' } },
-        ]}
-      />
-    </GridContent>
-  </Section>
-
-  <Section className="introduction-new-media relative z-10" data-model-id="10">
-    <GridContent className="h-screen" variant="b">
-      <h1 id="inmh" class="uppercase">New Media & Immersive Installations</h1>
-      <p id="inmt">
-        I’m fascinated by the potential of immersive environments to blur the lines between the digital and physical.
-        Using tools like TouchDesigner, it's possible to create responsive systems that connect light, sound, and
-        movement—turning spaces into living, reactive experiences. These formats offer a unique way to tell stories,
-        provoke emotion, and engage the senses beyond the screen.
+      <p id="idt1" class="row-start-7 col-start-1 col-span-6">
+        I'm a <InlineHighlight className="mx-8" color="white">developer</InlineHighlight> with a focus on building interactive
+        and engaging digital experiences. My work ranges from <InlineHighlight className="mx-8"
+          >web development</InlineHighlight
+        > to <InlineHighlight className="mx-8" color="green">creative coding</InlineHighlight> for installations and art.
       </p>
-    </GridContent>
-  </Section>
+
+      <p id="idt2" class="row-start-9 col-start-3 col-span-5">
+        I use modern tools and frameworks to bring <InlineHighlight className="mx-12" color="white"
+          >ideas</InlineHighlight
+        > to life—whether it's a <InlineHighlight className="ml-8" color="yellow">responsive website</InlineHighlight>
+        <InlineHighlight className="mx-8" color="green">visual experiment</InlineHighlight> or <InlineHighlight
+          className="mx-8"
+          color="red">immersive piece.</InlineHighlight
+        > I enjoy <InlineHighlight className="mx-8" color="white">exploring</InlineHighlight> the intersection of code, design,
+        and user experience.
+      </p>
+    </Section>
+    <!-- <h2>Tech Stack</h2> -->
+    <!-- <div class="row-start-11 col-start-1 col-span-4">
+        <TechStackIcons />
+      </div> -->
+  </div>
 </Layout>
+
+<Section className="introduction-development-previews relative z-10">
+  <ProjectsPreview
+    projects={[
+      { href: '/', image: { src: 'https://picsum.photos/400?random=1', alt: 'picture alt' } },
+      { href: '/', image: { src: 'https://picsum.photos/400?random=2', alt: 'picture alt' } },
+      { href: '/', image: { src: 'https://picsum.photos/400?random=3', alt: 'picture alt' } },
+    ]}
+  />
+</Section>
+
+<Section className="introduction-new-media relative z-10" data-model-id="10">
+  <h1 id="inmh" class="uppercase">New Media & Immersive Installations</h1>
+  <p id="inmt">
+    I’m fascinated by the potential of immersive environments to blur the lines between the digital and physical. Using
+    tools like TouchDesigner, it's possible to create responsive systems that connect light, sound, and movement—turning
+    spaces into living, reactive experiences. These formats offer a unique way to tell stories, provoke emotion, and
+    engage the senses beyond the screen.
+  </p>
+</Section>
 
 <!-- <div class="loading"></div> -->
 
@@ -108,7 +134,6 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
   import Lenis from 'lenis'
-  import { step } from 'three/tsl'
 
   const lenis = new Lenis({
     lerp: 1,
@@ -118,6 +143,11 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000)
   })
+
+  // const lenis = {
+  //   options: { lerp: 1 },
+  //   scrollTo: (_, __) => {},
+  // }
 
   const MAX_ENTROPY = 0.01
   window.entropy = 0
@@ -143,13 +173,18 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
       document.dispatchEvent(swapModelEvent)
     }
 
-    // Introduction section Scroll Triggers
-
+    // Elements
     const introductionSections = document.querySelectorAll('.introduction-dummy')
     const lastIntroEl: HTMLElement = document.querySelector('.introduction-dummy-last')
     const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
     const contentScrollEl: HTMLElement = document.querySelector('.content-wrapper')
     const devPreviewEl: HTMLElement = document.querySelector('.introduction-development-previews')
+    const generalEl: HTMLElement = document.querySelector('.introduction-general')
+    const devEl: HTMLElement = document.querySelector('.introduction-development')
+
+    // Inline Elements per section
+    const generalInlines = generalEl.querySelectorAll('.inline-highlight')
+    const devInlines = devEl.querySelectorAll('.inline-highlight')
 
     introductionSections.forEach((section: HTMLElement) => {
       ScrollTrigger.create({
@@ -181,16 +216,6 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
       })
     })
 
-    // Last introduction slide
-    // ScrollTrigger.create({
-    //   trigger: lastIntroEl,
-    //   onEnter: () => {
-    //     lenis.options.lerp = 0.03
-    //     swapModel(lastIntroEl.dataset.modelId)
-    //   },
-    //   onEnterBack: () => {},
-    // })
-
     ScrollTrigger.create({
       trigger: entropyEl,
       start: 'center center',
@@ -220,18 +245,14 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
       },
       onLeaveBack: () => {
         lenis.options.lerp = 1
-        swapModel(7)
+        swapModel(2)
       },
       onUpdate: (self) => {
-        console.log('last element update ::: ', self.progress)
-
-        // window.entropy = (1 - Math.abs(2 * self.progress - 1)) * 0.01
         window.entropy = self.progress * MAX_ENTROPY
       },
     })
 
     // GSAP Timeline
-    const icons = Array.from(document.querySelectorAll('.tech-icon'))
     const scrollerTL = gsap.timeline({
       paused: true,
     })
@@ -239,8 +260,6 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
     let isTweening = false
     let currentIndex = 0
     const tlBlocks = ['initAbout', 'aboutEntered', 'devEntered', 'tlComplete']
-
-    // const devPreviewEl: HTMLElement = document.querySelector('.introduction-development-previews')
 
     // Function to handle scroll events within the pinned container to animate between blocks of content
     function handlePinContainerScroll({ progress, direction }) {
@@ -296,49 +315,67 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
         },
         onComplete: () => {
           isTweening = false
+
+          // Flash inline highlight
+          if (toLabel === 'aboutEntered') {
+            // const el: HTMLElement = generalInlines[Math.floor(Math.random() * generalInlines.length)] as HTMLElement
+            generalInlines.forEach((el, i) => {
+              setTimeout(() => {
+                el.classList.add('animation-in')
+                setTimeout(() => {
+                  el.classList.add('animation-out')
+                  el.classList.remove('animation-in')
+                }, 350)
+              }, i * 50)
+            })
+          }
+
+          // Flash inline highlight
+          if (toLabel === 'devEntered') {
+            const el: HTMLElement = devInlines[Math.floor(Math.random() * devInlines.length)] as HTMLElement
+
+            el.classList.add('animation-in')
+            setTimeout(() => {
+              el.classList.add('animation-out')
+              el.classList.remove('animation-in')
+            }, 350)
+          }
+
+          // Set Z indices to
+          if (targetIndex > 1) {
+            generalEl.style.zIndex = '1'
+            devEl.style.zIndex = '2'
+          } else {
+            generalEl.style.zIndex = '2'
+            devEl.style.zIndex = '1'
+          }
         },
       })
     }
 
     // Define animation
     scrollerTL.addLabel('initAbout')
-    scrollerTL.from('#igh', { x: 1000, ease: 'power1.inOut', duration: 1.25 })
-    scrollerTL.from('#igt', { x: 1000, ease: 'power1.inOut', duration: 0.9 }, '<0.4')
+    scrollerTL.from('#igh', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.8 })
+    scrollerTL.from('#igt1', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'initAbout+=0.2')
+    scrollerTL.from('#igt2', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.7 }, 'initAbout+=0.4')
 
     scrollerTL.addLabel('aboutEntered')
 
-    scrollerTL.to('#igh', { x: 1000, ease: 'power1.inOut', duration: 1.25 })
-    scrollerTL.to('#igt', { x: 1000, ease: 'power1.inOut', duration: 1 }, '<0.2')
+    scrollerTL.to('#igh', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.8 })
+    scrollerTL.to('#igt1', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'aboutEntered+=0.2')
+    scrollerTL.to('#igt2', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.7 }, 'aboutEntered+=0.4')
 
-    scrollerTL.addLabel('queueDevelopment', '-=1.5')
+    scrollerTL.addLabel('queueDevelopment')
 
-    scrollerTL.from('#idh', { x: -1000, ease: 'power1.inOut', duration: 1.3 }, 'queueDevelopment')
-    scrollerTL.from('#idt', { x: -1000, ease: 'power1.inOut', duration: 0.7 }, '<0.6')
-    scrollerTL.from(
-      icons,
-      {
-        scale: 0,
-        duration: 0.5,
-        stagger: 0.1, // delay between each icon's animation
-        ease: 'power1.inOut',
-      },
-      '<0.3'
-    )
+    scrollerTL.from('#idh', { y: -500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'queueDevelopment-=1')
+    scrollerTL.from('#idt1', { x: -500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'queueDevelopment-=0.8')
+    scrollerTL.from('#idt2', { x: -500, opacity: 0, ease: 'power1.inOut', duration: 0.7 }, 'queueDevelopment-=0.6')
 
     scrollerTL.addLabel('devEntered')
 
-    scrollerTL.to('#idt', { x: -1000, ease: 'power1.inOut', duration: 1.4 })
-    scrollerTL.to('#idh', { x: -1000, ease: 'power1.inOut', duration: 1.1 }, '<0.3')
-    scrollerTL.to(
-      [...icons.reverse()],
-      {
-        scale: 0,
-        duration: 0.5,
-        stagger: 0.1, // delay between each icon's animation
-        ease: 'power1.inOut',
-      },
-      'devEntered'
-    )
+    scrollerTL.to('#idh', { y: -500, opacity: 0, ease: 'power1.inOut', duration: 0.8 })
+    scrollerTL.to('#idt2', { x: -500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'devEntered+=0.2')
+    scrollerTL.to('#idt1', { x: -500, opacity: 0, ease: 'power1.inOut', duration: 0.7 }, 'devEntered+=0.4')
 
     scrollerTL.addLabel('tlComplete')
 
@@ -368,7 +405,7 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
         lenis.options.lerp = 1
       },
       onLeave: () => {
-        lenis.options.lerp = 0.1
+        lenis.options.lerp = 0.3
         currentIndex = tlBlocks.length - 1
       },
       onUpdate: (self) => {
@@ -377,3 +414,64 @@ import ProjectsPreview from '@/components/ProjectsPreview.astro'
     })
   })
 </script>
+
+<style lang="scss">
+  .introduction-general {
+    z-index: 2;
+  }
+
+  .wave-y-1 {
+    display: inline-block;
+    animation: 8s infinite alternate ease-in-out wave-x;
+  }
+
+  .wave-y-2 {
+    display: inline-block;
+    animation: 7s infinite alternate-reverse ease-in-out wave-x;
+    animation-delay: 0.33s;
+  }
+
+  @keyframes wave-l {
+    from {
+      margin-left: -16px;
+    }
+
+    to {
+      margin-left: 16px;
+    }
+  }
+
+  @keyframes wave-r {
+    from {
+      margin-right: -16px;
+    }
+
+    to {
+      margin-right: 16px;
+    }
+  }
+
+  @keyframes wave-x {
+    from {
+      transform: translateX(-16px);
+      /* margin-top: -16px; */
+    }
+
+    to {
+      /* margin-top: 16px; */
+      transform: translateX(16px);
+    }
+  }
+
+  @keyframes wave-y {
+    from {
+      transform: translateY(-16px);
+      /* margin-top: -16px; */
+    }
+
+    to {
+      /* margin-top: 16px; */
+      transform: translateY(16px);
+    }
+  }
+</style>

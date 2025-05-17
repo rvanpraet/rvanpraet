@@ -123,19 +123,18 @@ void main() {
   vec3 target = texture2D(uTarget, vUv).xyz;
   vec4 info = texture2D(uInfo, vUv);
 
-  float speedMod = info.y * 0.01;
-  float newForce = uForce + uEntropy * 50.0 + speedMod;
-  velocity *= newForce; // Velocity relaxation
+  // Force relaxation
+  velocity *= uForce;
 
-  // Curl noise
-  vec3 noise = curlNoise(position) * 0.002;
-  vec3 transitionNoise = curlNoise(vec3(position.x * 1.0, position.y * 10.0, position.z * 5.0) * info.w) * 0.005;
+  // Noise -- Curl noise seems to be too taxing on the GPU for a web app with computation renderer
+  vec3 noise = snoiseVec3(position) * 0.005;
+  // vec3 transitionNoise = snoiseVec3(vec3(position.x * 1.0, position.y * 10.0, position.z * 1.0)) * 0.005;
+  // vec3 transitionNoise = curlNoise(vec3(position.x * 1.0, position.y * 10.0, position.z * 5.0) * info.w) * 0.005;
 
+  // Entropy --- TOFIX: No IF statements in shaders
   if (uEntropy > 0.0) {
     float rVar = 0.3 + info.z * 0.7;
     float r = 500.0 * rVar;
-    // position.x = cos(uTime + info.x * M_PI * 2.0) * r * uEntropy;
-    // position.y = sin(uTime + info.x * M_PI * 2.0) * r * uEntropy;
 
     float entropy = clamp(uEntropy, 0.5 * 0.01, 1.0 * 0.01);
 
@@ -148,33 +147,38 @@ void main() {
   vec3 direction = normalize(target - position);
   float dist = length(target - position);
 
+  // // Simple attraction
+  // vec3 attraction = direction * dist * 0.01;
+  // velocity += attraction;
+
   // // Linear attraction
   // velocity.x += sin(uTime * 1.2 + info.x * M_PI * 2.0) * dist * 0.005; // Adds extra wiggle
-  // vec3 attraction = direction * dist * 0.01 + transitionNoise * dist;
-  // velocity += attraction; // Force that pushes particles towards their current target
+  // vec3 attraction = direction * dist * 0.01 + noise * dist * 0.2;
+  // velocity += attraction * (info.x * 0.15 + 0.85); // Force that pushes particles towards their current target
 
   // Exponential or eased attraction
   float maxDist = 2.0; // adjust to fit your system
   float normDist = clamp(dist / maxDist, 0.0, 1.0); // normalize dist to 0–1
-
   float falloff = easeInOutSine(normDist); // get easing-based force
 
-  velocity.x += cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025; // Adds extra wiggle
+  // Add extra wiggle in x direction
+  velocity.x += cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025;
 
-  vec3 attraction =
-    (direction * falloff * 0.05 + transitionNoise * clamp(falloff, 0.005, 1.0) * 3.5) * step(0.001, dist);
-  velocity += attraction; // Force that pushes particles towards their current target
+  // Force that pushes particles towards their current target
+  vec3 attraction = (direction * falloff * 0.05 + noise * clamp(falloff, 0.005, 1.0) * 1.5) * step(0.001, dist);
+  velocity += attraction * (info.y * 0.15 + 0.85); // Force that pushes particles towards their current target
 
   // Mouse repel force
   float mouseDistance = distance(position, uMouse);
   float maxDistance = 0.75;
 
+  // TODO: No if statements...
   if (mouseDistance < maxDistance) {
     vec3 pushDirection = normalize(position - uMouse);
-    velocity += (pushDirection * (1.0 - mouseDistance / maxDistance) * 0.035 + noise) * uMouseSpeed;
-  }
+    vec3 mouseAttraction = (pushDirection * (1.0 - mouseDistance / maxDistance) * 0.035 + noise) * uMouseSpeed;
+    velocity += mouseAttraction;
 
-  // velocity += curlNoise( position ) * 0.001;
+  }
 
   gl_FragColor = vec4(velocity, 1.0);
 }

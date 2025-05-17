@@ -29,7 +29,7 @@ export default class PostProcessing {
       radius: 0.15,
       directionX: 0.1,
       directionY: 0.1,
-      damp: 0.6,
+      damp: 0.4,
     }
 
     // Debug
@@ -59,8 +59,8 @@ export default class PostProcessing {
 
     this.composer = new EffectComposer(this.renderer)
     this.composer.addPass(renderScene)
-    this.composer.addPass(this.afterImagePass)
     // this.composer.addPass(this.afterImagePass)
+    // this.composer.addPass(this.bloomPass)
     this.composer.addPass(outputPass)
   }
 

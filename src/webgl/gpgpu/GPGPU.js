@@ -102,8 +102,8 @@ export default class GPGPU {
         uColor: { value: this.params.color },
         uMinAlpha: { value: this.params.minAlpha },
         uMaxAlpha: { value: this.params.maxAlpha },
-        uEntropy: { value: 0 },
         uInfo: { value: this.uniforms.positionUniforms.uInfo.value },
+        uTime: { value: 0 },
       },
       vertexShader,
       fragmentShader,
@@ -138,6 +138,7 @@ export default class GPGPU {
     this.events.update()
     this.uniforms.velocityUniforms.uTime.value = state.time
     this.uniforms.positionUniforms.uTime.value = state.time
+    this.material.uniforms.uTime.value = state.time
   }
 
   swapTarget(targetIndex) {

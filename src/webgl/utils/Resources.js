@@ -12,6 +12,9 @@ import codingPath from '/webgl/assets/models/coding.glb?url'
 import particleTexture from '/webgl/assets/textures/particle2.png?url'
 import fontPath from '/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 
+//
+const TOTAL_PROGRESS = 165190 + 4045609 + 7886300
+
 const modelConfig = {
   reinald: {
     x: -4,
@@ -25,7 +28,7 @@ const modelConfig = {
     scaleZ: 2.5,
   },
   coding: {
-    x: 3.5,
+    x: 4,
     y: -1,
     z: 0,
     rotateX: 0,
@@ -70,16 +73,25 @@ export default class Resources extends EventEmitter {
 
   // First load in fonts
   initResources() {
+    this.loadingPercentage = document.querySelector('.loading-percentage')
+    this.loadedProgress = []
+    this.loadingProgress = 0
+    this.totalLoadingProgress = 300
     const fontLoader = new FontLoader()
     const textureLoader = new THREE.TextureLoader()
     this.textures = {
       mask: textureLoader.load(particleTexture),
     }
-    fontLoader.load(fontPath, (font) => {
-      this.font = font
-      this.loadModelResources() // Load model resources after initial resources are loaded
-      // this.emit('ready')
-    })
+
+    fontLoader.load(
+      fontPath,
+      (font) => {
+        this.font = font
+        this.loadModelResources() // Load model resources after initial resources are loaded
+        // this.emit('ready')
+      },
+      this.onResourceProgress.bind(this)
+    )
   }
 
   loadModelResources() {
@@ -92,7 +104,7 @@ export default class Resources extends EventEmitter {
     // Create text meshes
     const params = {
       font: this.font,
-      size: 1,
+      size: 1.2,
       depth: 0.02,
       curveSegments: 60,
       bevelEnabled: true,
@@ -101,10 +113,11 @@ export default class Resources extends EventEmitter {
       bevelOffset: 0,
       bevelSegments: 5,
     }
+
     const texts = [
-      "Hi, I'm Reinald",
-      'Creative Developer',
-      'based in Amsterdam',
+      "HI, I'M REINALD",
+      'CREATIVE',
+      'DEVELOPER',
       'I love to create',
       'immersive',
       'and',
@@ -141,7 +154,7 @@ export default class Resources extends EventEmitter {
         const mesh = model.children[0]
         this.onModelLoad(name, mesh)
       },
-      undefined,
+      this.onResourceProgress.bind(this),
       (error) => console.error(`Error loading ${name} model:`, error)
     )
   }
@@ -154,7 +167,7 @@ export default class Resources extends EventEmitter {
         const mesh = model.scene.children[0]
         this.onModelLoad(name, mesh)
       },
-      undefined,
+      this.onResourceProgress.bind(this),
       (error) => console.error(`Error loading ${name} model:`, error)
     )
   }
@@ -186,7 +199,27 @@ export default class Resources extends EventEmitter {
     // Emit ready when all models are loaded
     if (this.loadingCount === 0) {
       this.emit('ready')
-      document.body.classList.remove('is-loading')
+      const loaderBg = document.querySelector('.loading-bg')
+      loaderBg.classList.remove('is-loading')
     }
+  }
+
+  onResourceProgress(e) {
+    // console.log('in progress ::: ', e)
+    let progress
+
+    if (e.loaded === e.total) {
+      console.log('pushing value')
+      this.loadedProgress.push(e.loaded)
+      this.loadingPercentage.textContent = `${Math.round((this.getLoadedProgress() / TOTAL_PROGRESS) * 100)}`
+    } else {
+      this.loadingPercentage.textContent = `${Math.round(((this.getLoadedProgress() + e.loaded) / TOTAL_PROGRESS) * 100)}`
+    }
+  }
+
+  getLoadedProgress() {
+    return this.loadedProgress.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue
+    }, 0)
   }
 }

@@ -41,7 +41,7 @@ export default class Renderer extends Handler {
       // depth: false,
     })
 
-    this.webglRenderer.toneMapping = THREE.ACESFilmicToneMapping
+    this.webglRenderer.toneMapping = THREE.LinearToneMapping
     this.webglRenderer.toneMappingExposure = 1
 
     this.webglRenderer.setSize(this.sizes.width, this.sizes.height)

@@ -1,0 +1,161 @@
+---
+const colorMap = {
+  white: {
+    mainColor: '#ffffff',
+    difColor: '#000000',
+  },
+  yellow: {
+    mainColor: '#ffe66d',
+    // difColor: '#3645d9',
+    difColor: '#001992',
+  },
+  green: {
+    mainColor: '#70a37f',
+    difColor: '#8f5c80',
+  },
+  red: {
+    mainColor: '#d64045',
+    difColor: '#29bfba',
+  },
+}
+
+const { className, color = 'yellow' } = Astro.props
+
+const { mainColor, difColor } = colorMap[color]
+
+// const willDiffClass =
+const willDiffClass = 'will-diff '
+
+// const mainColor = `--color-${color}`
+// const difColor = `--color-${color}-dif`
+---
+
+<span class={'inline-highlight ' + willDiffClass + className}><slot /></span>
+
+<script>
+  import gsap from 'gsap'
+  const inlineEls = document.querySelectorAll('.inline-highlight')
+
+  inlineEls.forEach((el) => {
+    el.addEventListener('mouseenter', (e) => {
+      console.log('hover inline')
+
+      el.classList.add('animation-in')
+      el.classList.remove('animation-out')
+
+      // setTimeout(() => {
+      //   el.classList.remove('animation-in')
+      // }, 350)
+    })
+
+    el.addEventListener('mouseleave', (e) => {
+      console.log('hover out inline')
+
+      el.classList.remove('animation-in')
+      el.classList.add('animation-out')
+
+      setTimeout(() => {
+        el.classList.remove('animation-out')
+      }, 350)
+    })
+  })
+</script>
+
+<style lang="scss" define:vars={{ mainColor, difColor }}>
+  .inline-highlight {
+    display: inline-block;
+    position: relative;
+    overflow-y: clip;
+    padding: 0 calc(var(--spacing) * 2);
+
+    &::before,
+    &::after {
+      border-radius: 2px;
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      transform: translateY(100%);
+      background-color: var(--mainColor);
+      animation-fill-mode: forwards;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    &.will-diff {
+      &::before {
+        @supports (mix-blend-mode: difference) {
+          background-color: var(--color-white);
+          mix-blend-mode: difference;
+        }
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      &::after {
+        background-color: var(--mainColor);
+        @supports (mix-blend-mode: difference) {
+          // background-color: adjust-hue(#ffe66d, 180);
+          background-color: var(--difColor);
+          filter: brightness(0.85);
+          //#e20074; <- desired color, complementary color does not match exactly
+          // filter: hue-rotate(-180deg) brightness(2);
+        }
+        z-index: -1;
+      }
+
+      &.animation-in {
+        @supports not (mix-blend-mode: difference) {
+          color: var(--color-black);
+        }
+      }
+    }
+
+    &.animation-in {
+      // @supports not (mix-blend-mode: difference) {
+      //   color: var(--color-black);
+      // }
+
+      &::before,
+      &::after {
+        // transform: translateY(0);
+
+        animation: slideInUp 0.25s ease-in forwards;
+      }
+    }
+
+    &.animation-out {
+      &::before,
+      &::after {
+        animation: slideOutUp 0.25s ease-out forwards;
+      }
+    }
+
+    &:focus,
+    &:hover {
+      cursor: default;
+    }
+
+    /* Animates from bottom to center */
+    @keyframes slideInUp {
+      0% {
+        transform: translateY(100%);
+      }
+      100% {
+        transform: translateY(0%);
+      }
+    }
+
+    /* Animates from center to top (after slide in) */
+    @keyframes slideOutUp {
+      0% {
+        transform: translateY(0%);
+      }
+      100% {
+        transform: translateY(-100%);
+      }
+    }
+  }
+</style>

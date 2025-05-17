@@ -11,12 +11,12 @@ import '@/styles/global.css'
     <meta name="generator" content={Astro.generator} />
     <title>Astro Basics</title>
   </head>
-  <body>
+  <body class="is-loading">
     <slot />
   </body>
 </html>
 
-<style>
+<style is:global>
   .body .introduction-dummy {
     border: 3px solid red;
   }
