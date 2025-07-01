@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+interface Props extends HTMLAttributes<'span'> {
+  className?: string
+  color?: string
+}
+
+const { className, color } = Astro.props
+
+const transformBefore =
+  'rotateZ(' + Math.random() * 360 + 'deg) translateX(' + (Math.random() * 0.5 + 0.25) * 100 + '%)'
+const transformAfter = 'rotateZ(' + Math.random() * 360 + 'deg) translateX(' + (Math.random() * 0.5 + 0.25) * 100 + '%)'
+
+const classes = twMerge(`sliced-letter`, className)
+---
+
+<span class={classes}><slot /></span>
+
+<style lang="scss" define:vars={{ transformBefore, transformAfter }}>
+  .sliced-letter {
+    display: inline-block;
+    position: relative;
+    overflow: clip;
+
+    &::before {
+      z-index: 2;
+      position: absolute;
+      content: '';
+      width: 8px;
+      height: 200%;
+      transform: var(--transformBefore);
+      background-color: var(--color-black);
+    }
+
+    &::after {
+      z-index: 2;
+      position: absolute;
+      content: '';
+      width: 8px;
+      height: 200%;
+      transform: var(--transformAfter);
+      background-color: var(--color-black);
+    }
+  }
+</style>

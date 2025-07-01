@@ -1,0 +1,43 @@
+---
+import type { ArtItemType } from '@/types/art'
+import type { HTMLAttributes } from 'astro/types'
+import { Image, imageConfig } from 'astro:assets'
+import { twMerge } from 'tailwind-merge'
+import Section from './Section.astro'
+
+type Props = HTMLAttributes<'div'> & ArtItemType
+
+const { class: className, image, title, year } = Astro.props
+const classes = twMerge('art-item pt-24 grid grid-cols-13', className)
+---
+
+<div class={classes}>
+  <div class="col-start-5 col-span-5 flex justify-center items-center">
+    <Image {...image} layout="responsive" inferSize class=".art-item--image" />
+  </div>
+
+  <p class="col-start-10 col-span-2 italic content-end">
+    <span class="pl-8 text-lg">{title}</span>
+    <br />
+    <span class="pl-8 text-sm">{year}</span>
+  </p>
+
+  <div class="art-item--line col-start-3 col-span-9 pb-24"></div>
+</div>
+
+<style lang="scss">
+  .art-item {
+    // border-bottom: 1px solid var(--color-white);
+    // height: calc(100vh - 8rem);
+  }
+
+  .art-item--image {
+    max-height: calc(100vh - 8rem);
+    width: auto;
+    // object-fit: cover;
+    // object-position: center;
+  }
+  .art-item--line {
+    border-bottom: 1px solid var(--color-white);
+  }
+</style>

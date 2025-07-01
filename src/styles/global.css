@@ -2,6 +2,7 @@
 @import 'lenis/dist/lenis.css';
 @import './fonts/font-faces.css';
 @import './typography/typography.css';
+@import './layout/layout.css';
 
 @theme {
   --color-white: #e2e2e2;
@@ -34,5 +35,5 @@ body {
 }
 
 body {
-  padding: 0 2rem;
+  /* padding: 0 2rem; */
 }

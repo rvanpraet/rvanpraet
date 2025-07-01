@@ -16,6 +16,19 @@ import fontPath from '/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 const TOTAL_PROGRESS = 165190 + 4045609 + 7886300
 
 const modelConfig = {
+  text: {
+    xp: {
+      x: 2.5,
+      y: 0,
+      z: 0,
+      // rotateX: 0,
+      // rotateY: 0,
+      // rotateZ: 0,
+      // scaleX: 2.5,
+      // scaleY: 2.5,
+      // scaleZ: 2.5,
+    },
+  },
   reinald: {
     x: -4,
     y: -1.5,
@@ -115,6 +128,7 @@ export default class Resources extends EventEmitter {
     }
 
     const texts = [
+      'XP',
       "HI, I'M REINALD",
       'CREATIVE',
       'DEVELOPER',
@@ -142,6 +156,8 @@ export default class Resources extends EventEmitter {
     const offset = new THREE.Vector3()
     geometry.boundingBox.getCenter(offset).negate()
     geometry.translate(offset.x, offset.y, offset.z)
+
+    geometry.translate(5.5, 0, 0)
 
     return mesh
   }

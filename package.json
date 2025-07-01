@@ -19,6 +19,7 @@
     "lil-gui": "^0.20.0",
     "sass": "^1.88.0",
     "stats.js": "^0.17.0",
+    "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.4",
     "three": "^0.173.0",
     "three-mesh-bvh": "^0.8.3"

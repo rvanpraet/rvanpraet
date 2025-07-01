@@ -2,64 +2,79 @@
 import ScrollIcon from '@/components/ScrollIcon.astro'
 import Three from '../components/Three.astro'
 import Layout from '../layouts/Layout.astro'
-import TechStackIcons from '@/components/TechStackIcons.astro'
-import GridContent from '@/components/GridContent.astro'
-import Section from '@/components/Section.astro'
-import ProjectsPreview from '@/components/ProjectsPreview.astro'
-import Introduction from '@/components/Introduction.astro'
+// import GridContent from '@/components/GridContent.astro'
 import ExperienceLoader from '@/components/ExperienceLoader.astro'
 import InlineHighlight from '@/components/InlineHighlight.astro'
+import NavMenu from '@/components/NavMenu.astro'
+import SlicedLetter from '@/components/SlicedLetter.astro'
+import FullpageSection from '@/components/FullpageSection.astro'
+import Timeline from '@/components/Timeline.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
+  <NavMenu />
   <ExperienceLoader />
 
   <Three />
 
   <ScrollIcon />
 
-  <section class="introduction-dummy relative z-10" data-model-id="0">
-    <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy relative z-10" data-model-id="1">
-    <GridContent className="h-screen" variant="full" />
-  </section>
-  <section class="introduction-dummy relative z-10" data-model-id="2">
-    <GridContent className="h-screen" variant="full" />
-  </section>
+  <Timeline
+    class="relative z-10"
+    items={[
+      {
+        dateFrom: '2024',
+        dateTo: 'Current',
+        title: 'Freelance',
+        subtitle: 'Creative Developer - Sound Designer - Immersive Artist',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
+      },
+      {
+        dateFrom: '2021',
+        dateTo: '2024',
+        title: 'Fabrique',
+        subtitle: 'Frontend Developer',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
+      },
+      {
+        dateFrom: '2020',
+        dateTo: '2021',
+        title: 'Thuisleefgroep',
+        subtitle: 'Frontend Developer',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
+      },
+      {
+        dateFrom: '2018',
+        dateTo: '2020',
+        title: 'Vattenfall',
+        subtitle: 'Frontend Developer',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
+      },
+    ]}
+  />
 
-  <div class="introduction-entropy relative z-10"></div>
+  <!-- <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="0"></section>
+  <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="1"></section>
+  <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="2"></section> -->
 
-  <!-- <Section className="introduction-dummy relative z-10" data-model-id="2">
-    <GridContent className="h-screen" variant="full" />
-  </Section>
-  <Section className="introduction-dummy relative z-10" data-model-id="3">
-    <GridContent className="h-screen" variant="full" />
-  </Section>
-  <Section className="introduction-dummy relative z-10" data-model-id="4">
-    <GridContent className="h-screen" variant="full" />
-  </Section>
-  <Section className="introduction-dummy relative z-10" data-model-id="5">
-    <GridContent className="h-screen" variant="full" />
-  </Section>
-  <Section className="introduction-dummy relative z-10" data-model-id="6">
-    <GridContent className="h-screen" variant="full" />
-  </Section>
-  <Section className="introduction-dummy relative z-10" data-model-id="7">
-    <GridContent className="h-screen" variant="full" />
-  </Section> -->
+  <!-- <div class="introduction-entropy relative z-10"></div> -->
 
-  <div class="content-wrapper relative z-10 h-screen">
-    <Section className="introduction-general absolute inset-0 w-full h-full" data-model-id="8">
-      <h1 id="igh" class="row-start-3 col-start-6 col-span-6">
-        AB<span class="mx-2"><span class="text-green wave-y-1 mx-4">O</span><span class="wave-y-2 mx-4">U</span></span
+  <!-- <div class="content-wrapper relative z-10 h-screen">
+    <FullpageSection className="introduction-general" data-model-id="8">
+      <h1 id="igh" class="row-start-4 col-start-7 col-span-6">
+        AB<span class="mx-2"
+          ><SlicedLetter className="text-green">O</SlicedLetter><span class="wave-y-2 mx-4">U</span></span
         ><InlineHighlight color="white">T</InlineHighlight>
       </h1>
 
-      <p id="igt1" class="row-start-7 col-start-6 col-span-6">
+      <p id="igt1" class="row-start-7 col-start-7 col-span-6">
         I'm passionate about technology—<InlineHighlight className="mx-16" color="white"
           >I love to create.</InlineHighlight
         >Storytelling, emotion, mystery: these are the words that shape my approach to<InlineHighlight className="mx-12"
@@ -75,11 +90,13 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
         aim to evoke feeling,<InlineHighlight className="mx-12" color="yellow">spark</InlineHighlight>curiosity, and
         invite a<InlineHighlight className="ml-12" color="white">moment of reflection.</InlineHighlight>
       </p>
-    </Section>
+    </FullpageSection>
 
-    <Section className="introduction-development absolute inset-0 w-full h-full" data-model-id="9">
+    <FullpageSection className="introduction-development" data-model-id="9">
       <h1 id="idh" class="row-start-3 col-start-1 col-span-12">
-        C<span class="mx-4 wave-y-1 text-yellow">O</span>DIN<InlineHighlight color="white">G</InlineHighlight>
+        C<SlicedLetter className="mx-4 wave-y-1 text-yellow">O</SlicedLetter>DIN<InlineHighlight color="white"
+          >G</InlineHighlight
+        >
       </h1>
 
       <p id="idt1" class="row-start-7 col-start-1 col-span-6">
@@ -99,15 +116,11 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
         > I enjoy <InlineHighlight className="mx-8" color="white">exploring</InlineHighlight> the intersection of code, design,
         and user experience.
       </p>
-    </Section>
-    <!-- <h2>Tech Stack</h2> -->
-    <!-- <div class="row-start-11 col-start-1 col-span-4">
-        <TechStackIcons />
-      </div> -->
-  </div>
+    </FullpageSection>
+  </div> -->
 </Layout>
 
-<Section className="introduction-development-previews relative z-10">
+<!-- <FullpageSection className="introduction-development-previews">
   <ProjectsPreview
     projects={[
       { href: '/', image: { src: 'https://picsum.photos/400?random=1', alt: 'picture alt' } },
@@ -115,9 +128,9 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
       { href: '/', image: { src: 'https://picsum.photos/400?random=3', alt: 'picture alt' } },
     ]}
   />
-</Section>
+</FullpageSection> -->
 
-<Section className="introduction-new-media relative z-10" data-model-id="10">
+<!-- <FullpageSection className="introduction-new-media" data-model-id="10">
   <h1 id="inmh" class="uppercase">New Media & Immersive Installations</h1>
   <p id="inmt">
     I’m fascinated by the potential of immersive environments to blur the lines between the digital and physical. Using
@@ -125,7 +138,7 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
     spaces into living, reactive experiences. These formats offer a unique way to tell stories, provoke emotion, and
     engage the senses beyond the screen.
   </p>
-</Section>
+</FullpageSection> -->
 
 <!-- <div class="loading"></div> -->
 
@@ -175,12 +188,13 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
 
     // Elements
     const introductionSections = document.querySelectorAll('.introduction-dummy')
-    const lastIntroEl: HTMLElement = document.querySelector('.introduction-dummy-last')
     const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
     const contentScrollEl: HTMLElement = document.querySelector('.content-wrapper')
     const devPreviewEl: HTMLElement = document.querySelector('.introduction-development-previews')
     const generalEl: HTMLElement = document.querySelector('.introduction-general')
     const devEl: HTMLElement = document.querySelector('.introduction-development')
+
+    if (!contentScrollEl) return
 
     // Inline Elements per section
     const generalInlines = generalEl.querySelectorAll('.inline-highlight')
@@ -267,6 +281,8 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
       if (isTweening) return
 
       const targetIndex = currentIndex + direction
+
+      console.log(targetIndex)
 
       if (targetIndex < 0 || targetIndex >= tlBlocks.length) return
 
@@ -387,6 +403,7 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
       pin: true,
       scrub: true,
       onEnter: () => {
+        lenis.options.lerp = 1
         window.entropy = 0
         // currentIndex = 0
       },
@@ -415,7 +432,7 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" is:global>
   .introduction-general {
     z-index: 2;
   }

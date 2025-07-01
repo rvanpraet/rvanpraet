@@ -25,7 +25,7 @@ export default class PostProcessing {
 
     this.params = {
       threshold: 0.35,
-      strength: 0.25,
+      strength: 0.05,
       radius: 0.15,
       directionX: 0.1,
       directionY: 0.1,
@@ -60,7 +60,7 @@ export default class PostProcessing {
     this.composer = new EffectComposer(this.renderer)
     this.composer.addPass(renderScene)
     // this.composer.addPass(this.afterImagePass)
-    // this.composer.addPass(this.bloomPass)
+    this.composer.addPass(this.bloomPass)
     this.composer.addPass(outputPass)
   }
 

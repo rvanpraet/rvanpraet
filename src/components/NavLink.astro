@@ -1,14 +1,22 @@
-<!-- ---
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
 
-const { variant, className, ...rest } = Astro.props
+export interface LinkProps extends HTMLAttributes<'a'> {
+  active?: boolean
+  className?: string
+  variant?: string
+}
 
-const classes = twMerge(
-  `nav-link-${variant}`,
-  className
+type Props = LinkProps
+
+const { active = false, variant = 'primary', className, ...rest } = Astro.props
+
+const wrapperClasses = twMerge(
+  `nav-link--${variant} uppercase font-extralight text-base py-2 px-4`,
+  className,
+  active ? 'active' : ''
 )
-
 ---
 
-
-
-<a class={classes} {...rest}></a> -->
+<a class={wrapperClasses} {...rest}><span class="nav-link--text"><slot /></span></a>

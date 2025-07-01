@@ -1,13 +1,16 @@
 ---
-const { className, ...rest } = Astro.props
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+interface Props extends HTMLAttributes<'section'> {
+  className?: string
+}
+
+const { class: className, ...rest } = Astro.props
+
+const classes = twMerge('.main-grid-layout', className)
 ---
 
-<section class={'grid grid-rows-12 grid-cols-4 md:grid-cols-6 lg:grid-cols-12' + ' ' + className} {...rest}>
+<section class={classes} {...rest}>
   <slot />
 </section>
-
-<!-- <style>
-  section {
-    z-index: 1;
-  }
-</style> -->

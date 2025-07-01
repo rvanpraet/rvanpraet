@@ -1,0 +1,36 @@
+---
+import type { ImageData } from '@/types/image'
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+import OrientationPicture from './OrientationPicture.astro'
+
+interface Props extends HTMLAttributes<'a'> {
+  image: ImageData
+  title: string
+  description?: string
+  tags?: string[]
+}
+
+const { class: className, image, title, description, tags, ...rest } = Astro.props
+
+const classes = twMerge('flex flex-col gap-4 justify-center', className)
+---
+
+<a class={classes} {...rest}>
+  {
+    tags && (
+      <div class="flex flex-row gap-2">
+        {tags.map((tag) => (
+          <span class="text-sm font-light mr-2">{tag}</span>
+        ))}
+      </div>
+    )
+  }
+  <OrientationPicture variant="landscape" src={image.src} alt={image.alt} />
+
+  <div>
+    <p class="text-3xl">{title}</p>
+
+    {description && <p class="text-sm">{description}</p>}
+  </div>
+</a>

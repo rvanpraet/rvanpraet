@@ -1,0 +1,69 @@
+---
+import GenericContent from '@/components/GenericContent.astro'
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import ImageDual from '@/components/ImageDual.astro'
+import ContentImage from '@/components/ContentImage.astro'
+import contentImage from '@/assets/images/PRESS_KIT_SASEMOI_PORTRAIT.jpg'
+import ProjectsPreview from '@/components/ProjectsPreview.astro'
+
+import jcbImage from '@/assets/images/JCB_LIBRARY.jpg'
+import depthArrayImage from '@/assets/images/DEPTH_ARRAY.jpg'
+import delverImage from '@/assets/images/DELVER.png'
+---
+
+<ContentLayout>
+  <GenericContent variant="introduction">
+    <h1>Projects</h1>
+    <p>
+      Something about projects and how the right projects push you to develop yourself in the direction you want to go
+    </p>
+  </GenericContent>
+
+  <ProjectsPreview
+    projects={[
+      {
+        href: '/',
+        title: 'Depth Array: Reflections',
+        tags: ['Immersive', 'Sound Design', 'Creative Coding'],
+        image: { src: depthArrayImage, alt: 'picture alt' },
+      },
+      {
+        href: '/',
+        title: 'JCB Library',
+        tags: ['Development', 'Cultural Heritage'],
+        image: { src: jcbImage, alt: 'picture alt' },
+      },
+      {
+        href: '/',
+        title: 'Delver Music',
+        tags: ['Design', 'Development', 'Music'],
+        image: { src: delverImage, alt: 'picture alt' },
+      },
+    ]}
+  />
+
+  <!-- <ImageDual
+    images={[
+      { variant: 'landscape', src: 'https://picsum.photos/700/300/?random=1', alt: 'picture alt' },
+      { variant: 'portrait', src: 'https://picsum.photos/500/300/?random=2', alt: 'picture alt' },
+    ]}
+  /> -->
+
+  <ContentImage variant="left" image={{ variant: 'landscape', src: contentImage, alt: 'Reinald portrait' }}>
+    <h1>Lorem Ipsum</h1>
+
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo aut illo beatae similique officia ducimus, ut porro,
+      optio, rem maxime soluta exercitationem sint odio atque dignissimos? Saepe praesentium nobis laudantium!
+    </p>
+  </ContentImage>
+
+  <ContentImage variant="right" image={{ variant: 'portrait', src: contentImage, alt: 'Reinald portrait' }}>
+    <h1>Lorem Ipsum</h1>
+
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo aut illo beatae similique officia ducimus, ut porro,
+      optio, rem maxime soluta exercitationem sint odio atque dignissimos? Saepe praesentium nobis laudantium!
+    </p>
+  </ContentImage>
+</ContentLayout>

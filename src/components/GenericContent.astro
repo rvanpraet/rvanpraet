@@ -1,0 +1,54 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+import Section from './Section.astro'
+
+interface Props extends HTMLAttributes<'section'> {
+  className?: string
+  variant: 'introduction' | 'content'
+}
+
+const variantClasses = {
+  introduction: 'mt-32',
+  content: 'mt-16',
+}
+
+const { className, variant, ...rest } = Astro.props
+
+const variantClass = variantClasses[variant]
+
+console.log(variantClass)
+
+const classes = twMerge(variantClass, className)
+---
+
+<Section class={classes} {...rest}>
+  <div class="content-wrapper col-start-2 col-span-10">
+    <slot />
+  </div>
+</Section>
+
+<style lang="scss">
+  .content-wrapper {
+    h1 {
+      /* font-size: var(--text-8xl); */
+      text-transform: uppercase;
+      font-weight: var(--font-weight-light);
+      margin-bottom: calc(var(--spacing) * 8);
+      font-size: 4rem;
+    }
+
+    h2 {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: calc(var(--spacing) * 4);
+    }
+
+    p {
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-light);
+      margin-bottom: calc(var(--spacing) * 16);
+      line-height: 1.5em;
+    }
+  }
+</style>

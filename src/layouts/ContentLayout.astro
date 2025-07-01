@@ -12,17 +12,26 @@ import '@/styles/global.css'
     <meta name="generator" content={Astro.generator} />
     <title>Astro Basics</title>
   </head>
-  <body class="is-loading bg-black">
+  <body class="bg-black">
     <NavMenu />
-    <main>
+    <main class="relative z-10">
       <slot />
     </main>
     <!-- Footer -->
   </body>
 </html>
 
-<style is:global>
-  .body .introduction-dummy {
-    border: 3px solid red;
-  }
-</style>
+<script>
+  import Lenis from 'lenis'
+
+  // Initialize Lenis
+  const lenis = new Lenis({
+    duration: 0.3,
+    autoRaf: true,
+  })
+
+  // Listen for the scroll event and log the event data
+  lenis.on('scroll', (e) => {
+    console.log(e)
+  })
+</script>

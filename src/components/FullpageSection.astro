@@ -1,0 +1,31 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+import Section from './Section.astro'
+
+interface Props extends HTMLAttributes<'section'> {
+  className?: string
+}
+
+const { className, ...rest } = Astro.props
+
+const positionClass = 'absolute inset-0 w-full h-full'
+const gridClass = 'grid grid-rows-12 grid-cols-4 md:grid-cols-6 lg:grid-cols-12'
+const classes = twMerge(positionClass, gridClass, className)
+---
+
+<section class={classes} {...rest}>
+  <slot />
+</section>
+
+<style lang="scss">
+  section {
+    h1 {
+      /* font-size: var(--text-8xl); */
+      // text-transform: uppercase;
+      // font-weight: var(--font-weight-light);
+      // margin-bottom: calc(var(--spacing) * 8);
+      font-size: 8rem;
+    }
+  }
+</style>

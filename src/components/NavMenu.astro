@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import NavLink, { type LinkProps } from './NavLink.astro'
+import { twMerge } from 'tailwind-merge'
+
+interface Props extends HTMLAttributes<'nav'> {
+  links?: LinkProps[]
+}
+
+const links = [
+  { text: 'Main', active: true, href: '/' },
+  { text: 'Projects', active: false, href: '/projects' },
+  { text: 'Art', active: false, href: '/art' },
+  { text: 'About', active: false, href: '/about' },
+]
+
+const { class: className } = Astro.props
+
+const classes = twMerge('fixed w-full top-0 left-0 z-40 flex justify-center', className)
+---
+
+<nav class={classes}>
+  <div class="navigation-wrapper flex justify-center w-fit gap-8 px-2">
+    {links.map(({ text, ...linkProps }) => <NavLink {...linkProps}>{text}</NavLink>)}
+  </div>
+</nav>
+
+<style>
+  .navigation-wrapper {
+    /* background-color: #0d0d0ddd; */
+    background-color: #1f1f1fbb;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+  }
+</style>

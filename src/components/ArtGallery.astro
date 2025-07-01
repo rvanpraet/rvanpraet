@@ -1,0 +1,19 @@
+---
+import type { ArtItemType } from '@/types/art'
+
+// import Section from './Section.astro'
+import ArtItem from './ArtItem.astro'
+// import { twMerge } from 'tailwind-merge'
+
+type Props = {
+  className?: string
+  items: ArtItemType[]
+}
+
+const { className, items } = Astro.props
+// const classes = twMerge('mt-32', className)
+---
+
+<Fragment>
+  {items.map((item) => <ArtItem class="col-start-4 col-span-6 max-h-screen" {...item} />)}
+</Fragment>

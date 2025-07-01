@@ -1,0 +1,33 @@
+---
+import NavMenu from '@/components/NavMenu.astro'
+import GenericContent from '@/components/GenericContent.astro'
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import ImageDual from '@/components/ImageDual.astro'
+import ContentImage from '@/components/ContentImage.astro'
+import contentImage from '@/assets/images/PRESS_KIT_SASEMOI_PORTRAIT.jpg'
+import { Image } from 'astro:assets'
+import bgImage from '@/assets/images/RVP_BG.jpeg'
+---
+
+<!-- BG Image -->
+<div class="fixed w-screen h-screen z-0">
+  <Image
+    src={bgImage}
+    alt="Background Image"
+    layout="none"
+    fit="cover"
+    inferSize={true}
+    class="absolute inset-0 object-cover w-full h-full scale-200"
+  />
+</div>
+
+<ContentLayout>
+  <ContentImage variant="left" image={{ variant: 'square', src: contentImage, alt: 'Reinald portrait' }}>
+    <h1>Lorem Ipsum</h1>
+
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo aut illo beatae similique officia ducimus, ut porro,
+      optio, rem maxime soluta exercitationem sint odio atque dignissimos? Saepe praesentium nobis laudantium!
+    </p>
+  </ContentImage>
+</ContentLayout>

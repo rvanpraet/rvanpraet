@@ -1,0 +1,72 @@
+---
+import type { ImageData } from '@/types/image'
+import type { HTMLAttributes } from 'astro/types'
+import { Image, Picture } from 'astro:assets'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'div'> & ImageData
+
+const variantClasses = {
+  landscape: 'landscape',
+  'landscape-54': 'landscape-54',
+  portrait: 'portrait',
+  square: 'square',
+}
+
+const { class: className, variant, src, alt } = Astro.props
+const classes = twMerge('orientation-picture', variantClasses[variant], className)
+
+const inferSize = typeof src === 'string'
+---
+
+<div class={classes}>
+  <Image src={src} alt={alt} layout="none" fit="cover" inferSize={inferSize} />
+</div>
+
+<style lang="scss">
+  /* Position child elements relative to this element */
+  .orientation-picture {
+    position: relative;
+
+    img {
+      /* Image should match parent box size */
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &::after {
+      display: block;
+      content: '';
+      /* 16:9 aspect ratio */
+      padding-bottom: 0;
+    }
+
+    &.portrait::after {
+      padding-bottom: 133.33%;
+    }
+
+    &.landscape::after {
+      padding-bottom: 56.25%;
+    }
+
+    &.landscape-54::after {
+      padding-bottom: 80%;
+    }
+
+    &.square::after {
+      padding-bottom: 100%;
+    }
+  }
+
+  .orientation-picture
+
+  /* Create a pseudo element that uses padding-bottom to take up space */
+  .orientation-picture::after {
+  }
+
+  /* Image is positioned absolutely relative to the parent element */
+</style>

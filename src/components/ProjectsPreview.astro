@@ -1,26 +1,51 @@
 ---
 import { Picture } from 'astro:assets'
+import DecoratedLink from './DecoratedLink.astro'
+import { twMerge } from 'tailwind-merge'
+import type { ImageData } from '@/types/image'
 
-const { projects } = Astro.props
+type DecoratedLink = {
+  href: string
+  title: string
+  image: ImageData
+  description?: string
+  tags?: string[]
+}
+
+type Props = {
+  class?: string
+  projects: DecoratedLink[]
+}
+
+const { class: className, projects } = Astro.props
+const classes = twMerge(
+  'generic-image-grid mt-32 px-8 col-start-1 col-span-12 flex w-full flex-row flex-wrap',
+  className
+)
 ---
 
-<div class="flex flex-row flex-wrap gap-10">
+<div class={classes}>
   {
     projects.map((project) => (
-      <a class="project-link" href={project.href}>
-        <Picture src={project.image.src} alt={project.image.alt} inferSize />{' '}
-      </a>
+      <DecoratedLink
+        class="w-1/2 mb-16"
+        image={project.image}
+        title={project.title}
+        description={project.description}
+        tags={project.tags}
+      />
     ))
   }
 </div>
 
-<style>
-  .project-link {
-    display: inline-block;
-    width: calc(50% - (var(--spacing) * 5));
-  }
+<style lang="scss">
+  .generic-image-grid {
+    :nth-child(even) {
+      padding-left: 0.5rem;
+    }
 
-  picture img {
-    width: 100%;
+    :nth-child(odd) {
+      padding-right: 0.5rem;
+    }
   }
 </style>

@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+import Section from './Section.astro'
+import { Picture } from 'astro:assets'
+import OrientationPicture from './OrientationPicture.astro'
+import type { ImageData } from '@/types/image'
+
+interface Props extends HTMLAttributes<'section'> {
+  className?: string
+  images: ImageData[]
+}
+
+const variantClasses = {
+  introduction: 'mt-32',
+  content: 'mt-16',
+}
+
+const { className, images, ...rest } = Astro.props
+
+const wrapperClass = 'flex col-start-1 col-span-full gap-8'
+const imageWrapperClass = ['col-start-1 col-span-6 pr-4', 'col-start-7 col-span-6 pl-4']
+
+const classes = twMerge('mt-32', className)
+---
+
+<Section class={classes} {...rest}>
+  {images.map((image, index) => <OrientationPicture class={imageWrapperClass[index]} {...image} />)}
+</Section>
+
+<style>
+  picture img {
+    width: 100%;
+  }
+</style>
