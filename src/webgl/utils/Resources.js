@@ -128,15 +128,15 @@ export default class Resources extends EventEmitter {
     }
 
     const texts = [
-      'XP',
       "HI, I'M REINALD",
       'CREATIVE',
       'DEVELOPER',
-      'I love to create',
-      'immersive',
-      'and',
-      'interactive',
-      'experiences',
+      'XP',
+      // 'I love to create',
+      // 'immersive',
+      // 'and',
+      // 'interactive',
+      // 'experiences',
     ]
     this.models.text = texts.map((text) => this.createText(text, params))
   }
@@ -157,7 +157,7 @@ export default class Resources extends EventEmitter {
     geometry.boundingBox.getCenter(offset).negate()
     geometry.translate(offset.x, offset.y, offset.z)
 
-    geometry.translate(5.5, 0, 0)
+    // geometry.translate(5.5, 0, 0)
 
     return mesh
   }

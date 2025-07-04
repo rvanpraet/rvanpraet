@@ -52,12 +52,16 @@ export default class Mask extends Handler {
   }
 
   setupModels() {
+    const xpModel = this.resources.models.text.pop()
     this.model = this.resources.models.text[0]
     this.models = [
       ...this.resources.models.text,
       ...Object.values(this.resources.models.main),
       ...Object.values(this.resources.models.main),
+      xpModel,
     ]
+
+    console.log(this.models)
     // this.model.geometry.position.y -= 0.5
   }
 
