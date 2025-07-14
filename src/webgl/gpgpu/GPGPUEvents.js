@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { MeshBVH, acceleratedRaycast } from 'three-mesh-bvh'
+import { debounce } from '../helpers'
 
 export default class GPGPUEvents {
   constructor(mouse, camera, mesh, uniforms) {
@@ -18,6 +19,7 @@ export default class GPGPUEvents {
 
   init() {
     this.setupMouse()
+    this.setupScroll()
   }
 
   setupEntropy() {
@@ -51,15 +53,27 @@ export default class GPGPUEvents {
     })
   }
 
+  setupScroll() {
+    window.addEventListener('wheel', (e) => {
+      console.log('Wheel event detected:', e.deltaY)
+      this.verticalDrift = Math.sign(e.deltaY)
+      // this.verticalDrift = e.deltaY * 0.05
+    })
+  }
+
   update() {
     if (!this.mouse.cursorPosition) return // Don't update if cursorPosition is undefined
 
     this.mouseSpeed *= 0.95
+    this.verticalDrift *= 0.7
     this.entropy = window.entropy
 
     // Velocity uniform updates
     if (this.uniforms.velocityUniforms.uMouseSpeed) this.uniforms.velocityUniforms.uMouseSpeed.value = this.mouseSpeed
     if (this.uniforms.velocityUniforms.uEntropy) this.uniforms.velocityUniforms.uEntropy.value = this.entropy
+    if (this.uniforms.velocityUniforms.uVerticalDrift) {
+      this.uniforms.velocityUniforms.uVerticalDrift.value = this.verticalDrift || 0
+    }
 
     // Position uniform updates
     if (this.uniforms.positionUniforms.uEntropy) this.uniforms.positionUniforms.uEntropy.value = this.entropy
@@ -67,6 +81,7 @@ export default class GPGPUEvents {
 
   updateRaycasterMesh(mesh) {
     // const isRaycasterPlane = true
+    console.log('updateRaycasterMesh', mesh)
     const isRaycasterPlane = mesh.userData.hasPlaneRaycast
     this.geometry = isRaycasterPlane ? new THREE.PlaneGeometry(20, 20) : mesh.geometry
 

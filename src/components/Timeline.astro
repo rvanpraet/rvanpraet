@@ -13,14 +13,14 @@ interface Props extends HTMLAttributes<'section'> {
   }>
 }
 
-const { items, class: classList } = Astro.props
+const { items, class: classList, ...rest } = Astro.props
 
 const componentClasses = 'timeline-component content-wrapper'
 
 const classes = twMerge(componentClasses, classList)
 ---
 
-<section class={classes}>
+<section class={classes} {...rest}>
   <ul class="list-none p-0">
     <div class="flex items-center h-16 mt-8 mb-10 gap-16">
       <hr class="w-8 h-8 ml-4 bg-white rounded-full" />
@@ -29,12 +29,12 @@ const classes = twMerge(componentClasses, classList)
     {
       items.map((item, index) => (
         <li class="timeline-item main-grid-layout relative flex flex-row gap-8 w-full mb-16">
-          <div class="timeline-date-range col-start-2 col-span-2">
+          <div class="timeline-date-range col-start-4 col-span-2">
             <span class="timeline-daterange-to pb-2">{item.dateTo}</span>
             <div class="timeline-date-separator" />
             <span class="timeline-daterange-from pt-2">{item.dateFrom}</span>
           </div>
-          <div class="col-start-5 col-span-5">
+          <div class="col-start-7 col-span-6 pr-8">
             <h2 class="uppercase mb-0!">{item.title}</h2>
             {item.subtitle && <h3 class="timeline-item-subtitle">{item.subtitle}</h3>}
             <p class="mb-0!">{item.description}</p>

@@ -7,6 +7,8 @@ import simFragmentVelocity from './shaders/simFragmentVelocity.glsl?raw'
 import vertexShader from './shaders/vertex.glsl?raw'
 import fragmentShader from './shaders/fragment.glsl?raw'
 
+// GPGPU allows us to simulate a large number of particles using the GPU, using a compute shader and swapping textures
+// It is used to create a particle system that can be attracted to different targets in the scene
 export default class GPGPU {
   constructor({ size, camera, renderer, mouse, scene, model, sizes, debug, targets, params, particleMask }) {
     this.camera = camera // Camera
@@ -35,6 +37,8 @@ export default class GPGPU {
     this.createParticles()
   }
 
+  // The GPUComputationRenderer allows us to create multiple shaders and have these influence each other
+  // During the computation, we can swap textures and update the particles' positions and velocities
   initGPGPU() {
     this.gpgpuCompute = new GPUComputationRenderer(this.sizes.width, this.sizes.width, this.renderer)
 
@@ -59,32 +63,37 @@ export default class GPGPU {
     this.uniforms.positionUniforms.uInfo = { value: randomInfoTexture }
 
     // Velocity uniforms
-    this.uniforms.velocityUniforms.uEntropy = { value: 0 }
-    this.uniforms.velocityUniforms.uInfo = { value: randomInfoTexture }
-    this.uniforms.velocityUniforms.uMouse = {
-      value: this.mouse.cursorPosition,
-    }
-    this.uniforms.velocityUniforms.uMouseSpeed = { value: 0 }
     this.uniforms.velocityUniforms.uOriginalPosition = {
       value: positionTexture,
-    }
-    this.uniforms.velocityUniforms.uTime = { value: 0 }
-    this.uniforms.velocityUniforms.uForce = { value: this.params.force }
+    } // Original position texture
+    this.uniforms.velocityUniforms.uEntropy = { value: 0 } // Entropy value for moving shape
+    this.uniforms.velocityUniforms.uInfo = { value: randomInfoTexture } // Random info texture for particles
+    this.uniforms.velocityUniforms.uMouse = {
+      value: this.mouse.cursorPosition,
+    } // Mouse position in world space
+    this.uniforms.velocityUniforms.uMouseSpeed = { value: 0 } // Mouse speed, set by GPGPUEvents
+    this.uniforms.velocityUniforms.uVerticalDrift = { value: 0 } // Vertical drift for particles when scrolling
+    this.uniforms.velocityUniforms.uTime = { value: 0 } // Time uniform for animation
+    this.uniforms.velocityUniforms.uForce = { value: this.params.force } // Force applied to particles
     this.uniforms.velocityUniforms.uTarget = {
       value: null,
-    }
+    } // Target position for particles to attract to
 
     this.gpgpuCompute.init()
   }
 
+  // Create target coordinates from the meshes
+  // This will be used to attract the particles towards the target meshes
   createTargets() {
-    console.log(this.targets)
+    console.log('targets', this.targets)
     this.targetsPositions = this.targets.map((mesh) => {
       return this.utils.createTargetDataFromMesh(mesh)
     })
     this.uniforms.velocityUniforms.uTarget.value = this.targetsPositions[0]
   }
 
+  // Create particles using a ShaderMaterial
+  // The particles will be rendered as points in the scene
   createParticles() {
     this.material = new THREE.ShaderMaterial({
       uniforms: {
@@ -142,6 +151,7 @@ export default class GPGPU {
   }
 
   swapTarget(targetIndex) {
+    console.log('swapping target to', targetIndex)
     this.uniforms.velocityUniforms.uTarget.value = this.targetsPositions[targetIndex]
     this.events.updateRaycasterMesh(this.targets[targetIndex])
   }

@@ -127,25 +127,22 @@ export default class Resources extends EventEmitter {
       bevelSegments: 5,
     }
 
+    // Define the texts to create with their parameters
     const texts = [
-      "HI, I'M REINALD",
-      'CREATIVE',
-      'DEVELOPER',
-      'XP',
-      // 'I love to create',
-      // 'immersive',
-      // 'and',
-      // 'interactive',
-      // 'experiences',
+      ["HI, I'M REINALD", { size: 1.2, offsets: { x: 0, y: 0, z: 0 } }],
+      ['CREATIVE', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
+      ['DEVELOPER', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
+      ['XP', { size: 1.8, offsets: { x: -5, y: 0, z: 0, rotateX: Math.PI * 0.5 } }],
     ]
-    this.models.text = texts.map((text) => this.createText(text, params))
+    this.models.text = texts.map(([text, config]) => this.createText(text, { ...params, ...config }))
   }
 
   createText(text, params) {
-    const geometry = new TextGeometry(text, params)
+    const { offsets, ...geometryParams } = params
+    const geometry = new TextGeometry(text, geometryParams)
+
     geometry.computeBoundingBox()
     geometry.computeBoundingSphere()
-
     const material = new THREE.MeshBasicMaterial({ color: 'white' })
     const mesh = new THREE.Mesh(geometry, material)
 
@@ -157,7 +154,8 @@ export default class Resources extends EventEmitter {
     geometry.boundingBox.getCenter(offset).negate()
     geometry.translate(offset.x, offset.y, offset.z)
 
-    // geometry.translate(5.5, 0, 0)
+    // Apply model specific transformations
+    geometry.translate(offsets.x, offsets.y, offsets.z)
 
     return mesh
   }
@@ -201,12 +199,15 @@ export default class Resources extends EventEmitter {
 
     modelGeometry.computeBoundingBox()
     modelGeometry.boundingBox.getCenter(offset).negate()
+
+    // Apply model specific transformations
     modelGeometry.translate(offset.x + config.x, offset.y + config.y, offset.z + config.z)
     modelGeometry.rotateX(config.rotateX)
     modelGeometry.rotateY(config.rotateY)
     modelGeometry.rotateZ(config.rotateZ)
 
-    mesh.userData.hasPlaneRaycast = false
+    // Notify that this mesh does not use a plane mouse interaction
+    mesh.userData.hasPlaneRaycast = true
 
     // Add model to available
     this.models.main[name] = mesh
@@ -221,11 +222,7 @@ export default class Resources extends EventEmitter {
   }
 
   onResourceProgress(e) {
-    // console.log('in progress ::: ', e)
-    let progress
-
     if (e.loaded === e.total) {
-      console.log('pushing value')
       this.loadedProgress.push(e.loaded)
       this.loadingPercentage.textContent = `${Math.round((this.getLoadedProgress() / TOTAL_PROGRESS) * 100)}`
     } else {

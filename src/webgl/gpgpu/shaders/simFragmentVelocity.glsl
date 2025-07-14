@@ -113,6 +113,7 @@ uniform float uMouseSpeed;
 uniform float uForce;
 uniform float uTime;
 uniform float uEntropy;
+uniform float uVerticalDrift;
 
 void main() {
   vec2 vUv = gl_FragCoord.xy / resolution.xy;
@@ -143,18 +144,14 @@ void main() {
     target.z = (info.z * 2.0 - 1.0) * entropy;
   }
 
+  // Add some vertical drift to the particles when scrolling
+  float driftStrength = abs(position.x * 2.0 - 1.0);
+  target.y += uVerticalDrift * driftStrength * 0.07 * (info.w * 0.2 + 0.8);
+  target.y += uVerticalDrift * 0.15;
+
   // Particle attraction to shape force
   vec3 direction = normalize(target - position);
   float dist = length(target - position);
-
-  // // Simple attraction
-  // vec3 attraction = direction * dist * 0.01;
-  // velocity += attraction;
-
-  // // Linear attraction
-  // velocity.x += sin(uTime * 1.2 + info.x * M_PI * 2.0) * dist * 0.005; // Adds extra wiggle
-  // vec3 attraction = direction * dist * 0.01 + noise * dist * 0.2;
-  // velocity += attraction * (info.x * 0.15 + 0.85); // Force that pushes particles towards their current target
 
   // Exponential or eased attraction
   float maxDist = 2.0; // adjust to fit your system

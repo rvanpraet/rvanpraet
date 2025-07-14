@@ -57,12 +57,11 @@ export default class Mask extends Handler {
     this.models = [
       ...this.resources.models.text,
       ...Object.values(this.resources.models.main),
-      ...Object.values(this.resources.models.main),
+      // ...Object.values(this.resources.models.main),
       xpModel,
     ]
 
     console.log(this.models)
-    // this.model.geometry.position.y -= 0.5
   }
 
   setupCameraPosition() {

@@ -15,12 +15,8 @@ import Timeline from '@/components/Timeline.astro'
 ---
 
 <Layout>
-  <NavMenu />
   <ExperienceLoader />
-
   <Three />
-
-  <ScrollIcon />
 
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="0"></section>
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="1"></section>
@@ -28,61 +24,76 @@ import Timeline from '@/components/Timeline.astro'
 
   <div class="introduction-entropy relative z-10"></div>
 
-  <div class="content-wrapper relative z-10 h-screen">
-    <FullpageSection className="introduction-general" data-model-id="8">
-      <h1 id="igh" class="row-start-4 col-start-7 col-span-6">
-        AB<span class="mx-2"
-          ><SlicedLetter className="text-green">O</SlicedLetter><span class="wave-y-2 mx-4">U</span></span
-        ><InlineHighlight color="white">T</InlineHighlight>
-      </h1>
+  <FullpageSection
+    class="introduction-general content-wrapper relative z-10 my-32 lg:w-screen lg:h-screen lg:my-16"
+    data-model-id="3"
+  >
+    <h1
+      id="igh"
+      class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:row-start-4 lg:col-start-7 lg:col-span-6"
+    >
+      <span>AB</span><span class="mx-2"
+        ><SlicedLetter className="text-green">O</SlicedLetter><span class="wave-y-2 mx-4">U</span></span
+      ><InlineHighlight color="white">T</InlineHighlight>
+    </h1>
 
-      <p id="igt1" class="row-start-7 col-start-7 col-span-6">
-        I'm passionate about technology—<InlineHighlight className="mx-16" color="white"
-          >I love to create.</InlineHighlight
-        >Storytelling, emotion, mystery: these are the words that shape my approach to<InlineHighlight className="mx-12"
-          >creativity and art.</InlineHighlight
-        >I work with both<InlineHighlight className="mx-12" color="green">code and sound</InlineHighlight>as means to
-        translate my vision to the world.
-      </p>
-      <p id="igt2" class="row-start-9 col-start-8 col-span-5">
-        Inspired by the<InlineHighlight className="mx-16" color="green">natural world</InlineHighlight>, its patterns,
-        rhythms and quiet complexity often<InlineHighlight className="mx-12" color="white"
-          >find their way</InlineHighlight
-        > into my work.<br />Through<InlineHighlight className="mx-12" color="red">immersion and art</InlineHighlight>I
-        aim to evoke feeling,<InlineHighlight className="mx-12" color="yellow">spark</InlineHighlight>curiosity, and
-        invite a<InlineHighlight className="ml-12" color="white">moment of reflection.</InlineHighlight>
-      </p>
-    </FullpageSection>
+    <p id="igt1" class="col-start-1 col-span-4 lg:row-start-7 lg:col-start-6 lg:col-span-6">
+      I'm passionate about technology,<InlineHighlight className="mx-16" color="white"
+        >I love to create.</InlineHighlight
+      >Storytelling, emotion, mystery: these are the words that shape my approach to<InlineHighlight className="mx-12"
+        >creativity and art.</InlineHighlight
+      >I work with both<InlineHighlight className="mx-12" color="green">code and sound</InlineHighlight>as means to
+      translate my vision to the world.
+    </p>
+    <p id="igt2" class="col-start-1 col-span-4 lg:row-start-9 lg:col-start-8 lg:col-span-5">
+      Inspired by the<InlineHighlight className="mx-16" color="green">natural world</InlineHighlight>, its patterns,
+      rhythms and quiet complexity often<InlineHighlight className="mx-12" color="white">find their way</InlineHighlight
+      > into my work.<br />Through<InlineHighlight className="mx-12" color="red">immersion and art</InlineHighlight>I
+      aim to evoke feeling,<InlineHighlight className="mx-12" color="yellow">spark</InlineHighlight>curiosity, and
+      invite a<InlineHighlight className="ml-12" color="white">moment of reflection.</InlineHighlight>
+    </p>
+  </FullpageSection>
 
-    <FullpageSection className="introduction-development" data-model-id="9">
-      <h1 id="idh" class="row-start-3 col-start-1 col-span-12">
-        C<SlicedLetter className="mx-4 wave-y-1 text-yellow">O</SlicedLetter>DIN<InlineHighlight color="white"
-          >G</InlineHighlight
-        >
-      </h1>
+  <FullpageSection
+    class="introduction-development content-wrapper relative z-10 my-32 lg:w-screen lg:h-screen lg:my-16"
+    data-model-id="4"
+  >
+    <h1
+      id="idh"
+      class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:row-start-4 lg:col-start-1 lg:col-span-10"
+    >
+      C<SlicedLetter className="mx-4 wave-y-1 text-yellow">O</SlicedLetter>DIN<InlineHighlight color="white"
+        >G</InlineHighlight
+      >
+    </h1>
 
-      <p id="idt1" class="row-start-7 col-start-1 col-span-6">
-        I'm a <InlineHighlight className="mx-8" color="white">developer</InlineHighlight> with a focus on building interactive
-        and engaging digital experiences. My work ranges from <InlineHighlight className="mx-8"
-          >web development</InlineHighlight
-        > to <InlineHighlight className="mx-8" color="green">creative coding</InlineHighlight> for installations and art.
-      </p>
+    <p
+      id="idt1"
+      class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:row-start-7 lg:col-start-1 lg:col-span-6"
+    >
+      I'm a <InlineHighlight className="mx-8" color="white">developer</InlineHighlight> with a focus on building interactive
+      and engaging digital experiences. My work ranges from <InlineHighlight className="mx-8"
+        >web development</InlineHighlight
+      > to <InlineHighlight className="mx-8" color="green">creative coding</InlineHighlight> for installations and art.
+    </p>
 
-      <p id="idt2" class="row-start-9 col-start-3 col-span-5">
-        I use modern tools and frameworks to bring <InlineHighlight className="mx-12" color="white"
-          >ideas</InlineHighlight
-        > to life—whether it's a <InlineHighlight className="ml-8" color="yellow">responsive website</InlineHighlight>
-        <InlineHighlight className="mx-8" color="green">visual experiment</InlineHighlight> or <InlineHighlight
-          className="mx-8"
-          color="red">immersive piece.</InlineHighlight
-        > I enjoy <InlineHighlight className="mx-8" color="white">exploring</InlineHighlight> the intersection of code, design,
-        and user experience.
-      </p>
-    </FullpageSection>
-  </div>
+    <p
+      id="idt2"
+      class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:row-start-8 lg:col-start-3 lg:col-span-5"
+    >
+      I use modern tools and frameworks to bring <InlineHighlight className="mx-12" color="white">ideas</InlineHighlight
+      > to life—whether it's a <InlineHighlight className="ml-8" color="yellow">responsive website</InlineHighlight>
+      <InlineHighlight className="mx-8" color="green">visual experiment</InlineHighlight> or <InlineHighlight
+        className="mx-8"
+        color="red">immersive piece.</InlineHighlight
+      > I enjoy <InlineHighlight className="mx-8" color="white">exploring</InlineHighlight> the intersection of code, design,
+      and user experience.
+    </p>
+  </FullpageSection>
 
   <Timeline
-    class="relative z-10"
+    data-model-id="5"
+    class="introduction-xp relative z-10"
     items={[
       {
         dateFrom: '2024',
@@ -118,6 +129,7 @@ import Timeline from '@/components/Timeline.astro'
       },
     ]}
   />
+  <ScrollIcon />
 </Layout>
 
 <!-- <FullpageSection className="introduction-development-previews">
@@ -149,10 +161,22 @@ import Timeline from '@/components/Timeline.astro'
   import Lenis from 'lenis'
 
   const lenis = new Lenis({
-    lerp: 1,
+    // lerp: 0.1,
+    // wheelMultiplier: 0.1,
+    // touchMultiplier: 0.1,
+    // smoothWheel: true,
+    lerp: 0.085,
+    // duration: 0.5,
+  })
+  //   const lenis = {
+  //   options: { lerp: 1 },
+  //   scrollTo: (_, __) => {},
+  // }
+
+  lenis.on('scroll', (e) => {
+    ScrollTrigger.update()
   })
 
-  lenis.on('scroll', ScrollTrigger.update)
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000)
   })
@@ -165,12 +189,12 @@ import Timeline from '@/components/Timeline.astro'
   const MAX_ENTROPY = 0.01
   window.entropy = 0
 
-  document.addEventListener('DOMContentLoaded', () => {
-    lenis.scrollTo(document.documentElement, {
-      offset: 0,
-      immediate: true,
-    })
-  })
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   lenis.scrollTo(document.documentElement, {
+  //     offset: 0,
+  //     immediate: true,
+  //   })
+  // })
 
   gsap.registerPlugin(ScrollTrigger)
 
@@ -189,76 +213,52 @@ import Timeline from '@/components/Timeline.astro'
     // Elements
     const introductionSections = document.querySelectorAll('.introduction-dummy')
     const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
-    const contentScrollEl: HTMLElement = document.querySelector('.content-wrapper')
-    const devPreviewEl: HTMLElement = document.querySelector('.introduction-development-previews')
     const generalEl: HTMLElement = document.querySelector('.introduction-general')
     const devEl: HTMLElement = document.querySelector('.introduction-development')
-
-    if (!contentScrollEl) return
+    const xpEl: HTMLElement = document.querySelector('.introduction-xp')
 
     // Inline Elements per section
     const generalInlines = generalEl.querySelectorAll('.inline-highlight')
     const devInlines = devEl.querySelectorAll('.inline-highlight')
 
+    // Intro slide scrolltriggers for each TRHEE.JS word
     introductionSections.forEach((section: HTMLElement) => {
+      // Swap model on scroll
       ScrollTrigger.create({
         trigger: section,
-        // snap: {
-        //   snapTo: 0.5,
-        //   duration: 0.15,
-        // },
+        start: 'center center',
+        end: '+=100%',
         onEnter: () => {
-          lenis.scrollTo(section, {
-            offset: -200,
-            lerp: 1,
-            lock: true,
-            force: true,
-            duration: 0.5,
-          })
           swapModel(section.dataset.modelId)
         },
         onEnterBack: () => {
-          lenis.scrollTo(section, {
-            offset: 200,
-            lerp: 1,
-            lock: true,
-            force: true,
-            duration: 0.5,
-          })
           swapModel(section.dataset.modelId)
         },
       })
     })
 
+    // ScrollTrigger for the entropy section
     ScrollTrigger.create({
       trigger: entropyEl,
       start: 'center center',
-      end: '+=200%',
+      end: '+=175%',
       pin: true,
       // markers: {
       //   indent: 500,
       // },
       onEnter: () => {
-        lenis.options.lerp = 0.02
+        // lenis.options.lerp = 0.1
         // swapModel(lastIntroEl.dataset.modelId)
       },
       onEnterBack: () => {
-        lenis.options.lerp = 0.03
+        swapModel(2)
+        // lenis.options.lerp = 0.1
       },
       onLeave: () => {
-        lenis.options.lerp = 1
-        lenis.scrollTo(devPreviewEl, {
-          offset: window.innerHeight * 0.5,
-          lock: true,
-          force: true,
-          duration: 1,
-          onComplete: () => {
-            window.entropy = 0
-          },
-        })
+        // lenis.options.lerp = 0.1
       },
       onLeaveBack: () => {
-        lenis.options.lerp = 1
+        // lenis.options.lerp = 0.8
         swapModel(2)
       },
       onUpdate: (self) => {
@@ -266,173 +266,78 @@ import Timeline from '@/components/Timeline.astro'
       },
     })
 
-    // GSAP Timeline
-    const scrollerTL = gsap.timeline({
-      paused: true,
-    })
-
-    let isTweening = false
-    let currentIndex = 0
-    const tlBlocks = ['initAbout', 'aboutEntered', 'devEntered', 'tlComplete']
-
-    // Function to handle scroll events within the pinned container to animate between blocks of content
-    function handlePinContainerScroll({ progress, direction }) {
-      // Check if we are animating or if we should be animating
-      if (isTweening) return
-
-      const targetIndex = currentIndex + direction
-
-      console.log(targetIndex)
-
-      if (targetIndex < 0 || targetIndex >= tlBlocks.length) return
-
-      // Start the animation
-      isTweening = true
-
-      // Get the labels from the predefined label blocks array
-      const fromLabel = tlBlocks[currentIndex]
-      const toLabel = tlBlocks[targetIndex]
-
-      // Set the new current index
-      currentIndex = targetIndex
-
-      // Calculate the tween duration by looking up the label time values
-      const tweenDuration = Math.abs(scrollerTL.labels[toLabel] - scrollerTL.labels[fromLabel])
-
-      const targetModelId = targetIndex + 7 //TODO: This magic number should be better fool-proofed
-      if (targetModelId > 7) swapModel(targetModelId)
-
-      // Kill previous tweens
-      gsap.killTweensOf(scrollerTL)
-
-      // Animation blocks translate to scrolling one pageheight of content
-      // While the animation block is playing we want to scroll to the corresponding page position
-
-      const lastSectionOffset = targetIndex === tlBlocks.length - 1 ? 15 : 0 // Small offset to preview the next section at the end of animation
-
-      // Scroll to corresponding page position (and lock the scroll)
-      lenis.scrollTo(devPreviewEl, {
-        lerp: 1, // No slowing down to prevent triggering a new scroll animation
-        offset: -window.innerHeight * (tlBlocks.length - targetIndex) + lastSectionOffset, // The corresponding position is based off next section block calculating backwards
-        lock: true,
-        force: true,
-        duration: tweenDuration * 0.9, // Slight shorter duration to prevent triggering a new scroll animation
-      })
-
-      // Animate !
-      scrollerTL.tweenFromTo(fromLabel, toLabel, {
-        duration: tweenDuration,
-        onStart: () => {
-          if (direction < 0 && targetIndex === 0) {
-            // Only when
-            lenis.options.lerp = 0.03
-            gsap.to(window, { entropy: MAX_ENTROPY, duration: tweenDuration + 2 })
-          }
-        },
-        onComplete: () => {
-          isTweening = false
-
-          // Flash inline highlight
-          if (toLabel === 'aboutEntered') {
-            // const el: HTMLElement = generalInlines[Math.floor(Math.random() * generalInlines.length)] as HTMLElement
-            generalInlines.forEach((el, i) => {
-              setTimeout(() => {
-                el.classList.add('animation-in')
-                setTimeout(() => {
-                  el.classList.add('animation-out')
-                  el.classList.remove('animation-in')
-                }, 350)
-              }, i * 50)
-            })
-          }
-
-          // Flash inline highlight
-          if (toLabel === 'devEntered') {
-            const el: HTMLElement = devInlines[Math.floor(Math.random() * devInlines.length)] as HTMLElement
-
-            el.classList.add('animation-in')
-            setTimeout(() => {
-              el.classList.add('animation-out')
-              el.classList.remove('animation-in')
-            }, 350)
-          }
-
-          // Set Z indices to
-          if (targetIndex > 1) {
-            generalEl.style.zIndex = '1'
-            devEl.style.zIndex = '2'
-          } else {
-            generalEl.style.zIndex = '2'
-            devEl.style.zIndex = '1'
-          }
-        },
-      })
-    }
-
-    // Define animation
-    scrollerTL.addLabel('initAbout')
-    scrollerTL.from('#igh', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.8 })
-    scrollerTL.from('#igt1', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'initAbout+=0.2')
-    scrollerTL.from('#igt2', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.7 }, 'initAbout+=0.4')
-
-    scrollerTL.addLabel('aboutEntered')
-
-    scrollerTL.to('#igh', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.8 })
-    scrollerTL.to('#igt1', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'aboutEntered+=0.2')
-    scrollerTL.to('#igt2', { x: 500, opacity: 0, ease: 'power1.inOut', duration: 0.7 }, 'aboutEntered+=0.4')
-
-    scrollerTL.addLabel('queueDevelopment')
-
-    scrollerTL.from('#idh', { y: -500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'queueDevelopment-=1')
-    scrollerTL.from('#idt1', { x: -500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'queueDevelopment-=0.8')
-    scrollerTL.from('#idt2', { x: -500, opacity: 0, ease: 'power1.inOut', duration: 0.7 }, 'queueDevelopment-=0.6')
-
-    scrollerTL.addLabel('devEntered')
-
-    scrollerTL.to('#idh', { y: -500, opacity: 0, ease: 'power1.inOut', duration: 0.8 })
-    scrollerTL.to('#idt2', { x: -500, opacity: 0, ease: 'power1.inOut', duration: 0.8 }, 'devEntered+=0.2')
-    scrollerTL.to('#idt1', { x: -500, opacity: 0, ease: 'power1.inOut', duration: 0.7 }, 'devEntered+=0.4')
-
-    scrollerTL.addLabel('tlComplete')
-
-    // Pinned container for introduction and development (TODO: New Media in same container and project previews all mixed?)
     ScrollTrigger.create({
-      trigger: contentScrollEl,
-      start: 'center center',
-      end: '+=300%',
-      pin: true,
-      scrub: true,
+      trigger: generalEl,
+      start: 'top center',
+      end: 'bottom center',
       onEnter: () => {
-        lenis.options.lerp = 1
         window.entropy = 0
-        // currentIndex = 0
-      },
-      onLeaveBack: () => {
-        console.log('leave back pin element')
-        currentIndex = 0
-        lenis.scrollTo(entropyEl, {
-          offset: -window.innerHeight * 0.5,
-          lerp: 0.03,
-          force: true,
-          lock: true,
-          duration: 2,
-        })
+        swapModel(generalEl.dataset.modelId)
       },
       onEnterBack: () => {
-        lenis.options.lerp = 1
+        swapModel(generalEl.dataset.modelId)
       },
-      onLeave: () => {
-        lenis.options.lerp = 0.3
-        currentIndex = tlBlocks.length - 1
-      },
-      onUpdate: (self) => {
-        handlePinContainerScroll({ ...self })
+      onLeaveBack: () => {
+        window.entropy = 1
       },
     })
+
+    ScrollTrigger.create({
+      trigger: devEl,
+      start: 'top center',
+      end: 'bottom center',
+      onEnter: () => {
+        swapModel(devEl.dataset.modelId)
+      },
+      onLeaveBack: () => {
+        swapModel(parseInt(xpEl.dataset.modelId) - 1)
+      },
+      onEnterBack: () => {
+        swapModel(devEl.dataset.modelId)
+      },
+    })
+
+    ScrollTrigger.create({
+      trigger: xpEl,
+      start: 'top center+=33%',
+
+      onEnter: () => {
+        swapModel(xpEl.dataset.modelId)
+      },
+      onEnterBack: () => {
+        swapModel(xpEl.dataset.modelId)
+      },
+      onLeaveBack: () => {
+        swapModel(parseInt(xpEl.dataset.modelId) - 1)
+      },
+    })
+
+    // Text animations with GSAP
+
+    // const generalTL = gsap.timeline({
+    //   paused: true,
+    //   scrollTrigger: {
+    //     trigger: generalEl,
+    //     start: 'top bottom',
+    //     end: '+=100%',
+    //     // scrub: 0.5,
+    //     onUpdate: (self) => {
+    //       // Update the progress of the timeline based on the scroll position
+    //       generalTL.progress(self.progress)
+    //     },
+    //   },
+    // })
+    // generalTL
+    //   .fromTo('#igh', { y: -500, opacity: 0 }, { y: 0, opacity: 1, duration: 1 })
+    //   .fromTo('#igt1', { y: -500, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '<')
+    //   .fromTo('#igt2', { y: -500, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '<')
   })
 </script>
 
 <style lang="scss" is:global>
+  .introduction-dummy {
+    // height: 200vh !important;
+  }
   .introduction-general {
     z-index: 2;
   }

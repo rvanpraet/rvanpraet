@@ -7,11 +7,10 @@ interface Props extends HTMLAttributes<'section'> {
   className?: string
 }
 
-const { className, ...rest } = Astro.props
+const { class: className, ...rest } = Astro.props
 
-const positionClass = 'absolute inset-0 w-full h-full'
-const gridClass = 'grid grid-rows-12 grid-cols-4 md:grid-cols-6 lg:grid-cols-12'
-const classes = twMerge(positionClass, gridClass, className)
+const gridClass = 'main-grid-layout px-2 lg:px-8'
+const classes = twMerge(gridClass, className)
 ---
 
 <section class={classes} {...rest}>
