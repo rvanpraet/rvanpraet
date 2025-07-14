@@ -1,6 +1,6 @@
 .content-wrapper {
   h1 {
-    @apply text-6xl mb-12 lg:text-8xl lg:mb-8 font-bold uppercase;
+    @apply text-6xl mb-12 lg:text-8xl lg:mb-16 xl:mb-16 font-bold uppercase;
     /* font-size: 8rem; */
     line-height: 1em;
     text-transform: uppercase;
@@ -16,7 +16,7 @@
   }
 
   p {
-    @apply text-lg mb-12 lg:text-xl lg:mb-16 font-extralight;
+    @apply text-lg mb-12 lg:text-xl lg:mb-16 xl:mb-16 font-extralight;
     line-height: 1.5em;
     /* font-size: var(--text-xl);
     font-weight: var(--font-weight-extralight); */

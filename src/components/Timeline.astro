@@ -22,19 +22,19 @@ const classes = twMerge(componentClasses, classList)
 
 <section class={classes} {...rest}>
   <ul class="list-none p-0">
-    <div class="flex items-center h-16 mt-8 mb-10 gap-16">
+    <!-- <div class="flex items-center h-16 mt-8 mb-10 gap-16">
       <hr class="w-8 h-8 ml-4 bg-white rounded-full" />
       <hr class="border-t border-white w-fit" />
-    </div>
+    </div> -->
     {
       items.map((item, index) => (
-        <li class="timeline-item main-grid-layout relative flex flex-row gap-8 w-full mb-16">
-          <div class="timeline-date-range col-start-4 col-span-2">
+        <li class="timeline-item main-grid-layout relative flex flex-row gap-8 w-full mb-16 px-2 lg:px-0">
+          <div class="timeline-date-range col-start-1 col-span-1 pr-2 sm:pr-8 md:col-span-2 md:pr-16 lg:col-start-4 lg:col-span-2">
             <span class="timeline-daterange-to pb-2">{item.dateTo}</span>
             <div class="timeline-date-separator" />
             <span class="timeline-daterange-from pt-2">{item.dateFrom}</span>
           </div>
-          <div class="col-start-7 col-span-6 pr-8">
+          <div class="col-start-2 col-span-3 md:col-start-3 md:col-span-4 lg:col-start-7 lg:col-span-6 lg:pr-8">
             <h2 class="uppercase mb-0!">{item.title}</h2>
             {item.subtitle && <h3 class="timeline-item-subtitle">{item.subtitle}</h3>}
             <p class="mb-0!">{item.description}</p>
@@ -73,27 +73,51 @@ const classes = twMerge(componentClasses, classList)
 
     &:nth-child(even) {
       .timeline-daterange-from {
-        align-self: flex-start;
+        align-self: center;
+        @media screen and (min-width: 640px) {
+          align-self: flex-start;
+        }
       }
       .timeline-daterange-to {
-        align-self: flex-end;
+        align-self: center;
+        @media screen and (min-width: 640px) {
+          align-self: flex-end;
+        }
       }
 
       .timeline-date-separator {
-        transform: rotate(30deg);
+        @media screen and (min-width: 640px) {
+          transform: rotate(15deg);
+        }
+
+        @media screen and (min-width: 768px) {
+          transform: rotate(30deg);
+        }
       }
     }
 
     &:nth-child(odd) {
       .timeline-daterange-from {
-        align-self: flex-end;
+        align-self: center;
+        @media screen and (min-width: 640px) {
+          align-self: flex-end;
+        }
       }
       .timeline-daterange-to {
-        align-self: flex-start;
+        align-self: center;
+        @media screen and (min-width: 640px) {
+          align-self: flex-start;
+        }
       }
 
       .timeline-date-separator {
-        transform: rotate(-30deg);
+        @media screen and (min-width: 640px) {
+          transform: rotate(-15deg);
+        }
+
+        @media screen and (min-width: 768px) {
+          transform: rotate(-30deg);
+        }
       }
     }
   }

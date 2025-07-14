@@ -11,47 +11,36 @@ import reinaldPath from '/webgl/assets/models/reinald1.obj?url'
 import codingPath from '/webgl/assets/models/coding.glb?url'
 import particleTexture from '/webgl/assets/textures/particle2.png?url'
 import fontPath from '/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
+import { getCurrentBreakpoint } from '@/scripts/utils/breakpoints'
+import { modelConfig, textModelConfig } from './ResourcesConfig'
 
 //
 const TOTAL_PROGRESS = 165190 + 4045609 + 7886300
 
-const modelConfig = {
-  text: {
-    xp: {
-      x: 2.5,
-      y: 0,
-      z: 0,
-      // rotateX: 0,
-      // rotateY: 0,
-      // rotateZ: 0,
-      // scaleX: 2.5,
-      // scaleY: 2.5,
-      // scaleZ: 2.5,
-    },
-  },
-  reinald: {
-    x: -4,
-    y: -1.5,
-    z: 0,
-    rotateX: 0,
-    rotateY: Math.PI * 0.25,
-    rotateZ: 0,
-    scaleX: 2.5,
-    scaleY: 2.5,
-    scaleZ: 2.5,
-  },
-  coding: {
-    x: 4,
-    y: -1,
-    z: 0,
-    rotateX: 0,
-    rotateY: Math.PI * -0.25,
-    rotateZ: 0,
-    scaleX: 10,
-    scaleY: 10,
-    scaleZ: 10,
-  },
-}
+// const modelConfig = {
+//   reinald: {
+//     x: -4,
+//     y: -1.5,
+//     z: 0,
+//     rotateX: 0,
+//     rotateY: Math.PI * 0.25,
+//     rotateZ: 0,
+//     scaleX: 2.5,
+//     scaleY: 2.5,
+//     scaleZ: 2.5,
+//   },
+//   coding: {
+//     x: 4,
+//     y: -1,
+//     z: 0,
+//     rotateX: 0,
+//     rotateY: Math.PI * -0.25,
+//     rotateZ: 0,
+//     scaleX: 10,
+//     scaleY: 10,
+//     scaleZ: 10,
+//   },
+// }
 
 export default class Resources extends EventEmitter {
   static instance
@@ -115,7 +104,7 @@ export default class Resources extends EventEmitter {
 
   createTextMeshes() {
     // Create text meshes
-    const params = {
+    const baseTextParams = {
       font: this.font,
       size: 1.2,
       depth: 0.02,
@@ -128,13 +117,14 @@ export default class Resources extends EventEmitter {
     }
 
     // Define the texts to create with their parameters
-    const texts = [
-      ["HI, I'M REINALD", { size: 1.2, offsets: { x: 0, y: 0, z: 0 } }],
-      ['CREATIVE', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
-      ['DEVELOPER', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
-      ['XP', { size: 1.8, offsets: { x: -5, y: 0, z: 0, rotateX: Math.PI * 0.5 } }],
-    ]
-    this.models.text = texts.map(([text, config]) => this.createText(text, { ...params, ...config }))
+    const texts = textModelConfig[getCurrentBreakpoint()]
+    // const texts = [
+    //   ["HI, I'M REINALD", { size: 1.2, offsets: { x: 0, y: 0, z: 0 } }],
+    //   ['CREATIVE', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
+    //   ['DEVELOPER', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
+    //   ['XP', { size: 1.8, offsets: { x: -5, y: 0, z: 0, rotateX: Math.PI * 0.5 } }],
+    // ]
+    this.models.text = texts.map(([text, config]) => this.createText(text, { ...baseTextParams, ...config }))
   }
 
   createText(text, params) {
@@ -187,7 +177,9 @@ export default class Resources extends EventEmitter {
   }
 
   onModelLoad(name, mesh) {
-    const config = modelConfig[name]
+    const breakpoint = getCurrentBreakpoint()
+    const config = modelConfig[breakpoint][name]
+    // const config = modelConfig[name]
 
     // Create a scaling matrix
     const scaleMatrix = new THREE.Matrix4().makeScale(config.scaleX, config.scaleY, config.scaleZ)
