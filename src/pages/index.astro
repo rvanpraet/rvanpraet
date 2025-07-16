@@ -25,37 +25,36 @@ import Timeline from '@/components/Timeline.astro'
   <div class="introduction-entropy relative z-10"></div>
 
   <FullpageSection
-    class="introduction-general content-wrapper flex items-center relative z-10 my-64 lg:w-screen lg:h-screen lg:my-16"
+    class="introduction-general content-wrapper flex items-center relative z-10 my-64 lg:w-screen lg:h-screen lg:my-0"
     data-model-id="3"
   >
     <div class="main-grid-layout h-fit">
       <h1 id="igh" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-7 lg:col-span-6">
-        <span>AB</span><span class="mx-2"
-          ><SlicedLetter className="text-green">O</SlicedLetter><span class="wave-y-2 mx-4">U</span></span
-        ><InlineHighlight color="white">T</InlineHighlight>
+        <span>ABO</span><SlicedLetter className="text-green wave-y-2 ml-4">U</SlicedLetter><InlineHighlight
+          color="white">T</InlineHighlight
+        >
       </h1>
 
       <p id="igt1" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-6 lg:col-span-6">
-        I'm passionate about technology,<InlineHighlight className="mx-16" color="white"
+        I'm passionate about technology,<InlineHighlight className="mx-6 lg:mx-12 font-semibold" color="white"
           >I love to create.</InlineHighlight
-        >Storytelling, emotion, mystery: these are the words that shape my approach to<InlineHighlight className="mx-12"
-          >creativity and art.</InlineHighlight
-        >I work with both<InlineHighlight className="mx-12" color="green">code and sound</InlineHighlight>as means to
-        translate my vision to the world.
+        >Storytelling, emotion, mystery: these are the words that shape my approach to creativity and art. I work with
+        both<InlineHighlight className="mx-6 lg:mx-12 font-semibold" color="green">code and sound</InlineHighlight>as
+        means to translate my vision to the world.
       </p>
       <p id="igt2" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-8 lg:col-span-5">
-        Inspired by the<InlineHighlight className="mx-16" color="green">natural world</InlineHighlight>, its patterns,
-        rhythms and quiet complexity often<InlineHighlight className="mx-12" color="white"
-          >find their way</InlineHighlight
-        > into my work.<br />Through<InlineHighlight className="mx-12" color="red">immersion and art</InlineHighlight>I
-        aim to evoke feeling,<InlineHighlight className="mx-12" color="yellow">spark</InlineHighlight>curiosity, and
-        invite a<InlineHighlight className="ml-12" color="white">moment of reflection.</InlineHighlight>
+        Inspired by the<InlineHighlight className="font-semibold mx-6 lg:mx-12" color="green"
+          >natural world</InlineHighlight
+        >, its patterns, rhythms and quiet complexity often find their way into my work.<br />Through immersion and art
+        I aim to evoke feeling,<InlineHighlight className="font-semibold mx-6 lg:mx-12" color="yellow"
+          >spark curiosity</InlineHighlight
+        > and invite a moment of reflection.
       </p>
     </div>
   </FullpageSection>
 
   <FullpageSection
-    class="introduction-development content-wrapper flex items-center relative z-10 my-64 lg:w-screen lg:h-screen lg:my-16"
+    class="introduction-development content-wrapper flex items-center relative z-10 my-64 lg:w-screen lg:h-screen lg:my-0"
     data-model-id="4"
   >
     <div class="main-grid-layout h-fit">
@@ -66,21 +65,18 @@ import Timeline from '@/components/Timeline.astro'
       </h1>
 
       <p id="idt1" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-1 lg:col-span-6">
-        I'm a <InlineHighlight className="mx-8" color="white">developer</InlineHighlight> with a focus on building interactive
-        and engaging digital experiences. My work ranges from <InlineHighlight className="mx-8"
-          >web development</InlineHighlight
-        > to <InlineHighlight className="mx-8" color="green">creative coding</InlineHighlight> for installations and art.
+        I'm a developer with a focus on building <InlineHighlight className="mx-6 font-semibold lg:mx-12" color="white"
+          >interactive and engaging</InlineHighlight
+        > digital experiences. My work ranges from web development to creative coding for installations and art.
       </p>
 
       <p id="idt2" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-3 lg:col-span-5">
-        I use modern tools and frameworks to bring <InlineHighlight className="mx-12" color="white"
-          >ideas</InlineHighlight
-        > to life—whether it's a <InlineHighlight className="ml-8" color="yellow">responsive website</InlineHighlight>
-        <InlineHighlight className="mx-8" color="green">visual experiment</InlineHighlight> or <InlineHighlight
-          className="mx-8"
-          color="red">immersive piece.</InlineHighlight
-        > I enjoy <InlineHighlight className="mx-8" color="white">exploring</InlineHighlight> the intersection of code, design,
-        and user experience.
+        I use modern tools and frameworks to <InlineHighlight className="font-semibold mx-6 lg:mx-12" color="white"
+          >bring ideas to life.</InlineHighlight
+        > Whether it's a responsive website, visual experiment or immersive piece, <InlineHighlight
+          className="font-semibold mx-6 lg:mx-12"
+          color="white">I enjoy exploring</InlineHighlight
+        > the intersection of code, design, and user experience.
       </p>
     </div>
   </FullpageSection>
@@ -122,6 +118,11 @@ import Timeline from '@/components/Timeline.astro'
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
       },
     ]}
+  />
+
+  <FullpageSection
+    class="introduction-contact content-wrapper flex items-center relative z-10 my-64 lg:w-screen lg:h-screen lg:my-0"
+    data-model-id="6"
   />
   <ScrollIcon />
 </Layout>
@@ -260,6 +261,31 @@ import Timeline from '@/components/Timeline.astro'
       },
     })
 
+    gsap.to('.scroll-icon-container', {
+      opacity: 0,
+      // duration: 0.5,
+      scrollTrigger: {
+        trigger: generalEl,
+        start: 'top bottom',
+        end: '+=25%',
+        scrub: true,
+      },
+    })
+
+    // Animations for the general section
+    const generalTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#igt1',
+        start: 'top bottom',
+        end: 'top center',
+        scrub: true,
+      },
+    })
+    // generalTL.fromTo('#igh', { y: -100, opacity: 0 }, { y: 0, opacity: 1, duration: 1 })
+    generalTL.fromTo('#igt1', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
+    generalTL.fromTo('#igt2', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
+
+    // ScrollTrigger for the general section
     ScrollTrigger.create({
       trigger: generalEl,
       start: 'top center',
@@ -276,6 +302,19 @@ import Timeline from '@/components/Timeline.astro'
       },
     })
 
+    // Animations for the development section
+    const devTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#idt1',
+        start: 'top bottom',
+        end: 'top center',
+        scrub: true,
+      },
+    })
+    devTL.fromTo('#idt1', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
+    devTL.fromTo('#idt2', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
+
+    // ScrollTrigger for the development section
     ScrollTrigger.create({
       trigger: devEl,
       start: 'top center',
@@ -291,6 +330,7 @@ import Timeline from '@/components/Timeline.astro'
       },
     })
 
+    // ScrollTrigger for the experience section
     ScrollTrigger.create({
       trigger: xpEl,
       start: 'top center+=33%',
@@ -306,25 +346,45 @@ import Timeline from '@/components/Timeline.astro'
       },
     })
 
-    // Text animations with GSAP
+    // Animations for the timeline items
+    const separatorEls = document.querySelectorAll('.timeline-date-separator')
+    console.log(separatorEls)
+    separatorEls.forEach((el) => {
+      gsap.fromTo(
+        el,
+        {
+          height: 0,
+        },
+        {
+          height: '110%',
+          duration: 1,
+          // ease: 'power2.inOut',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top bottom',
+            end: 'top center',
+            scrub: true,
+          },
+        }
+      )
+    })
 
-    // const generalTL = gsap.timeline({
-    //   paused: true,
-    //   scrollTrigger: {
-    //     trigger: generalEl,
-    //     start: 'top bottom',
-    //     end: '+=100%',
-    //     // scrub: 0.5,
-    //     onUpdate: (self) => {
-    //       // Update the progress of the timeline based on the scroll position
-    //       generalTL.progress(self.progress)
-    //     },
-    //   },
-    // })
-    // generalTL
-    //   .fromTo('#igh', { y: -500, opacity: 0 }, { y: 0, opacity: 1, duration: 1 })
-    //   .fromTo('#igt1', { y: -500, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '<')
-    //   .fromTo('#igt2', { y: -500, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '<')
+    // ScrollTrigger for the contact section
+    const contactEl: HTMLElement = document.querySelector('.introduction-contact')
+    ScrollTrigger.create({
+      trigger: contactEl,
+      start: 'top center',
+
+      onEnter: () => {
+        swapModel(contactEl.dataset.modelId)
+      },
+      onEnterBack: () => {
+        swapModel(contactEl.dataset.modelId)
+      },
+      onLeaveBack: () => {
+        swapModel(parseInt(contactEl.dataset.modelId) - 1)
+      },
+    })
   })
 </script>
 

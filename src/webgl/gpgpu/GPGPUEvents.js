@@ -55,9 +55,7 @@ export default class GPGPUEvents {
 
   setupScroll() {
     window.addEventListener('wheel', (e) => {
-      console.log('Wheel event detected:', e.deltaY)
       this.verticalDrift = Math.sign(e.deltaY)
-      // this.verticalDrift = e.deltaY * 0.05
     })
   }
 

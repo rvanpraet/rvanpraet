@@ -1,10 +1,10 @@
-<button class="scroll-icon-container z-40">
-  <div class="flex flex-col items-center justify-center w-full">
+<div class="scroll-icon-container z-40">
+  <div class="flex flex-col items-center justify-center w-fit">
     <canvas id="dotlottie-scroll-canvas" style="width: 40px; height: 40px;"></canvas>
 
-    <!-- <p class="text-xs font-extralight">Scroll</p> -->
+    <p class="text-sm font-normal">Scroll to explore</p>
   </div>
-</button>
+</div>
 
 <script>
   import { DotLottie } from '@lottiefiles/dotlottie-web'
@@ -25,9 +25,11 @@
     justify-content: center;
     align-items: center;
     position: fixed;
+    width: 100%;
     /* width: 40px;
     height: 40px; */
-    top: calc(100% - 80px);
-    width: calc(100% - 64px);
+    left: 0;
+    top: calc(100% - 100px);
+    /* width: calc(100% - 64px); */
   }
 </style>

@@ -52,14 +52,10 @@ export default class Mask extends Handler {
   }
 
   setupModels() {
+    const contactModel = this.resources.models.text.pop()
     const xpModel = this.resources.models.text.pop()
     this.model = this.resources.models.text[0]
-    this.models = [
-      ...this.resources.models.text,
-      ...Object.values(this.resources.models.main),
-      // ...Object.values(this.resources.models.main),
-      xpModel,
-    ]
+    this.models = [...this.resources.models.text, ...Object.values(this.resources.models.main), xpModel, contactModel]
 
     console.log(this.models)
   }

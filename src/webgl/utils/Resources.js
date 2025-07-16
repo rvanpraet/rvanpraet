@@ -199,7 +199,7 @@ export default class Resources extends EventEmitter {
     modelGeometry.rotateZ(config.rotateZ)
 
     // Notify that this mesh does not use a plane mouse interaction
-    mesh.userData.hasPlaneRaycast = true
+    mesh.userData.hasPlaneRaycast = false
 
     // Add model to available
     this.models.main[name] = mesh

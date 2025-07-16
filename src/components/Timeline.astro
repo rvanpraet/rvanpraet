@@ -45,6 +45,40 @@ const classes = twMerge(componentClasses, classList)
   </ul>
 </section>
 
+<script>
+  // import gsap from 'gsap'
+  // import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  // gsap.registerPlugin(ScrollTrigger)
+
+  import { init } from 'astro/virtual-modules/prefetch.js'
+
+  const initDateSeparators = () => {
+    document.querySelectorAll('.timeline-date-separator').forEach((el: HTMLElement, index) => {
+      el.style.width = `100%`
+
+      // Rotate the element based on its index (odd/even)
+      const sign = index % 2 === 0 ? -1 : 1
+
+      // Calculate angle of rotation based on width and height
+      const { width, height } = el.getBoundingClientRect()
+      const angle = 90 - Math.atan2(height, width - 32) * (180 / Math.PI)
+
+      // Set the rotation of the element
+      el.style.transform = `rotate(${angle * sign}deg)`
+      el.style.transformOrigin = 'center center'
+      el.style.width = `${2}px`
+    })
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initDateSeparators()
+  })
+
+  window.addEventListener('resize', () => {
+    initDateSeparators()
+  })
+</script>
+
 <style lang="scss">
   .timeline-item {
     .timeline-date-range {
@@ -59,10 +93,12 @@ const classes = twMerge(componentClasses, classList)
     }
 
     .timeline-date-separator {
-      width: 2px;
+      // width: 2px;
+      width: 100%;
       height: 100%;
       background-color: var(--color-white);
-      margin: 0 auto;
+      // margin: 0 auto;
+      // margin: 0 calc(var(--spacing) * 2);
     }
 
     .timeline-item-subtitle {
@@ -74,6 +110,7 @@ const classes = twMerge(componentClasses, classList)
     &:nth-child(even) {
       .timeline-daterange-from {
         align-self: center;
+
         @media screen and (min-width: 640px) {
           align-self: flex-start;
         }
@@ -85,15 +122,15 @@ const classes = twMerge(componentClasses, classList)
         }
       }
 
-      .timeline-date-separator {
-        @media screen and (min-width: 640px) {
-          transform: rotate(15deg);
-        }
+      // .timeline-date-separator {
+      //   @media screen and (min-width: 640px) {
+      //     transform: rotate(15deg);
+      //   }
 
-        @media screen and (min-width: 768px) {
-          transform: rotate(30deg);
-        }
-      }
+      //   @media screen and (min-width: 768px) {
+      //     transform: rotate(30deg);
+      //   }
+      // }
     }
 
     &:nth-child(odd) {
@@ -110,15 +147,15 @@ const classes = twMerge(componentClasses, classList)
         }
       }
 
-      .timeline-date-separator {
-        @media screen and (min-width: 640px) {
-          transform: rotate(-15deg);
-        }
+      // .timeline-date-separator {
+      //   @media screen and (min-width: 640px) {
+      //     transform: rotate(-15deg);
+      //   }
 
-        @media screen and (min-width: 768px) {
-          transform: rotate(-30deg);
-        }
-      }
+      //   @media screen and (min-width: 768px) {
+      //     transform: rotate(-30deg);
+      //   }
+      // }
     }
   }
 </style>
