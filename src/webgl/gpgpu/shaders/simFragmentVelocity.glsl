@@ -146,8 +146,8 @@ void main() {
 
   // Add some vertical drift to the particles when scrolling
   float driftStrength = abs(position.x * 2.0 - 1.0);
-  target.y += uVerticalDrift * driftStrength * 0.07 * (info.w * 0.2 + 0.8);
-  target.y += uVerticalDrift * 0.15;
+  target.y += uVerticalDrift * driftStrength * 0.03 * (info.w * 0.2 + 0.8);
+  // target.y += uVerticalDrift * 0.05;
 
   // Particle attraction to shape force
   vec3 direction = normalize(target - position);

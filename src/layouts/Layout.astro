@@ -1,6 +1,13 @@
 ---
+import Footer from '@/components/Footer.astro'
 import NavMenu from '@/components/NavMenu.astro'
 import '@/styles/global.css'
+
+const links = [
+  { text: 'about', active: false, href: '#about' },
+  { text: 'work', active: false, href: '#work' },
+  { text: 'contact', active: false, href: '#contact' },
+]
 ---
 
 <!doctype html>
@@ -10,15 +17,15 @@ import '@/styles/global.css'
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro Basics</title>
+    <title>Home - Reinald Van Praet</title>
   </head>
   <body class="is-loading bg-black">
-    <NavMenu />
+    <NavMenu links={links} />
     <main>
       <slot />
     </main>
-    <!-- Footer -->
-  </body>
+    <Footer />
+  </body>f
 </html>
 
 <style is:global>

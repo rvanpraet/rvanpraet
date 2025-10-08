@@ -2,13 +2,17 @@
 import ScrollIcon from '@/components/ScrollIcon.astro'
 import Three from '../components/Three.astro'
 import Layout from '../layouts/Layout.astro'
-// import GridContent from '@/components/GridContent.astro'
 import ExperienceLoader from '@/components/ExperienceLoader.astro'
 import InlineHighlight from '@/components/InlineHighlight.astro'
-import NavMenu from '@/components/NavMenu.astro'
 import SlicedLetter from '@/components/SlicedLetter.astro'
-import FullpageSection from '@/components/FullpageSection.astro'
 import Timeline from '@/components/Timeline.astro'
+import ProjectsPreview from '@/components/ProjectsPreview.astro'
+import Section from '@/components/Section.astro'
+
+import jcbImage from '@/assets/images/projects/americana/JCB_LIBRARY.jpg'
+import depthArrayImage from '@/assets/images/projects/depth-array/DDW_01.jpg'
+import delverImage from '@/assets/images/projects/delver/DELVER.png'
+import Contact from '@/components/Contact.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -22,151 +26,194 @@ import Timeline from '@/components/Timeline.astro'
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="1"></section>
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="2"></section>
 
-  <div class="introduction-entropy relative z-10"></div>
+  <section class="introduction-entropy relative z-10 h-screen w-screen"></section>
 
-  <FullpageSection
-    class="introduction-general content-wrapper flex items-center relative z-10 my-64 lg:w-screen lg:h-screen lg:my-0"
+  <section
+    id="about"
+    class="introduction-general flex items-center relative z-10 h-fit lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
     data-model-id="3"
   >
     <div class="main-grid-layout h-fit">
-      <h1 id="igh" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-7 lg:col-span-6">
-        <span>ABO</span><SlicedLetter className="text-green wave-y-2 ml-4">U</SlicedLetter><InlineHighlight
+      <h1
+        id="igh"
+        class="text-heading-1 col-start-1 col-span-4 md:col-start-3 md:col-span-4 max-lg:px-4 lg:col-start-7 lg:col-span-5 lg:pr-12 2xl:col-start-8 3xl:col-start-9 3xl:col-span-5 2xl:pr-0"
+      >
+        <!-- <span>ABO</span><SlicedLetter className="text-green wave-y-2 ml-4">U</SlicedLetter><InlineHighlight
           color="white">T</InlineHighlight
-        >
+        > -->
+        <span>AB<SlicedLetter className="wave-y-2 mx-4 text-salmon">O</SlicedLetter>UT</span>
       </h1>
 
-      <p id="igt1" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-6 lg:col-span-6">
+      <p
+        id="igt1"
+        class="text-paragraph col-start-1 col-span-4 md:col-start-3 md:col-span-4 max-lg:px-4 lg:col-start-7 lg:col-span-6 lg:pr-12 2xl:col-start-8 3xl:col-start-9 3xl:col-span-5 2xl:pr-0"
+      >
         I'm passionate about technology,<InlineHighlight className="mx-6 lg:mx-12 font-semibold" color="white"
           >I love to create.</InlineHighlight
         >Storytelling, emotion, mystery: these are the words that shape my approach to creativity and art. I work with
-        both<InlineHighlight className="mx-6 lg:mx-12 font-semibold" color="green">code and sound</InlineHighlight>as
+        both<InlineHighlight className="mx-6 lg:mx-12 font-semibold" color="white">code and sound</InlineHighlight>as
         means to translate my vision to the world.
       </p>
-      <p id="igt2" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-8 lg:col-span-5">
-        Inspired by the<InlineHighlight className="font-semibold mx-6 lg:mx-12" color="green"
-          >natural world</InlineHighlight
-        >, its patterns, rhythms and quiet complexity often find their way into my work.<br />Through immersion and art
-        I aim to evoke feeling,<InlineHighlight className="font-semibold mx-6 lg:mx-12" color="yellow"
-          >spark curiosity</InlineHighlight
+      <p
+        id="igt2"
+        class="text-paragraph col-start-1 col-span-4 md:col-start-3 md:col-span-4 max-lg:px-4 lg:col-start-8 lg:col-span-5 lg:text-end lg:pr-12 2xl:col-start-9 3xl:col-start-10 3xl:col-span-5 2xl:pr-0"
+      >
+        Inspired by the natural world, its patterns, rhythms and quiet complexity often find their way into my work.<br
+        />Through immersion and art I aim to evoke feeling,<InlineHighlight
+          className="font-semibold mx-6 lg:mx-12"
+          color="white">spark curiosity</InlineHighlight
         > and invite a moment of reflection.
       </p>
     </div>
-  </FullpageSection>
+  </section>
 
-  <FullpageSection
-    class="introduction-development content-wrapper flex items-center relative z-10 my-64 lg:w-screen lg:h-screen lg:my-0"
+  <section
+    class="introduction-development flex items-center relative z-10 h-fit my-16 md:my-24 lg:my-32 xl:my-64 lg:w-screen"
     data-model-id="4"
   >
     <div class="main-grid-layout h-fit">
-      <h1 id="idh" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-2 lg:col-span-8">
-        C<SlicedLetter className="mx-4 wave-y-1 text-yellow">O</SlicedLetter>DIN<InlineHighlight color="white"
-          >G</InlineHighlight
-        >
+      <h1
+        id="idh"
+        class="text-heading-1 col-start-1 col-span-4 md:col-start-1 md:col-span-4 max-lg:px-4 lg:col-start-1 lg:col-span-6 lg:text-end lg:pl-12 2xl:col-start-2 3xl:col-start-4 3xl:col-span-5 2xl:pl-0"
+      >
+        CO<SlicedLetter className="mx-4 wave-y-1 text-salmon">D</SlicedLetter>ING
       </h1>
 
-      <p id="idt1" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-1 lg:col-span-6">
+      <p
+        id="idt1"
+        class="text-paragraph col-start-1 col-span-4 md:col-start-1 md:col-span-4 max-lg:px-4 lg:col-start-1 lg:col-span-6 lg:text-end lg:pl-12 2xl:col-start-2 3xl:col-start-4 3xl:col-span-5 2xl:pl-0"
+      >
         I'm a developer with a focus on building <InlineHighlight className="mx-6 font-semibold lg:mx-12" color="white"
           >interactive and engaging</InlineHighlight
         > digital experiences. My work ranges from web development to creative coding for installations and art.
       </p>
 
-      <p id="idt2" class="col-start-1 col-span-4 md:col-start-1 md:col-span-6 lg:col-start-3 lg:col-span-5">
+      <p
+        id="idt2"
+        class="text-paragraph col-start-1 col-span-4 md:col-start-1 md:col-span-4 max-lg:px-4 lg:col-start-1 lg:col-span-5 lg:pl-12 2xl:col-start-2 3xl:col-start-3 3xl:col-span-5 2xl:pl-0"
+      >
         I use modern tools and frameworks to <InlineHighlight className="font-semibold mx-6 lg:mx-12" color="white"
           >bring ideas to life.</InlineHighlight
-        > Whether it's a responsive website, visual experiment or immersive piece, <InlineHighlight
-          className="font-semibold mx-6 lg:mx-12"
-          color="white">I enjoy exploring</InlineHighlight
-        > the intersection of code, design, and user experience.
+        > Whether it's a responsive website, visual experiment or immersive piece, I enjoy exploring the intersection of
+        code, design, and user experience.
       </p>
     </div>
-  </FullpageSection>
+  </section>
 
-  <Timeline
-    data-model-id="5"
-    class="introduction-xp relative z-10"
-    items={[
-      {
-        dateFrom: '2024',
-        dateTo: 'Current',
-        title: 'Freelance',
-        subtitle: 'Creative Developer - Sound Designer - Immersive Artist',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
-      },
-      {
-        dateFrom: '2021',
-        dateTo: '2024',
-        title: 'Fabrique',
-        subtitle: 'Frontend Developer',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
-      },
-      {
-        dateFrom: '2020',
-        dateTo: '2021',
-        title: 'Thuisleefgroep',
-        subtitle: 'Frontend Developer',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
-      },
-      {
-        dateFrom: '2018',
-        dateTo: '2020',
-        title: 'Vattenfall',
-        subtitle: 'Frontend Developer',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam egestas odio et libero consequat placerat. Integer malesuada feugiat vestibulum. Quisque tristique quam metus, a gravida odio dictum eu. Proin euismod efficitur risus, eu placerat libero fringilla nec. Pellentesque fermentum lacus et sapien porta, eu iaculis erat rhoncus. Sed non ipsum a nisi consequat eleifend. Sed eget laoreet tortor. Sed varius turpis ut ante maximus, eget pharetra dolor consectetur. Fusce nec nulla mauris. Nullam sagittis ipsum a risus ultricies, sed lacinia arcu sodales.',
-      },
-    ]}
-  />
+  <section id="work" class="relative z-10">
+    <ProjectsPreview
+      class="lg:col-start-2 lg:col-span-10 px-4 lg:px-12"
+      projects={[
+        {
+          href: '/projects/depth-array-reflections',
+          title: 'Depth Array: Reflections',
+          tags: ['Immersive', 'Sound Design', 'Creative Coding'],
+          image: { src: depthArrayImage, alt: 'picture alt' },
+        },
+        {
+          href: '/projects/americana',
+          title: 'Americana',
+          tags: ['Development', 'Cultural Heritage'],
+          image: { src: jcbImage, alt: 'picture alt' },
+        },
+        {
+          href: '/projects/delver-music',
+          title: 'Delver Music',
+          tags: ['Design', 'Development', 'Music'],
+          image: { src: delverImage, alt: 'picture alt' },
+        },
+      ]}
+    />
+  </section>
 
-  <FullpageSection
-    class="introduction-contact content-wrapper flex items-center relative z-10 my-64 lg:w-screen lg:h-screen lg:my-0"
+  <section class="introduction-xp" data-model-id="5">
+    <div class="main-grid-layout relative z-10 my-16 md:my-24 lg:my-32">
+      <div
+        class="col-start-1 col-span-6 lg:col-start-4 lg:col-span-9 2xl:col-start-4 2xl:col-span-8 3xl:col-start-5 max-lg:px-4 lg:pr-12 2xl:pr-0"
+      >
+        <h1 class="text-heading-1">
+          EXP<SlicedLetter className="mx-4 wave-y-1 text-salmon">E</SlicedLetter>RIENCE
+        </h1>
+        <p class="text-paragraph">
+          A selection of past and current roles that outline my professional experience and areas of focus.
+        </p>
+      </div>
+    </div>
+
+    <Timeline
+      class="relative z-10 my-16 md:my-24 lg:my-32"
+      items={[
+        {
+          dateFrom: '2024',
+          dateTo: 'Current',
+          title: 'Freelance',
+          subtitle: 'Creative Developer - Sound Designer - Immersive Artist',
+          description:
+            "As of last year I've shifted my focus to freelance work, through which I wish to further explore my passion for immersive experiences with a focus on front-end development, storytelling, creative coding, sound design and new media.",
+        },
+        {
+          dateFrom: '2021',
+          dateTo: '2024',
+          title: 'Fabrique',
+          subtitle: 'Frontend Developer',
+          tags: ['React', 'Vanilla JS', 'TypeScript', 'NextJS', 'GSAP', 'Tailwind CSS', 'Django', 'Wagtail'],
+
+          description:
+            'For each project at Fabrique, a small team of talented individuals collaborates to create unique digital experiences. As a frontend developer, I worked closely with project lead, designers and backend developers to build responsive, accessible and performant websites and applications.<br /><br />My role involved choosing the right technology for the job, implementing designs, optimizing performance and ensuring the best user experience.<br /><br />Short communication lines with the team and clients allowed us to quickly iterate and adapt to changing requirements, resulting in high-quality products that meet the needs of our clients and their users.',
+        },
+        {
+          dateFrom: '2020',
+          dateTo: '2021',
+          title: 'Thuisleefgroep',
+          subtitle: 'Frontend Developer',
+          tags: ['React', 'TypeScript', 'Storybook'],
+          description:
+            'At Thuisleefgroep, our development team was creating applications for healthcare professionals and internal administration tools.<br /><br />As front-end developer I was responsible for the continuous development of these applications, coaching junior developers, as well as contributing to and maintaining the in-house React component library which is used across all applications.',
+        },
+        {
+          dateFrom: '2018',
+          dateTo: '2020',
+          title: 'Vattenfall',
+          subtitle: 'Frontend Developer',
+          tags: ['Angular', 'TypeScript', 'Azure DevOps'],
+          description:
+            "At Vattenfall, I worked as part of the scrum team responsible for transforming the Nuon brand to Vattenfall.<br /><br />This involved collaborating with front- and backend developers, designers and stakeholders to create a cohesive visual identity and smooth user experience for the brand's customers.<br /><br />Parallel to the visual rebranding, I worked on migrating the existing AngularJS codebase to Angular 2+.",
+        },
+      ]}
+    />
+  </section>
+
+  <!-- <section
+    id="contact"
+    class="introduction-contact flex items-center relative z-10 mt-24 md:mt-32 lg:mt-64 h-screen w-screen"
     data-model-id="6"
+  >
+    
+  </section> -->
+  <Contact
+    data-model-id="6"
+    id="contact"
+    class="introduction-contact h-screen w-screen relative z-10 my-0! flex flex-col justify-end"
+    textContainerClass="relative bottom-[10%] lg:bottom-[15%] xl:bottom-[15%]"
+    hideTitle
   />
+
   <ScrollIcon />
 </Layout>
 
-<!-- <FullpageSection className="introduction-development-previews">
-  <ProjectsPreview
-    projects={[
-      { href: '/', image: { src: 'https://picsum.photos/400?random=1', alt: 'picture alt' } },
-      { href: '/', image: { src: 'https://picsum.photos/400?random=2', alt: 'picture alt' } },
-      { href: '/', image: { src: 'https://picsum.photos/400?random=3', alt: 'picture alt' } },
-    ]}
-  />
-</FullpageSection> -->
-
-<!-- <FullpageSection className="introduction-new-media" data-model-id="10">
-  <h1 id="inmh" class="uppercase">New Media & Immersive Installations</h1>
-  <p id="inmt">
-    I’m fascinated by the potential of immersive environments to blur the lines between the digital and physical. Using
-    tools like TouchDesigner, it's possible to create responsive systems that connect light, sound, and movement—turning
-    spaces into living, reactive experiences. These formats offer a unique way to tell stories, provoke emotion, and
-    engage the senses beyond the screen.
-  </p>
-</FullpageSection> -->
-
-<!-- <div class="loading"></div> -->
-
 <script>
+  import { getCurrentBreakpoint } from '@/scripts/utils/breakpoints'
   import gsap from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
   import Lenis from 'lenis'
 
+  const currentBreakpoint = getCurrentBreakpoint()
+
+  gsap.registerPlugin(ScrollTrigger)
   const lenis = new Lenis({
-    // lerp: 0.1,
-    // wheelMultiplier: 0.1,
-    // touchMultiplier: 0.1,
-    // smoothWheel: true,
-    lerp: 0.085,
-    // duration: 0.5,
+    autoRaf: false,
+    lerp: 0.15,
   })
-  //   const lenis = {
-  //   options: { lerp: 1 },
-  //   scrollTo: (_, __) => {},
-  // }
 
   lenis.on('scroll', (e) => {
     ScrollTrigger.update()
@@ -176,22 +223,25 @@ import Timeline from '@/components/Timeline.astro'
     lenis.raf(time * 1000)
   })
 
-  // const lenis = {
-  //   options: { lerp: 1 },
-  //   scrollTo: (_, __) => {},
-  // }
+  // NavLink anchor smooth scroll
+  document.querySelectorAll('.nav-link').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault()
+      const href = link.getAttribute('href')
+      if (href && href.startsWith('#')) {
+        const target: HTMLElement | null = document.querySelector(href)
+
+        if (target) {
+          lenis.scrollTo(target, { offset: -window.innerHeight * 0.25, duration: 3 })
+        }
+      } else if (href) {
+        window.location.href = href
+      }
+    })
+  })
 
   const MAX_ENTROPY = 0.01
   window.entropy = 0
-
-  // document.addEventListener('DOMContentLoaded', () => {
-  //   lenis.scrollTo(document.documentElement, {
-  //     offset: 0,
-  //     immediate: true,
-  //   })
-  // })
-
-  gsap.registerPlugin(ScrollTrigger)
 
   // Only start building scroll listeners when the THREE World is ready
   document.addEventListener('world-ready', () => {
@@ -222,7 +272,7 @@ import Timeline from '@/components/Timeline.astro'
       ScrollTrigger.create({
         trigger: section,
         start: 'center center',
-        end: '+=100%',
+        // end: '+=100%',
         onEnter: () => {
           swapModel(section.dataset.modelId)
         },
@@ -236,11 +286,8 @@ import Timeline from '@/components/Timeline.astro'
     ScrollTrigger.create({
       trigger: entropyEl,
       start: 'center center',
-      end: '+=175%',
+      end: '+=200%',
       pin: true,
-      // markers: {
-      //   indent: 500,
-      // },
       onEnter: () => {
         // lenis.options.lerp = 0.1
         // swapModel(lastIntroEl.dataset.modelId)
@@ -263,7 +310,6 @@ import Timeline from '@/components/Timeline.astro'
 
     gsap.to('.scroll-icon-container', {
       opacity: 0,
-      // duration: 0.5,
       scrollTrigger: {
         trigger: generalEl,
         start: 'top bottom',
@@ -273,22 +319,44 @@ import Timeline from '@/components/Timeline.astro'
     })
 
     // Animations for the general section
+    const startMap = {
+      xs: 'top center',
+      sm: 'top center',
+      md: 'top bottom-=25%',
+      lg: 'top center',
+      xl: 'top center',
+      xxl: 'top center',
+      xxxl: 'top center',
+    }
     const generalTL = gsap.timeline({
       scrollTrigger: {
-        trigger: '#igt1',
-        start: 'top bottom',
+        trigger: generalEl,
+        start: 'top bottom-=25%',
         end: 'top center',
         scrub: true,
       },
     })
-    // generalTL.fromTo('#igh', { y: -100, opacity: 0 }, { y: 0, opacity: 1, duration: 1 })
-    generalTL.fromTo('#igt1', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
-    generalTL.fromTo('#igt2', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
+    generalTL.fromTo('#igh', { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 3, ease: 'none' })
+    generalTL.fromTo('#igt1', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' }, '-=1')
+    generalTL.fromTo('#igt2', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
+
+    const generalOutTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: generalEl,
+        start: 'top top+=20%',
+        end: 'bottom top',
+        scrub: true,
+      },
+    })
+    generalOutTL.addLabel('animationStart')
+    generalOutTL.fromTo('#igh', { y: 0 }, { y: -180, duration: 4, ease: 'none' }, 'animationStart')
+    generalOutTL.fromTo('#igt1', { y: 0 }, { y: -150, duration: 4, ease: 'none' }, 'animationStart+=0.33')
+    generalOutTL.fromTo('#igt2', { y: 0 }, { y: -120, duration: 4, ease: 'none' }, 'animationStart+=0.66')
 
     // ScrollTrigger for the general section
     ScrollTrigger.create({
       trigger: generalEl,
-      start: 'top center',
+      start: startMap[currentBreakpoint],
       end: 'bottom center',
       onEnter: () => {
         window.entropy = 0
@@ -305,19 +373,35 @@ import Timeline from '@/components/Timeline.astro'
     // Animations for the development section
     const devTL = gsap.timeline({
       scrollTrigger: {
-        trigger: '#idt1',
-        start: 'top bottom',
+        trigger: devEl,
+        start: 'top bottom-=25%',
         end: 'top center',
         scrub: true,
       },
     })
-    devTL.fromTo('#idt1', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
-    devTL.fromTo('#idt2', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
+
+    devTL.addLabel('animationStart')
+    devTL.fromTo('#idt1', { x: 150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
+    devTL.fromTo('#idh', { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 2, ease: 'none' })
+    devTL.fromTo('#idt2', { x: -150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
+
+    const devOutTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: devEl,
+        start: 'top top+=20%',
+        end: 'bottom top',
+        scrub: true,
+      },
+    })
+    devOutTL.addLabel('animationStart')
+    devOutTL.fromTo('#idh', { y: 0 }, { y: -180, duration: 4, ease: 'none' }, 'animationStart')
+    devOutTL.fromTo('#idt1', { y: 0 }, { y: -150, duration: 4, ease: 'none' }, 'animationStart+=0.33')
+    devOutTL.fromTo('#idt2', { y: 0 }, { y: -120, duration: 4, ease: 'none' }, 'animationStart+=0.66')
 
     // ScrollTrigger for the development section
     ScrollTrigger.create({
       trigger: devEl,
-      start: 'top center',
+      start: 'top center+=15%',
       end: 'bottom center',
       onEnter: () => {
         swapModel(devEl.dataset.modelId)
@@ -333,7 +417,8 @@ import Timeline from '@/components/Timeline.astro'
     // ScrollTrigger for the experience section
     ScrollTrigger.create({
       trigger: xpEl,
-      start: 'top center+=33%',
+      start: 'top center+=15%',
+      end: 'bottom center',
 
       onEnter: () => {
         swapModel(xpEl.dataset.modelId)
@@ -348,7 +433,6 @@ import Timeline from '@/components/Timeline.astro'
 
     // Animations for the timeline items
     const separatorEls = document.querySelectorAll('.timeline-date-separator')
-    console.log(separatorEls)
     separatorEls.forEach((el) => {
       gsap.fromTo(
         el,
@@ -373,9 +457,9 @@ import Timeline from '@/components/Timeline.astro'
     const contactEl: HTMLElement = document.querySelector('.introduction-contact')
     ScrollTrigger.create({
       trigger: contactEl,
-      start: 'top center',
-
+      start: 'top center+=15%',
       onEnter: () => {
+        lenis.scrollTo(contactEl, { offset: 100, duration: 0.75, force: true, lock: true, easing: (t) => t })
         swapModel(contactEl.dataset.modelId)
       },
       onEnterBack: () => {
@@ -389,6 +473,8 @@ import Timeline from '@/components/Timeline.astro'
 </script>
 
 <style lang="scss" is:global>
+  @reference '../styles/global.css';
+
   .introduction-dummy {
     // height: 200vh !important;
   }

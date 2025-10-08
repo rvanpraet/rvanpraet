@@ -4,7 +4,7 @@ import type { HTMLAttributes } from 'astro/types'
 import { twMerge } from 'tailwind-merge'
 import OrientationPicture from './OrientationPicture.astro'
 
-interface Props extends HTMLAttributes<'a'> {
+type Props = HTMLAttributes<'a'> & {
   image: ImageData
   title: string
   description?: string
@@ -13,7 +13,7 @@ interface Props extends HTMLAttributes<'a'> {
 
 const { class: className, image, title, description, tags, ...rest } = Astro.props
 
-const classes = twMerge('flex flex-col gap-4 justify-center', className)
+const classes = twMerge('decorated-link flex flex-col gap-2 lg:gap-3 justify-center', className)
 ---
 
 <a class={classes} {...rest}>
@@ -21,16 +21,55 @@ const classes = twMerge('flex flex-col gap-4 justify-center', className)
     tags && (
       <div class="flex flex-row gap-2">
         {tags.map((tag) => (
-          <span class="text-sm font-light mr-2">{tag}</span>
+          <span class="text-sm 2xl:text-base font-light mr-2">{tag}</span>
         ))}
       </div>
     )
   }
-  <OrientationPicture variant="landscape" src={image.src} alt={image.alt} />
+
+  <div class="decorated-link__image-container w-full h-auto relative overflow-hidden">
+    <OrientationPicture class="decorated-link__image" variant="landscape" src={image.src} alt={image.alt} />
+    <div class="color-overlay absolute inset-0"></div>
+  </div>
 
   <div>
-    <p class="text-3xl">{title}</p>
-
-    {description && <p class="text-sm">{description}</p>}
+    <p class="text-xl lg:text-2xl 2xl:text-3xl font-light uppercase">{title}</p>
+    {description && <p class="text-sm 2xl:text-base">{description}</p>}
   </div>
 </a>
+
+<style lang="scss" is:global>
+  .decorated-link {
+    .decorated-link__image {
+      filter: grayscale(1);
+      transition:
+        filter,
+        scale 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+    }
+
+    .color-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--color-salmon);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+      opacity: 1;
+    }
+
+    &:focus,
+    &:hover {
+      .decorated-link__image {
+        filter: grayscale(0);
+        scale: 1.15;
+      }
+
+      .color-overlay {
+        opacity: 0;
+      }
+    }
+  }
+</style>

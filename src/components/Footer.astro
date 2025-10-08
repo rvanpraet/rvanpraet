@@ -1,0 +1,47 @@
+---
+
+---
+
+<footer class="fixed bottom-0 left-0 w-full flex justify-center items-center z-40">
+  <p class="text-xs lg:text-sm font-extralight">
+    © {new Date().getFullYear()} Reinald Van Praet
+  </p>
+</footer>
+
+<script>
+  // Footer width smoothly goes up to 100% when reaching the bottom of the page
+  // and goes back to its 0 width when scrolling up again
+  if (typeof window !== 'undefined') {
+    let footerInView = false
+    const element = document.querySelector('footer')
+    window.addEventListener('scroll', () => {
+      const scrollPosition = window.innerHeight + window.pageYOffset
+      const threshold = 2 // Adjust for off-by-one px bugs on some platforms
+      const pageHeight = document.body.offsetHeight
+
+      if (scrollPosition >= pageHeight - threshold && !footerInView) {
+        // You are at (or near) the bottom of the page
+        footerInView = true
+        element?.classList.add('show')
+      } else {
+        footerInView = false
+        element?.classList.remove('show')
+      }
+    })
+  }
+</script>
+
+<style>
+  footer {
+    background-color: #1f1f1fbb;
+    /* border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem; */
+    transition: bottom 0.25s ease-in-out;
+    height: 28px;
+    bottom: -28px;
+
+    &.show {
+      bottom: 0;
+    }
+  }
+</style>

@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 import { MeshBVH, acceleratedRaycast } from 'three-mesh-bvh'
-import { debounce } from '../helpers'
 
 export default class GPGPUEvents {
   constructor(mouse, camera, mesh, uniforms) {
@@ -18,6 +17,10 @@ export default class GPGPUEvents {
   }
 
   init() {
+    // Remember initial camera position
+    // console.log(this.camera)
+    this.initialCameraPosition = this.camera.position
+
     this.setupMouse()
     this.setupScroll()
   }
@@ -39,6 +42,7 @@ export default class GPGPUEvents {
     this.raycasterMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial())
 
     this.mouse.on('mousemove', (cursorPosition) => {
+      // On mouse move, do raycasting to get a position that can relate to the 3D world
       this.raycaster.setFromCamera(cursorPosition, this.camera)
 
       const intersects = this.raycaster.intersectObjects([this.raycasterMesh])
@@ -75,6 +79,11 @@ export default class GPGPUEvents {
 
     // Position uniform updates
     if (this.uniforms.positionUniforms.uEntropy) this.uniforms.positionUniforms.uEntropy.value = this.entropy
+
+    // On mouse move, gently nudge the camera
+    const { x: mouseX, y: mouseY } = this.mouse.cursorPosition
+    this.camera.position.x = mouseX * 0.04
+    this.camera.position.y = mouseY * 0.04
   }
 
   updateRaycasterMesh(mesh) {

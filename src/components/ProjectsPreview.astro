@@ -18,34 +18,20 @@ type Props = {
 }
 
 const { class: className, projects } = Astro.props
-const classes = twMerge(
-  'generic-image-grid mt-32 px-8 col-start-1 col-span-12 flex w-full flex-row flex-wrap',
-  className
-)
+const classes = twMerge('generic-image-grid col-start-1 col-span-16 flex w-full flex-row flex-wrap', className)
 ---
 
 <div class={classes}>
   {
     projects.map((project) => (
       <DecoratedLink
-        class="w-1/2 mb-16"
+        class="w-full lg:w-1/2 mt-12 lg:mt-8 lg:even:pl-3 lg:odd:pr-3"
         image={project.image}
         title={project.title}
         description={project.description}
         tags={project.tags}
+        href={project.href}
       />
     ))
   }
 </div>
-
-<style lang="scss">
-  .generic-image-grid {
-    :nth-child(even) {
-      padding-left: 0.5rem;
-    }
-
-    :nth-child(odd) {
-      padding-right: 0.5rem;
-    }
-  }
-</style>

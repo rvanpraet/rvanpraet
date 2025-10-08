@@ -31,12 +31,12 @@ export default class PostProcessing {
     this.params = {
       // Bloom pass
       threshold: 0.35,
-      strength: 0.05,
-      radius: 0.15,
+      strength: 0.15,
+      radius: 0.05,
       directionX: 0.1,
       directionY: 0.1,
       // After Image pass
-      damp: 0.4,
+      damp: 0.75,
       // RGB Shift pass
       amount: 0.0,
       angle: 0.0,
@@ -73,8 +73,8 @@ export default class PostProcessing {
     this.composer = new EffectComposer(this.renderer)
     this.composer.addPass(renderScene)
     // this.composer.addPass(this.afterImagePass)
-    this.composer.addPass(this.rgbShiftPass)
     this.composer.addPass(this.bloomPass)
+    this.composer.addPass(this.rgbShiftPass)
     this.composer.addPass(outputPass)
   }
 

@@ -8,7 +8,7 @@ interface Props extends HTMLAttributes<'section'> {
 
 const { class: className, ...rest } = Astro.props
 
-const classes = twMerge('.main-grid-layout', className)
+const classes = twMerge('main-grid-layout', className)
 ---
 
 <section class={classes} {...rest}>

@@ -1,0 +1,124 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'button'>
+
+const { class: className, ...props } = Astro.props
+const classes = twMerge('btn-31 text-base 2xl:text-xl', className)
+---
+
+<button class={classes} {...props}>
+  <span class="text-container px-4 py-2">
+    <span class="text">
+      <slot />
+    </span>
+  </span>
+</button>
+
+<style>
+  .btn-31,
+  .btn-31 *,
+  .btn-31 :after,
+  .btn-31 :before,
+  .btn-31:after,
+  .btn-31:before {
+    border: 0 solid;
+    box-sizing: border-box;
+  }
+  .btn-31 {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: button;
+    background-color: var(--color-black);
+    background-image: none;
+    color: var(--color-white);
+    cursor: pointer;
+    font-weight: semibold;
+    line-height: 1.5em;
+    margin: 0;
+    -webkit-mask-image: -webkit-radial-gradient(var(--color-black), var(--color-white));
+    padding: 0;
+  }
+  .btn-31:disabled {
+    cursor: default;
+  }
+  .btn-31:-moz-focusring {
+    outline: auto;
+  }
+  .btn-31 svg {
+    display: block;
+    vertical-align: middle;
+  }
+  .btn-31 [hidden] {
+    display: none;
+  }
+  .btn-31 {
+    border-width: 1px;
+    position: relative;
+    text-transform: uppercase;
+  }
+  .btn-31:before {
+    --progress: 100%;
+    background: var(--color-white);
+    -webkit-clip-path: polygon(100% 0, var(--progress) var(--progress), 0 100%, 100% 100%);
+    clip-path: polygon(100% 0, var(--progress) var(--progress), 0 100%, 100% 100%);
+    content: '';
+    inset: 0;
+    position: absolute;
+    transition: -webkit-clip-path 0.2s ease;
+    transition: clip-path 0.2s ease;
+    transition:
+      clip-path 0.2s ease,
+      -webkit-clip-path 0.2s ease;
+  }
+
+  .btn-31:hover:before {
+    --progress: 0%;
+  }
+
+  .btn-31 .text-container {
+    display: block;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .btn-31 .text {
+    display: block;
+    mix-blend-mode: difference;
+    position: relative;
+  }
+
+  .btn-31:hover .text {
+    -webkit-animation: move-up-alternate 0.3s ease forwards;
+    animation: move-up-alternate 0.3s ease forwards;
+  }
+
+  @-webkit-keyframes move-up-alternate {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(80%);
+    }
+    51% {
+      transform: translateY(-80%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  @keyframes move-up-alternate {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(80%);
+    }
+    51% {
+      transform: translateY(-80%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+</style>

@@ -1,0 +1,32 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import Button from './Button.astro'
+import ButtonLink from './ButtonLink.astro'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'section'> & {
+  hideTitle?: boolean
+  textContainerClass?: string
+}
+
+const { class: className, textContainerClass, hideTitle, ...props } = Astro.props
+const classes = twMerge('main-grid-layout content-margins-y max-lg:px-4', className)
+---
+
+<section class={classes} {...props}>
+  <div
+    class={`col-span-6 lg:col-start-4 2xl:col-start-5 3xl:col-start-6 lg:text-center h-fit self-end ${textContainerClass}`}
+  >
+    {!hideTitle && <h2 class="text-heading-2">Let's connect</h2>}
+    <p class="text-paragraph mt-4">
+      I am currently available for new projects and collaborations. Whether you have a specific project in mind or just
+      want to say hello, feel free to reach out. I look forward to hearing from you!
+    </p>
+    <div class="flex items-center gap-4 lg:justify-center mt-8">
+      <ButtonLink href="mailto:reinald@sovereigncreative.nl">Email me</ButtonLink>
+      <ButtonLink href="https://www.linkedin.com/in/reinald-van-praet-a32916b8/">LinkedIn</ButtonLink>
+    </div>
+  </div>
+</section>
+
+<script></script>

@@ -2,6 +2,6 @@ export type ImageOrientation = 'landscape' | 'landscape-54' | 'portrait' | 'squa
 
 type ImageData = {
   variant?: ImageOrientation
-  src: ImageMetadata | string
+  src: string | ImageMetadata
   alt: string
 }

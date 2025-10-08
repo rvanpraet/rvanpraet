@@ -35,7 +35,8 @@ export default class Mask extends Handler {
 
     this.params = {
       color: new THREE.Color('#fff'),
-      size: isMobileDevice() ? 15.0 : 25.0,
+      // color: new THREE.Color(0xc18383),
+      size: isMobileDevice() ? 15.0 : 20.0,
       minAlpha: 0.8,
       maxAlpha: 1,
       force: 0.5,

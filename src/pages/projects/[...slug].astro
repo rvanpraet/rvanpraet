@@ -1,0 +1,61 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import projectPages from '@/data/project-pages.js'
+import ContentHeader from '@/components/ContentHeader.astro'
+import ContentBlock from '@/components/ContentBlock.astro'
+import ContentImage from '@/components/ContentImage.astro'
+import { CONTENT_TYPES } from '@/types/content.d.ts'
+import VideoEmbed from '@/components/VideoEmbed.astro'
+import Contact from '@/components/Contact.astro'
+
+type StaticPath<T> = {
+  params: { slug?: string }
+  props: T
+}
+
+type ContentPageProps = {
+  title: string
+  data: any
+}
+
+type ContentPage = StaticPath<ContentPageProps>
+
+// Generate static paths for all project pages via the projectPages data
+// Docs - https://docs.astro.build/ar/guides/routing/#static-ssg-mode
+export function getStaticPaths(): ContentPage[] {
+  const pages = projectPages
+
+  return pages.map(({ slug, ...props }) => {
+    return {
+      params: { slug },
+      props: props,
+    }
+  })
+}
+
+const componentsMap = {
+  [CONTENT_TYPES.CONTENT_BLOCK]: ContentBlock,
+  [CONTENT_TYPES.CONTENT_IMAGE]: ContentImage,
+  [CONTENT_TYPES.CONTENT_VIDEO]: VideoEmbed,
+}
+
+const { title, data } = Astro.props
+const { header, blocks } = data
+---
+
+<ContentLayout title={title}>
+  <ContentHeader {...header} />
+  {
+    blocks &&
+      blocks.length > 0 &&
+      blocks.map((block: any, index: number) => {
+        const Component = componentsMap[block.type] || null
+        return Component ? (
+          <Component key={index} {...block.props}>
+            {block.content && <slot set:html={block.content} />}
+          </Component>
+        ) : null
+      })
+  }
+  <Contact id="contact" />
+</ContentLayout>

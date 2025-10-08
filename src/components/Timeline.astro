@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 import { twMerge } from 'tailwind-merge'
-import Section from './Section.astro'
+import Tag from './Tag.astro'
 
 interface Props extends HTMLAttributes<'section'> {
   items: Array<{
@@ -10,74 +10,46 @@ interface Props extends HTMLAttributes<'section'> {
     title: string
     subtitle?: string
     description: string
+    tags?: string[]
   }>
 }
 
 const { items, class: classList, ...rest } = Astro.props
 
-const componentClasses = 'timeline-component content-wrapper'
+const componentClasses = 'timeline-component'
 
 const classes = twMerge(componentClasses, classList)
 ---
 
 <section class={classes} {...rest}>
   <ul class="list-none p-0">
-    <!-- <div class="flex items-center h-16 mt-8 mb-10 gap-16">
-      <hr class="w-8 h-8 ml-4 bg-white rounded-full" />
-      <hr class="border-t border-white w-fit" />
-    </div> -->
     {
       items.map((item, index) => (
-        <li class="timeline-item main-grid-layout relative flex flex-row gap-8 w-full mb-16 px-2 lg:px-0">
-          <div class="timeline-date-range col-start-1 col-span-1 pr-2 sm:pr-8 md:col-span-2 md:pr-16 lg:col-start-4 lg:col-span-2">
+        <li class="timeline-item main-grid-layout relative flex flex-row gap-8 w-full mb-16">
+          <div class="timeline-date-range col-start-1 col-span-1 pr-2 sm:pr-8 md:col-start-2 md:pr-16 max-lg:pl-4 lg:col-start-4 lg:col-span-2 3xl:col-start-5 text-sm">
             <span class="timeline-daterange-to pb-2">{item.dateTo}</span>
             <div class="timeline-date-separator" />
             <span class="timeline-daterange-from pt-2">{item.dateFrom}</span>
           </div>
-          <div class="col-start-2 col-span-3 md:col-start-3 md:col-span-4 lg:col-start-7 lg:col-span-6 lg:pr-8">
-            <h2 class="uppercase mb-0!">{item.title}</h2>
-            {item.subtitle && <h3 class="timeline-item-subtitle">{item.subtitle}</h3>}
-            <p class="mb-0!">{item.description}</p>
+          <div class="col-start-2 col-span-3 md:col-start-3 md:col-span-4 lg:col-start-6 lg:col-span-7 2xl:col-span-6 max-lg:pr-4 lg:pr-12 2xl:pr-0">
+            <h2 class="text-2xl lg:text-3xl 3xl:text-4xl font-semibold uppercase mb-0!">{item.title}</h2>
+            {item.subtitle && (
+              <h3 class="text-lg xl:text-xl 2xl:text-2xl font-light timeline-item-subtitle">{item.subtitle}</h3>
+            )}
+            {item.tags && item.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 mt-4">
+                {item.tags.map((tag) => (
+                  <Tag>{tag}</Tag>
+                ))}
+              </div>
+            )}
+            <p class="text-paragraph mb-0! mt-8" set:html={item.description} />
           </div>
         </li>
       ))
     }
   </ul>
 </section>
-
-<script>
-  // import gsap from 'gsap'
-  // import { ScrollTrigger } from 'gsap/ScrollTrigger'
-  // gsap.registerPlugin(ScrollTrigger)
-
-  import { init } from 'astro/virtual-modules/prefetch.js'
-
-  const initDateSeparators = () => {
-    document.querySelectorAll('.timeline-date-separator').forEach((el: HTMLElement, index) => {
-      el.style.width = `100%`
-
-      // Rotate the element based on its index (odd/even)
-      const sign = index % 2 === 0 ? -1 : 1
-
-      // Calculate angle of rotation based on width and height
-      const { width, height } = el.getBoundingClientRect()
-      const angle = 90 - Math.atan2(height, width - 32) * (180 / Math.PI)
-
-      // Set the rotation of the element
-      el.style.transform = `rotate(${angle * sign}deg)`
-      el.style.transformOrigin = 'center center'
-      el.style.width = `${2}px`
-    })
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    initDateSeparators()
-  })
-
-  window.addEventListener('resize', () => {
-    initDateSeparators()
-  })
-</script>
 
 <style lang="scss">
   .timeline-item {
@@ -93,18 +65,9 @@ const classes = twMerge(componentClasses, classList)
     }
 
     .timeline-date-separator {
-      // width: 2px;
       width: 100%;
       height: 100%;
       background-color: var(--color-white);
-      // margin: 0 auto;
-      // margin: 0 calc(var(--spacing) * 2);
-    }
-
-    .timeline-item-subtitle {
-      font-weight: var(--font-weight-extralight);
-      font-size: var(--text-xl);
-      margin-bottom: calc(var(--spacing) * 8);
     }
 
     &:nth-child(even) {
@@ -121,16 +84,6 @@ const classes = twMerge(componentClasses, classList)
           align-self: flex-end;
         }
       }
-
-      // .timeline-date-separator {
-      //   @media screen and (min-width: 640px) {
-      //     transform: rotate(15deg);
-      //   }
-
-      //   @media screen and (min-width: 768px) {
-      //     transform: rotate(30deg);
-      //   }
-      // }
     }
 
     &:nth-child(odd) {
@@ -146,16 +99,38 @@ const classes = twMerge(componentClasses, classList)
           align-self: flex-start;
         }
       }
-
-      // .timeline-date-separator {
-      //   @media screen and (min-width: 640px) {
-      //     transform: rotate(-15deg);
-      //   }
-
-      //   @media screen and (min-width: 768px) {
-      //     transform: rotate(-30deg);
-      //   }
-      // }
     }
   }
 </style>
+
+<script>
+  import { isXS } from '@/scripts/utils/breakpoints'
+
+  const initDateSeparators = () => {
+    document.querySelectorAll('.timeline-date-separator').forEach((el: HTMLElement, index) => {
+      el.style.width = `100%`
+
+      // Rotate the element based on its index (odd/even)
+      const sign = index % 2 === 0 ? -1 : 1
+
+      // Calculate angle of rotation based on width and height
+      const { width, height } = el.getBoundingClientRect()
+
+      // No rotation for extra small screens
+      const angle = isXS() ? 0 : 90 - Math.atan2(height, width - 32) * (180 / Math.PI)
+
+      // Set the rotation of the element
+      el.style.transform = `rotate(${angle * sign}deg)`
+      el.style.transformOrigin = 'center center'
+      el.style.width = `${2}px`
+    })
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initDateSeparators()
+  })
+
+  window.addEventListener('resize', () => {
+    initDateSeparators()
+  })
+</script>

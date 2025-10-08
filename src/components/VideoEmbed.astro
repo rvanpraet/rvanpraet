@@ -1,0 +1,74 @@
+---
+import Section from './Section.astro'
+
+const { url, title = 'Video' } = Astro.props
+
+// Parse video URL to determine provider and extract video ID
+function parseVideoUrl(url) {
+  // YouTube patterns
+  const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+  const youtubeMatch = url.match(youtubeRegex)
+
+  if (youtubeMatch) {
+    return {
+      provider: 'youtube',
+      id: youtubeMatch[1],
+      embedUrl: `https://www.youtube.com/embed/${youtubeMatch[1]}`,
+    }
+  }
+
+  // Vimeo patterns
+  const vimeoRegex = /(?:vimeo\.com\/)(\d+)/
+  const vimeoMatch = url.match(vimeoRegex)
+
+  if (vimeoMatch) {
+    return {
+      provider: 'vimeo',
+      id: vimeoMatch[1],
+      embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}`,
+    }
+  }
+
+  // Fallback for direct embed URLs
+  return {
+    provider: 'unknown',
+    id: '',
+    embedUrl: url,
+  }
+}
+
+const videoData = parseVideoUrl(url)
+---
+
+<Section class="video-embed content-margins-t">
+  <div class="col-span-12 px-4 lg:px-8 2xl:px-0 2xl:col-start-2 3xl:col-start-3">
+    <div class="video-wrapper">
+      <iframe
+        src={videoData.embedUrl}
+        title={title}
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background-color: var(--color-muted);
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+  }
+</style>

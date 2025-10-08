@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets'
+// import type { ImageData } from '@/types/image'
+import Tag from './Tag.astro'
+
+// type Props = {
+//   title: string
+//   subtitle?: string
+//   image?: ImageData
+// }
+
+const { title, subtitle, image, metadata } = Astro.props
+
+const inferSize = typeof image?.src === 'string'
+---
+
+<section class="content-header relative w-screen">
+  {
+    image ? (
+      <>
+        {/* Image */}
+        <div class="content-header__image-wrapper z-0 flex items-center justify-center overflow-hidden h-[50vh] md:h-[65vh] lg:h-[70vh] w-full">
+          <Image src={image.src} alt={image.alt} layout="none" fit="cover" inferSize={inferSize} />
+        </div>
+
+        <div class="header-content main-grid-layout relative z-10 justify-center max-lg:px-4 mt-8 2xl:mt-12">
+          {/* Title and subtitle */}
+          <div class="col-span-4 md:col-span-6 lg:col-span-10 lg:col-start-2 2xl:col-start-3 3xl:col-start-4 h-fit">
+            <h1 class="text-heading-1 mb-2! lg:mb-0!">{title}</h1>
+            {subtitle && <p class="text-lg lg:text-xl xl:text-2xl font-light uppercase">{subtitle}</p>}
+          </div>
+
+          {/* Metadata */}
+          {metadata && (
+            <>
+              <div class="col-span-3 md:col-span-4 lg:col-span-8 lg:col-start-2 2xl:col-start-3 2xl:col-span-7 3xl:col-start-4 mt-8">
+                <p class="text-paragraph mb-0!">{metadata.client}</p>
+                {metadata.location && <p class="text-paragraph  mb-8!">{metadata.location}</p>}
+                {metadata.website && (
+                  <a class="underline" href={metadata.website}>
+                    Visit website
+                  </a>
+                )}
+              </div>
+              <div class="col-span-1 md:col-start-6 mt-8 lg:col-start-10 lg:col-span-2 2xl:col-start-11 3xl:col-start-12">
+                {metadata.roles && metadata.roles.length > 0 && (
+                  <div class="flex flex-col flex-wrap gap-2 self-end lg:flex-row lg:justify-end">
+                    {metadata.roles.map((role: string) => (
+                      <Tag>{role}</Tag>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </>
+    ) : (
+      <div class="col-span-4 md:col-span-6 lg:col-span-10 lg:col-start-2 header-content header-centered">
+        <h1>{title}</h1>
+        {subtitle && <p class="subtitle">{subtitle}</p>}
+      </div>
+    )
+  }
+</section>
+
+<style lang="scss">
+  @reference '../styles/global.css';
+
+  .header-content {
+    @media screen and (max-width: calc(var(--breakpoint-md) - 1px)) {
+      .content-header__image-wrapper {
+        img {
+          max-height: 100%;
+          max-width: initial;
+        }
+      }
+    }
+  }
+</style>

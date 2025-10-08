@@ -1,6 +1,19 @@
 ---
+import Footer from '@/components/Footer.astro'
 import NavMenu from '@/components/NavMenu.astro'
 import '@/styles/global.css'
+
+type Props = {
+  title: string
+}
+
+const { title } = Astro.props
+
+const navLinks = [
+  { text: 'contact', active: false, href: '#contact' },
+  { text: 'work', active: false, href: '/projects' },
+  { text: 'about', active: false, href: '/' },
+]
 ---
 
 <!doctype html>
@@ -10,14 +23,14 @@ import '@/styles/global.css'
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro Basics</title>
+    <title>{title} - Reinald Van Praet</title>
   </head>
   <body class="bg-black">
-    <NavMenu />
+    <NavMenu links={navLinks} />
     <main class="relative z-10">
       <slot />
     </main>
-    <!-- Footer -->
+    <Footer />
   </body>
 </html>
 
@@ -28,10 +41,5 @@ import '@/styles/global.css'
   const lenis = new Lenis({
     duration: 0.3,
     autoRaf: true,
-  })
-
-  // Listen for the scroll event and log the event data
-  lenis.on('scroll', (e) => {
-    console.log(e)
   })
 </script>

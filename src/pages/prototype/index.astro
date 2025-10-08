@@ -1,0 +1,108 @@
+---
+// Imports
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import ContentHeader from '../../components/ContentHeader.astro'
+import ContentBlock from '../../components/ContentBlock.astro'
+import ContentImage from '../../components/ContentImage.astro'
+import TechBadges from '../../components/TechBadges.astro'
+import VideoEmbed from '../../components/VideoEmbed.astro'
+
+// Image for demo purposes
+
+import contentImage from '@/assets/images/PRESS_KIT_SASEMOI_PORTRAIT.jpg'
+import ddw01 from '@/assets/images/DDW_01.jpg'
+---
+
+<ContentLayout>
+  <div class="min-h-screen">
+    <!-- Example 3: Header with image  -->
+    <ContentHeader
+      title="Project Showcase"
+      subtitle="Featured work and case studies"
+      image={{ src: ddw01, alt: 'Project showcase header', variant: 'landscape' }}
+    />
+
+    <!-- Example 1: Header with title and subtitle  -->
+    <!-- <ContentHeader
+      title="Content Components Prototype"
+      subtitle="A showcase of reusable content blocks for building rich content pages"
+    /> -->
+
+    <!-- Example 2: Content block with typography  -->
+    <ContentBlock>
+      <h1>Seriously big title</h1>
+
+      <h2>Typography and Spacing</h2>
+      <p>
+        This is a paragraph demonstrating proper spacing and typography. The ContentBlock component automatically
+        handles margins between headings, paragraphs, lists, and other content elements.
+      </p>
+
+      <h3>Subheading Example</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua.
+      </p>
+
+      <ul>
+        <li>List item with proper spacing</li>
+        <li>Another list item</li>
+        <li>Third item in the list</li>
+      </ul>
+
+      <p>More content after the list maintains consistent spacing throughout the document.</p>
+    </ContentBlock>
+
+    <!-- Example 4: Content image  -->
+    <ContentImage
+      image={{ src: contentImage, alt: 'Project showcase header', variant: 'landscape' }}
+      caption="An example of a centered content image with optional caption"
+      variant="left"
+    />
+
+    <!-- Example 5: Technology badges  -->
+    <ContentBlock>
+      <h2>Technologies Used</h2>
+      <p>This project was built using the following technologies:</p>
+    </ContentBlock>
+
+    <TechBadges
+      technologies={[
+        { name: 'React', icon: 'react' },
+        { name: 'Node.js', icon: 'nodejs' },
+        { name: 'JavaScript', icon: 'javascript' },
+        { name: 'HTML5', icon: 'html5' },
+        { name: 'CSS3', icon: 'css3' },
+      ]}
+    />
+
+    <!-- Example 6: Video embeds  -->
+    <ContentBlock>
+      <h2>Video Content</h2>
+      <p>Embedded videos from popular platforms:</p>
+    </ContentBlock>
+
+    <VideoEmbed url="https://www.youtube.com/watch?v=dQw4w9WgXcQ" title="YouTube Video Example" />
+
+    <ContentBlock>
+      <p>Vimeo videos are also supported:</p>
+    </ContentBlock>
+
+    <VideoEmbed url="https://vimeo.com/148751763" title="Vimeo Video Example" />
+
+    <!-- Example 7: Mixed content  -->
+    <ContentBlock>
+      <h2>Combining Components</h2>
+      <p>These components work together seamlessly to create rich, well-structured content pages.</p>
+
+      <h3>Key Features</h3>
+      <ul>
+        <li>Responsive grid-based layout</li>
+        <li>Consistent typography and spacing</li>
+        <li>Flexible image handling</li>
+        <li>Multi-platform video support</li>
+        <li>Technology badges with icons</li>
+      </ul>
+    </ContentBlock>
+  </div>
+</ContentLayout>

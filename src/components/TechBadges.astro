@@ -1,0 +1,53 @@
+---
+import { Icon } from 'astro-icon/components'
+import Section from './Section.astro'
+
+// Define Technology and Props interfaces
+const Technology = {
+  name: '',
+  icon: '',
+}
+
+const Props = {
+  technologies: [],
+}
+
+// Extract technologies from Astro props
+const { technologies } = Astro.props
+---
+
+<Section class="tech-badges mb-16">
+  <div class="col-span-4 md:col-span-6 md:col-start-1 lg:col-span-8 lg:col-start-3 px-8">
+    <div class="flex flex-wrap gap-4 justify-center">
+      {
+        technologies.map((tech) => (
+          <div class="tech-badge flex items-center gap-2 px-4 py-2 rounded-lg bg-muted hover:bg-accent transition-colors">
+            <Icon name={tech.icon} class="w-6 h-6" />
+            <span class="font-medium">{tech.name}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Section>
+
+<style>
+  .tech-badge {
+    border: 1px solid var(--color-border);
+  }
+
+  .tech-badge:hover {
+    border-color: var(--color-primary);
+  }
+
+  @media (max-width: 640px) {
+    .tech-badge {
+      font-size: 0.875rem;
+    }
+
+    .tech-badge :global(.w-6) {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+</style>

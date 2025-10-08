@@ -1,46 +1,23 @@
-.content-wrapper {
-  h1 {
-    @apply text-6xl mb-12 lg:text-8xl lg:mb-16 xl:mb-16 font-bold uppercase;
-    /* font-size: 8rem; */
+@layer utilities {
+  .text-heading-1 {
+    @apply text-5xl lg:text-6xl xl:text-7xl 3xl:text-8xl mb-8 lg:mb-8 xl:mb-8 font-bold uppercase;
     line-height: 1em;
-    text-transform: uppercase;
-    font-weight: var(--font-weight-bold);
-    /* margin-top: calc(var(--spacing) * 16); */
-    /* margin-bottom: calc(var(--spacing) * 8); */
   }
 
-  h2 {
-    font-size: var(--text-4xl);
-    font-weight: var(--font-weight-light);
-    margin-bottom: calc(var(--spacing) * 4);
+  .text-heading-2 {
+    @apply text-3xl lg:text-4xl xl:text-5xl 3xl:text-6xl mb-6 lg:mb-8 xl:mb-8 font-semibold uppercase;
   }
 
-  p {
-    @apply text-lg mb-12 lg:text-xl lg:mb-16 xl:mb-16 font-extralight;
+  .text-heading-3 {
+    @apply text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl mb-6 lg:mb-8 xl:mb-8 font-normal uppercase;
+  }
+
+  .text-paragraph {
+    @apply text-base mb-6 xl:text-lg 2xl:text-xl lg:mb-8 xl:mb-8 font-extralight last:mb-0;
     line-height: 1.5em;
-    /* font-size: var(--text-xl);
-    font-weight: var(--font-weight-extralight); */
-    /* margin-bottom: calc(var(--spacing) * 16); */
 
     &:last-child {
       @apply mb-0;
     }
   }
-}
-
-.heading-1 {
-  @apply text-6xl font-light uppercase;
-}
-
-.heading-2 {
-  @apply text-4xl font-light uppercase;
-}
-
-.heading-3 {
-  @apply text-2xl font-light uppercase;
-}
-
-.paragraph {
-  @apply text-base font-extralight;
-  line-height: 1.5em;
 }

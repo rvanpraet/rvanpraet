@@ -1,0 +1,109 @@
+---
+import Section from './Section.astro'
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'section'>
+
+const { class: className } = Astro.props
+const classes = twMerge('content-block content-margins-t px-4 lg:px-0', className)
+
+// ContentBlock provides consistent spacing for typography elements matching typography.scss
+---
+
+<Section class={classes}>
+  <div
+    class="col-start-1 col-span-4 md:col-span-6 lg:col-span-10 lg:col-start-2 2xl:col-start-3 3xl:col-start-4 content-wrapper"
+  >
+    <slot />
+  </div>
+</Section>
+
+<style lang="scss" is:global>
+  @reference '../styles/global.css';
+
+  .content-wrapper {
+    h1 {
+      @apply text-6xl lg:text-7xl xl:text-8xl mb-8 lg:mb-8 xl:mb-8 font-bold uppercase;
+      line-height: 1em;
+    }
+
+    h2 {
+      @apply text-3xl lg:text-4xl mb-6 lg:mb-8 xl:mb-8 font-semibold uppercase;
+    }
+
+    h3 {
+      @apply text-2xl mb-6 font-light uppercase;
+      font-weight: var(--font-weight-light);
+      text-transform: uppercase;
+    }
+
+    p {
+      @apply text-lg mb-6 lg:text-xl lg:mb-8 xl:mb-8 font-extralight last:mb-0;
+      line-height: 1.5em;
+    }
+
+    ul,
+    ol {
+      @apply text-lg font-extralight mb-12 lg:mb-16;
+      //lg:text-xl
+      line-height: 1.5em;
+      padding-left: calc(var(--spacing) * 6);
+
+      li {
+        margin-bottom: calc(var(--spacing) * 2);
+      }
+    }
+
+    blockquote {
+      @apply text-lg font-extralight;
+      border-left: 4px solid var(--color-primary);
+      padding-left: calc(var(--spacing) * 4);
+      margin: calc(var(--spacing) * 8) 0;
+      line-height: 1.5em;
+    }
+
+    code {
+      background-color: var(--color-muted);
+      padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1);
+      border-radius: 0.25rem;
+      font-size: 0.9em;
+      font-family: var(--font-mono);
+    }
+
+    pre {
+      background-color: var(--color-muted);
+      padding: calc(var(--spacing) * 4);
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin-bottom: calc(var(--spacing) * 8);
+
+      code {
+        background-color: transparent;
+        padding: 0;
+      }
+    }
+
+    a {
+      color: var(--color-primary);
+      text-decoration: underline;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    strong {
+      font-weight: var(--font-weight-semibold);
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    figcaption {
+      @apply text-xs md:text-sm italic;
+    }
+  }
+</style>
