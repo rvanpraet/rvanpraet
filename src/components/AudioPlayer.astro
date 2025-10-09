@@ -1,0 +1,286 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'div'> & {
+  src: string
+  className?: string
+  // color?: 'white' | 'yellow' | 'green' | 'red'
+  color?: string
+  label?: string
+  audioPlayerProps?: HTMLAttributes<'audio'>
+}
+
+const { src, className = '', color = 'yellow', label = 'Play Audio', audioPlayerProps, ...rest } = Astro.props
+
+const colorMap = {
+  white: '#ffffff',
+  yellow: '#ffe66d',
+  green: '#70a37f',
+  red: '#d64045',
+}
+
+// const accentColor = '--color-salmon'
+// const accentColor = colorMap[color]
+const classes = twMerge('audio-player', className)
+---
+
+<div class={classes} {...rest}>
+  <audio class="audio-element" src={src} preload="metadata" {...audioPlayerProps}></audio>
+
+  <button class="audio-button rounded-full" aria-label={label}>
+    <svg class="waveform" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      Single SVG path for wave animation
+      <path
+        class="wave-path"
+        d="M 0 30 Q 25 30 50 30 T 100 30 T 150 30 T 200 30"
+        fill="none"
+        stroke-width="3"
+        stroke-linecap="round"></path>
+    </svg>
+    <span class="audio-label">Muted</span>
+  </button>
+</div>
+
+<script>
+  import gsap from 'gsap'
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const audioPlayers = document.querySelectorAll('.audio-player')
+
+    audioPlayers.forEach((playerEl) => {
+      const audioHint: HTMLElement = document.querySelector('.audio-hint')
+      const audio: HTMLAudioElement = playerEl.querySelector('.audio-element')
+      const button: HTMLButtonElement = playerEl.querySelector('.audio-button')
+      const label: HTMLSpanElement = playerEl.querySelector('.audio-label')
+      const wavePath: SVGPathElement = playerEl.querySelector('.wave-path')
+
+      audio.onplay = () => {
+        label.textContent = 'Playing'
+        startWaveAnimation()
+
+        if (audioHint) {
+          gsap.to(audioHint, {
+            opacity: 0,
+            duration: 1.5,
+            ease: 'power2.out',
+            onComplete: () => {
+              audioHint.style.display = 'none'
+            },
+          })
+        }
+      }
+
+      audio.onpause = () => {
+        label.textContent = 'Muted'
+        stopWaveAnimation()
+      }
+
+      if (!audio || !button || !wavePath) return
+
+      let isPlaying = false
+      let isMuted = false
+      let animationActive = false
+      let currentAmplitude = 0
+      let currentPhase = 0
+      let tickerFunc = null
+
+      const generateWavePath = (amplitude, phase, time) => {
+        const points = 8 + Math.sin(time * 0.01) * 2 // Vary points between 4 and 12
+        const width = 200
+        const centerY = 30
+        let path = `M 0 ${centerY}`
+
+        for (let i = 1; i <= points; i++) {
+          const x = (i / points) * width
+          const y = centerY + Math.sin((i / points) * Math.PI * 4 + phase) * amplitude
+          const prevX = ((i - 1) / points) * width
+          const cpX = (prevX + x) / 2
+
+          if (i === 1) {
+            path += ` Q ${cpX} ${y} ${x} ${y}`
+          } else {
+            path += ` T ${x} ${y}`
+          }
+        }
+
+        return path
+      }
+
+      const startWaveAnimation = () => {
+        if (animationActive) return
+        animationActive = true
+
+        // Smoothly animate amplitude to target
+        gsap.to(
+          { value: currentAmplitude },
+          {
+            value: 12,
+            duration: 0.5,
+            ease: 'power2.out',
+            onUpdate: function () {
+              currentAmplitude = this.targets()[0].value
+            },
+          }
+        )
+
+        // Create continuous phase animation using ticker
+        tickerFunc = (time) => {
+          if (!animationActive) return
+
+          // Continuously increment phase for seamless animation
+          currentPhase += 0.005 + Math.sin(time * 0.1) * 0.01
+
+          // Update the wave path
+          wavePath.setAttribute('d', generateWavePath(currentAmplitude, currentPhase, time))
+        }
+
+        gsap.ticker.add(tickerFunc)
+      }
+
+      const stopWaveAnimation = () => {
+        if (!animationActive) return
+        animationActive = false
+
+        // Remove ticker
+        if (tickerFunc) {
+          gsap.ticker.remove(tickerFunc)
+          tickerFunc = null
+        }
+
+        // Smoothly animate amplitude back to 0
+        gsap.to(
+          { value: currentAmplitude },
+          {
+            value: 0,
+            duration: 0.5,
+            ease: 'power2.out',
+            onUpdate: function () {
+              currentAmplitude = this.targets()[0].value
+              wavePath.setAttribute('d', generateWavePath(currentAmplitude, currentPhase, 0))
+            },
+          }
+        )
+      }
+
+      // Toggle play/pause
+      button.addEventListener('click', () => {
+        if (isPlaying) {
+          audio.pause()
+          isPlaying = false
+          button.classList.remove('playing')
+          // stopWaveAnimation()
+        } else {
+          audio.play()
+          isPlaying = true
+          button.classList.add('playing')
+          // if (!isMuted) {
+          //   startWaveAnimation()
+          // }
+        }
+      })
+
+      // // Double click to toggle mute
+      // button.addEventListener('dblclick', (e) => {
+      //   e.preventDefault()
+      //   isMuted = !isMuted
+      //   audio.muted = isMuted
+
+      //   if (isMuted) {
+      //     button.classList.add('muted')
+      //     stopWaveAnimation()
+      //   } else {
+      //     button.classList.remove('muted')
+      //     if (isPlaying) {
+      //       startWaveAnimation()
+      //     }
+      //   }
+      // })
+
+      // Handle audio end
+      audio.addEventListener('ended', () => {
+        isPlaying = false
+        button.classList.remove('playing')
+        stopWaveAnimation()
+      })
+    })
+  })
+</script>
+
+<style lang="scss">
+  .audio-player {
+    display: inline-block;
+  }
+
+  .audio-element {
+    display: none;
+  }
+
+  .audio-button {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 3);
+    // padding: calc(var(--spacing) * 2) calc(var(--spacing) * 2);
+    background-color: transparent;
+    // border: 1px solid var(--color-white);
+    // border-radius: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: rgba(var(--color-white), 0.55);
+      border-color: var(--color-salmon);
+    }
+
+    &.playing {
+      border-color: var(--color-salmon);
+
+      .wave-path {
+        stroke: var(--color-salmon);
+      }
+    }
+
+    &.muted {
+      opacity: 0.5;
+
+      .wave-path {
+        stroke: var(--color-salmon);
+      }
+    }
+  }
+
+  .waveform {
+    width: 40px;
+    height: 40px;
+
+    .wave-path {
+      stroke: var(--color-salmon);
+      transition: stroke 0.3s ease;
+    }
+  }
+
+  .audio-label {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-extralight);
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+    color: var(--color-white);
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .audio-button {
+      gap: calc(var(--spacing) * 2);
+      // padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+    }
+
+    .waveform {
+      width: 40px;
+      height: 40px;
+    }
+
+    .audio-label {
+      font-size: 0.875rem;
+    }
+  }
+</style>

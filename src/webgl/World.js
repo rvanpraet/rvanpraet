@@ -36,7 +36,7 @@ export default class Mask extends Handler {
     this.params = {
       color: new THREE.Color('#fff'),
       // color: new THREE.Color(0xc18383),
-      size: isMobileDevice() ? 15.0 : 20.0,
+      size: isMobileDevice() ? 15.0 : 15.0,
       minAlpha: 0.8,
       maxAlpha: 1,
       force: 0.5,
@@ -67,7 +67,7 @@ export default class Mask extends Handler {
 
   setupGPGPU() {
     this.gpgpu = new GPGPU({
-      size: isMobileDevice() ? 64 : 128,
+      size: isMobileDevice() ? 75 : 150,
       camera: this.camera.target,
       renderer: this.renderer.webglRenderer,
       mouse: this.mouse,

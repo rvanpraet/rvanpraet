@@ -23,4 +23,8 @@
   --color-yellow-dif: #3645d9;
   --color-green-dif: #3645d9;
   --color-red-dif: #3645d9;
+
+  /* Scrollbar color variables */
+  --scrollbar-track: rgba(0, 0, 0, 0.1);
+  --scrollbar-thumb: var(--color-salmon);
 }

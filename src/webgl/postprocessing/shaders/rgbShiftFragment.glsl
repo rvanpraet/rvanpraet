@@ -5,6 +5,7 @@ varying vec2 vUv;
 uniform sampler2D tDiffuse;
 uniform float amount;
 uniform float angle;
+uniform float entropy;
 
 void main() {
   float offset = amount * 0.001;

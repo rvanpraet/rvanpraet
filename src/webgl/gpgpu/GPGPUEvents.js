@@ -82,8 +82,8 @@ export default class GPGPUEvents {
 
     // On mouse move, gently nudge the camera
     const { x: mouseX, y: mouseY } = this.mouse.cursorPosition
-    this.camera.position.x = mouseX * 0.04
-    this.camera.position.y = mouseY * 0.04
+    this.camera.position.x = mouseX * 0.02
+    this.camera.position.y = mouseY * 0.02
   }
 
   updateRaycasterMesh(mesh) {

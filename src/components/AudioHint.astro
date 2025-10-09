@@ -1,0 +1,118 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'div'> & {
+  direction?: 'right' | 'left' | 'up' | 'down'
+}
+
+const { class: className, direction, ...props } = Astro.props
+
+const directionConfig = {
+  right: {
+    flexDirection: 'row',
+    arrowRotation: '0deg',
+    bounceAmountX: '8px',
+    bounceAmountY: '0px',
+  },
+  left: {
+    flexDirection: 'row-reverse',
+    arrowRotation: '180deg',
+    bounceAmountX: '-8px',
+    bounceAmountY: '0px',
+  },
+  down: {
+    flexDirection: 'column',
+    arrowRotation: '90deg',
+    bounceAmountX: '0px',
+    bounceAmountY: '8px',
+  },
+  up: {
+    flexDirection: 'column-reverse',
+    arrowRotation: '270deg',
+    bounceAmountX: '0px',
+    bounceAmountY: '-8px',
+  },
+}
+
+const config = directionConfig[direction]
+const classes = twMerge('audio-hint', className)
+---
+
+<div class={classes} data-direction={direction} {...props}>
+  <span class="hint-text">Play</span>
+  <span class="hint-arrow-wrapper">
+    <span class="hint-arrow">→</span>
+  </span>
+</div>
+
+<style
+  define:vars={{
+    flexDirection: config.flexDirection,
+    arrowRotation: config.arrowRotation,
+    bounceAmountX: config.bounceAmountX,
+    bounceAmountY: config.bounceAmountY,
+  }}
+>
+  .audio-hint {
+    display: flex;
+    align-items: center;
+    flex-direction: var(--flexDirection);
+    white-space: nowrap;
+    animation:
+      bounceDirection 2s ease-in-out infinite,
+      fadeOut 1.5s ease-in-out 10s forwards;
+  }
+
+  .hint-text {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-white);
+  }
+
+  .hint-arrow-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(var(--arrowRotation));
+  }
+
+  .hint-arrow {
+    font-size: 1.25rem;
+    color: var(--color-salmon);
+    animation: bounceArrow 2s ease-in-out infinite;
+  }
+
+  /* Dynamic bounce animation based on direction */
+  @keyframes bounceDirection {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(calc(var(--bounceAmountX)), calc(var(--bounceAmountY)));
+    }
+  }
+
+  @keyframes bounceArrow {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(calc(var(--bounceAmountX)), calc(var(--bounceAmountY))), scale(1.1);
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+</style>

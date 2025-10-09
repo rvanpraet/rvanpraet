@@ -169,7 +169,9 @@ export default class PostProcessing {
 
   setupListeners() {
     window.addEventListener('wheel', (e) => {
-      this.shiftAmount = Math.sign(e.deltaY)
+      // shift amount should be 0 whenever entropy is other than 0
+      this.shiftAmount = Math.sign(e.deltaY) * (entropy > 0 ? 0 : 1)
+
       // this.shiftAmount = e.deltaY * 0.01 // Adjust the vertical drift based on scroll speed
 
       // this.rgbShiftPass.uniforms.amount.value = Math.abs(e.deltaY * 0.0002)

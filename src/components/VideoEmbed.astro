@@ -41,7 +41,9 @@ const videoData = parseVideoUrl(url)
 ---
 
 <Section class="video-embed content-margins-t">
-  <div class="col-span-12 px-4 lg:px-8 2xl:px-0 2xl:col-start-2 3xl:col-start-3">
+  <div
+    class="col-span-12 px-4 lg:px-8 xl:px-0 xl:col-start-2 xl:col-span-10 2xl:col-start-3 3xl:col-start-3 3xl:col-span-12"
+  >
     <div class="video-wrapper">
       <iframe
         src={videoData.embedUrl}

@@ -26,3 +26,5 @@ body {
 body {
   /* padding: 0 2rem; */
 }
+
+@import './scrollbar.scss';

@@ -20,7 +20,14 @@ const inferSize = typeof src === 'string'
 ---
 
 <div class={classes}>
-  <Image src={src} alt={alt} layout="none" fit="cover" inferSize={inferSize} />
+  <Picture
+    src={src}
+    alt={alt}
+    layout="responsive"
+    widths={[300, 600, 900, 1200, 1500, 1800, 2100]}
+    fit="cover"
+    inferSize={inferSize}
+  />
 </div>
 
 <style lang="scss">

@@ -15,14 +15,14 @@ const classes = twMerge('main-grid-layout content-margins-y max-lg:px-4', classN
 
 <section class={classes} {...props}>
   <div
-    class={`col-span-6 lg:col-start-4 2xl:col-start-5 3xl:col-start-6 lg:text-center h-fit self-end ${textContainerClass}`}
+    class={`col-span-4 md:col-start-2 lg:col-start-4 lg:col-span-6 2xl:col-start-5 3xl:col-start-6 md:text-center h-fit self-end ${textContainerClass}`}
   >
     {!hideTitle && <h2 class="text-heading-2">Let's connect</h2>}
     <p class="text-paragraph mt-4">
       I am currently available for new projects and collaborations. Whether you have a specific project in mind or just
       want to say hello, feel free to reach out. I look forward to hearing from you!
     </p>
-    <div class="flex items-center gap-4 lg:justify-center mt-8">
+    <div class="flex items-center gap-4 md:justify-center mt-8">
       <ButtonLink href="mailto:reinald@sovereigncreative.nl">Email me</ButtonLink>
       <ButtonLink href="https://www.linkedin.com/in/reinald-van-praet-a32916b8/">LinkedIn</ButtonLink>
     </div>

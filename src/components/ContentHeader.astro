@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets'
+import { Image, Picture } from 'astro:assets'
 // import type { ImageData } from '@/types/image'
 import Tag from './Tag.astro'
 
@@ -20,7 +20,15 @@ const inferSize = typeof image?.src === 'string'
       <>
         {/* Image */}
         <div class="content-header__image-wrapper z-0 flex items-center justify-center overflow-hidden h-[50vh] md:h-[65vh] lg:h-[70vh] w-full">
-          <Image src={image.src} alt={image.alt} layout="none" fit="cover" inferSize={inferSize} />
+          <Image
+            src={image.src}
+            alt={image.alt}
+            layout="responsive"
+            fit="cover"
+            inferSize={inferSize}
+            widths={[300, 600, 900, 1200, 1500, 1800, 2100]}
+            class="h-full w-full object-cover"
+          />
         </div>
 
         <div class="header-content main-grid-layout relative z-10 justify-center max-lg:px-4 mt-8 2xl:mt-12">
@@ -71,7 +79,7 @@ const inferSize = typeof image?.src === 'string'
     @media screen and (max-width: calc(var(--breakpoint-md) - 1px)) {
       .content-header__image-wrapper {
         img {
-          max-height: 100%;
+          max-height: 100% !important;
           max-width: initial;
         }
       }

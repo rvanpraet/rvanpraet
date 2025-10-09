@@ -6,14 +6,15 @@ import ContentBlock from '../../components/ContentBlock.astro'
 import ContentImage from '../../components/ContentImage.astro'
 import TechBadges from '../../components/TechBadges.astro'
 import VideoEmbed from '../../components/VideoEmbed.astro'
+import AudioPlayer from '@/components/AudioPlayer.astro'
 
 // Image for demo purposes
-
 import contentImage from '@/assets/images/PRESS_KIT_SASEMOI_PORTRAIT.jpg'
-import ddw01 from '@/assets/images/DDW_01.jpg'
+import ddw01 from '@/assets/images/projects/depth-array/DDW_01.jpg'
+import droneAudio from '@/assets/audio/rvp-website-drone.mp3'
 ---
 
-<ContentLayout>
+<ContentLayout title="Prototype - Content Components">
   <div class="min-h-screen">
     <!-- Example 3: Header with image  -->
     <ContentHeader
@@ -88,7 +89,13 @@ import ddw01 from '@/assets/images/DDW_01.jpg'
       <p>Vimeo videos are also supported:</p>
     </ContentBlock>
 
-    <VideoEmbed url="https://vimeo.com/148751763" title="Vimeo Video Example" />
+    <!-- <VideoEmbed url="https://vimeo.com/148751763" title="Vimeo Video Example" /> -->
+
+    <div class="fixed z-40 bottom-[40px] right-[20px]">
+      <AudioPlayer src={droneAudio} label="Yellow" color="salmon" audioPlayerProps={{ loop: true }} />
+      <!-- <AudioPlayer src={dummyAudio} label="Green" color="green" />
+      <AudioPlayer src={dummyAudio} label="Red" color="red" /> -->
+    </div>
 
     <!-- Example 7: Mixed content  -->
     <ContentBlock>

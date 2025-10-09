@@ -1,4 +1,5 @@
 ---
+// Components
 import ScrollIcon from '@/components/ScrollIcon.astro'
 import Three from '../components/Three.astro'
 import Layout from '../layouts/Layout.astro'
@@ -8,11 +9,16 @@ import SlicedLetter from '@/components/SlicedLetter.astro'
 import Timeline from '@/components/Timeline.astro'
 import ProjectsPreview from '@/components/ProjectsPreview.astro'
 import Section from '@/components/Section.astro'
+import AudioPlayer from '@/components/AudioPlayer.astro'
+import Contact from '@/components/Contact.astro'
+import ContentBlock from '@/components/ContentBlock.astro'
 
-import jcbImage from '@/assets/images/projects/americana/JCB_LIBRARY.jpg'
+// Assets
+import jcbImage from '@/assets/images/projects/americana/americana_01.jpg'
 import depthArrayImage from '@/assets/images/projects/depth-array/DDW_01.jpg'
 import delverImage from '@/assets/images/projects/delver/DELVER.png'
-import Contact from '@/components/Contact.astro'
+import droneAudio from '@/assets/audio/rvp-website-drone.mp3'
+import AudioHint from '@/components/AudioHint.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -100,7 +106,17 @@ import Contact from '@/components/Contact.astro'
     </div>
   </section>
 
-  <section id="work" class="relative z-10">
+  <section id="projects" class="relative z-10">
+    <ContentBlock class="my-0!">
+      <h1 class="text-heading-1">PRO<SlicedLetter className="text-salmon mx-4 wave-y-2">J</SlicedLetter>ECTS</h1>
+    </ContentBlock>
+    <!-- <div class="main-grid-layout relative z-10 my-0 md:my-8 lg:my-16">
+      <div
+        class="col-start-1 col-span-6 lg:col-start-4 lg:col-span-9 2xl:col-start-4 2xl:col-span-8 3xl:col-start-5 max-lg:px-4 lg:pr-12 2xl:pr-0"
+      >
+        
+      </div>
+    </div> -->
     <ProjectsPreview
       class="lg:col-start-2 lg:col-span-10 px-4 lg:px-12"
       projects={[
@@ -199,23 +215,38 @@ import Contact from '@/components/Contact.astro'
   />
 
   <ScrollIcon />
+  <!-- <div
+    class="fixed z-50 max-lg:top-0 max-lg:left-0 pl-2 md:pl-4 lg:bottom-[40px] lg:right-[20px] flex items-center justify-center"
+  >
+    <div class="absolute top-[-150%] max-lg:hidden">
+      <AudioHint direction="down" />
+    </div>
+    <div class="absolute bottom-[-150%] lg:hidden">
+      <AudioHint direction="up" />
+    </div>
+    <AudioPlayer src={droneAudio} label="Yellow" color="salmon" audioPlayerProps={{ loop: true }} />
+  </div> -->
 </Layout>
 
 <script>
   import { getCurrentBreakpoint } from '@/scripts/utils/breakpoints'
+  import { getCenterScrollPosition } from '@/scripts/utils/device'
+  import { easeInOutQuad } from '@/scripts/utils/easings'
+  import Lenis from 'lenis'
   import gsap from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
-  import Lenis from 'lenis'
-
-  const currentBreakpoint = getCurrentBreakpoint()
+  import { map } from '@/scripts/utils/math'
 
   gsap.registerPlugin(ScrollTrigger)
   const lenis = new Lenis({
     autoRaf: false,
-    lerp: 0.15,
+    lerp: 0.3,
+    wheelMultiplier: 0.5,
   })
 
+  let currentScrollVel = 0
   lenis.on('scroll', (e) => {
+    currentScrollVel = Math.abs(e.velocity)
     ScrollTrigger.update()
   })
 
@@ -224,27 +255,23 @@ import Contact from '@/components/Contact.astro'
   })
 
   // NavLink anchor smooth scroll
-  document.querySelectorAll('.nav-link').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault()
-      const href = link.getAttribute('href')
-      if (href && href.startsWith('#')) {
-        const target: HTMLElement | null = document.querySelector(href)
+  let isScrollingToAnchor = false
 
-        if (target) {
-          lenis.scrollTo(target, { offset: -window.innerHeight * 0.25, duration: 3 })
-        }
-      } else if (href) {
-        window.location.href = href
-      }
-    })
-  })
-
+  // Entropy variables
   const MAX_ENTROPY = 0.01
   window.entropy = 0
 
   // Only start building scroll listeners when the THREE World is ready
   document.addEventListener('world-ready', () => {
+    // Elements
+    const introductionSections = document.querySelectorAll('.introduction-dummy')
+    const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
+    const generalEl: HTMLElement = document.querySelector('.introduction-general')
+    const devEl: HTMLElement = document.querySelector('.introduction-development')
+    const projectsEl: HTMLElement = document.querySelector('#projects')
+    const xpEl: HTMLElement = document.querySelector('.introduction-xp')
+
+    //
     // Swap model function
     function swapModel(targetId: string | number) {
       const swapModelEvent = new CustomEvent('swap-target', {
@@ -255,59 +282,90 @@ import Contact from '@/components/Contact.astro'
       document.dispatchEvent(swapModelEvent)
     }
 
-    // Elements
-    const introductionSections = document.querySelectorAll('.introduction-dummy')
-    const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
-    const generalEl: HTMLElement = document.querySelector('.introduction-general')
-    const devEl: HTMLElement = document.querySelector('.introduction-development')
-    const xpEl: HTMLElement = document.querySelector('.introduction-xp')
+    //
+    // Add Anchor link listeners
+    document.querySelectorAll('.nav-link').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        const href = link.getAttribute('href')
+        if (href && href.startsWith('#')) {
+          let target: HTMLElement | null = document.querySelector(href)
 
-    // Inline Elements per section
-    const generalInlines = generalEl.querySelectorAll('.inline-highlight')
-    const devInlines = devEl.querySelectorAll('.inline-highlight')
+          if (target) {
+            isScrollingToAnchor = true
+            lenis.scrollTo(href === '#about' ? getCenterScrollPosition(target) : target, {
+              offset: href === '#contact' ? 500 : 0,
+              duration: 3,
+              onComplete: () => (isScrollingToAnchor = false),
+            })
+          }
+        } else if (href) {
+          window.location.href = href
+        }
+      })
+    })
 
-    // Intro slide scrolltriggers for each TRHEE.JS word
-    introductionSections.forEach((section: HTMLElement) => {
-      // Swap model on scroll
+    const scrollToIntroSection = (section: HTMLElement) => {
+      if (isScrollingToAnchor) return
+      lenis.stop()
+      lenis.start()
+      lenis.scrollTo(getCenterScrollPosition(section), {
+        duration: 1.25,
+        lerp: 0.1,
+        lock: currentScrollVel < 15,
+        easing: easeInOutQuad,
+      })
+    }
+
+    // Intro slide scrolltriggers for each THREE.JS word
+    // ScrollTrigger scrolls the page to the center of the section when entering it and swaps the model
+    introductionSections.forEach((section: HTMLElement, index: number) => {
       ScrollTrigger.create({
         trigger: section,
-        start: 'center center',
-        // end: '+=100%',
+        start: 'top bottom-=10%',
+        end: 'bottom top+=10%',
         onEnter: () => {
+          if (index === 0) return
+          scrollToIntroSection(section)
           swapModel(section.dataset.modelId)
         },
+
         onEnterBack: () => {
+          scrollToIntroSection(section)
           swapModel(section.dataset.modelId)
         },
       })
     })
 
+    //
     // ScrollTrigger for the entropy section
     ScrollTrigger.create({
       trigger: entropyEl,
-      start: 'center center',
-      end: '+=200%',
+      start: 'top bottom-=10%',
+      end: '+=190%',
       pin: true,
       onEnter: () => {
-        // lenis.options.lerp = 0.1
-        // swapModel(lastIntroEl.dataset.modelId)
-      },
-      onEnterBack: () => {
-        swapModel(2)
-        // lenis.options.lerp = 0.1
-      },
-      onLeave: () => {
-        // lenis.options.lerp = 0.1
+        if (isScrollingToAnchor) return
+        lenis.scrollTo(entropyEl, {
+          offset: window.innerHeight * 0.5,
+          duration: 1.75,
+          lerp: 0.1,
+          lock: currentScrollVel < 15,
+          easing: easeInOutQuad,
+        })
       },
       onLeaveBack: () => {
-        // lenis.options.lerp = 0.8
-        swapModel(2)
+        if (isScrollingToAnchor) return
+        scrollToIntroSection(introductionSections[introductionSections.length - 1] as HTMLElement)
+        swapModel(introductionSections.length - 1)
       },
       onUpdate: (self) => {
         window.entropy = self.progress * MAX_ENTROPY
       },
     })
 
+    //
+    // Scroll icon fade animation
     gsap.to('.scroll-icon-container', {
       opacity: 0,
       scrollTrigger: {
@@ -318,21 +376,27 @@ import Contact from '@/components/Contact.astro'
       },
     })
 
-    // Animations for the general section
-    const startMap = {
-      xs: 'top center',
-      sm: 'top center',
-      md: 'top bottom-=25%',
-      lg: 'top center',
-      xl: 'top center',
-      xxl: 'top center',
-      xxxl: 'top center',
+    //
+    // Animations for entering the general section
+
+    //Scroll functions for the general section
+    const scrollToGeneral = () => {
+      if (isScrollingToAnchor) return
+      lenis.stop()
+      lenis.start()
+      lenis.scrollTo(getCenterScrollPosition(generalEl), {
+        duration: map(currentScrollVel, 0, 20, 1, 0.6),
+        lerp: 0.1,
+        lock: currentScrollVel < 25,
+        easing: easeInOutQuad,
+      })
     }
     const generalTL = gsap.timeline({
+      onStart: scrollToGeneral,
       scrollTrigger: {
         trigger: generalEl,
-        start: 'top bottom-=25%',
-        end: 'top center',
+        start: 'center bottom',
+        end: 'center center',
         scrub: true,
       },
     })
@@ -340,6 +404,8 @@ import Contact from '@/components/Contact.astro'
     generalTL.fromTo('#igt1', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' }, '-=1')
     generalTL.fromTo('#igt2', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
 
+    //
+    // Animations for leaving the general section
     const generalOutTL = gsap.timeline({
       scrollTrigger: {
         trigger: generalEl,
@@ -353,10 +419,21 @@ import Contact from '@/components/Contact.astro'
     generalOutTL.fromTo('#igt1', { y: 0 }, { y: -150, duration: 4, ease: 'none' }, 'animationStart+=0.33')
     generalOutTL.fromTo('#igt2', { y: 0 }, { y: -120, duration: 4, ease: 'none' }, 'animationStart+=0.66')
 
+    //
     // ScrollTrigger for the general section
+    // Extra mapping to adjust start position based on breakpoint
+    const startMap = {
+      xs: 'top center',
+      sm: 'top center',
+      md: 'top bottom-=25%',
+      lg: 'top center',
+      xl: 'top center',
+      xxl: 'top center',
+      xxxl: 'top center',
+    }
     ScrollTrigger.create({
       trigger: generalEl,
-      start: startMap[currentBreakpoint],
+      start: startMap[getCurrentBreakpoint()],
       end: 'bottom center',
       onEnter: () => {
         window.entropy = 0
@@ -370,8 +447,21 @@ import Contact from '@/components/Contact.astro'
       },
     })
 
-    // Animations for the development section
+    //
+    // Animations for entering the development section
+    const scrollToDev = () => {
+      if (isScrollingToAnchor) return
+      lenis.stop()
+      lenis.start()
+      lenis.scrollTo(getCenterScrollPosition(devEl), {
+        duration: map(currentScrollVel, 0, 20, 1, 0.6),
+        lerp: 0.1,
+        lock: currentScrollVel < 25,
+        easing: easeInOutQuad,
+      })
+    }
     const devTL = gsap.timeline({
+      onStart: scrollToDev,
       scrollTrigger: {
         trigger: devEl,
         start: 'top bottom-=25%',
@@ -379,12 +469,13 @@ import Contact from '@/components/Contact.astro'
         scrub: true,
       },
     })
-
     devTL.addLabel('animationStart')
     devTL.fromTo('#idt1', { x: 150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
     devTL.fromTo('#idh', { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 2, ease: 'none' })
     devTL.fromTo('#idt2', { x: -150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
 
+    //
+    // Animations for leaving the development section
     const devOutTL = gsap.timeline({
       scrollTrigger: {
         trigger: devEl,
@@ -398,6 +489,7 @@ import Contact from '@/components/Contact.astro'
     devOutTL.fromTo('#idt1', { y: 0 }, { y: -150, duration: 4, ease: 'none' }, 'animationStart+=0.33')
     devOutTL.fromTo('#idt2', { y: 0 }, { y: -120, duration: 4, ease: 'none' }, 'animationStart+=0.66')
 
+    //
     // ScrollTrigger for the development section
     ScrollTrigger.create({
       trigger: devEl,
@@ -407,10 +499,29 @@ import Contact from '@/components/Contact.astro'
         swapModel(devEl.dataset.modelId)
       },
       onLeaveBack: () => {
+        scrollToGeneral()
         swapModel(parseInt(xpEl.dataset.modelId) - 1)
       },
       onEnterBack: () => {
         swapModel(devEl.dataset.modelId)
+      },
+    })
+
+    // ScrollTrigger for projects section
+    ScrollTrigger.create({
+      trigger: projectsEl,
+      start: 'top center+=25%',
+      end: 'bottom center',
+
+      // onEnter: () => {
+      //   swapModel(xpEl.dataset.modelId)
+      // },
+      // onEnterBack: () => {
+      //   swapModel(xpEl.dataset.modelId)
+      // },
+      onLeaveBack: () => {
+        scrollToDev()
+        // swapModel(parseInt(xpEl.dataset.modelId) - 1)
       },
     })
 
@@ -454,12 +565,25 @@ import Contact from '@/components/Contact.astro'
     })
 
     // ScrollTrigger for the contact section
+    const scrollToContact = () => {
+      if (isScrollingToAnchor) return
+      lenis.stop()
+      lenis.start()
+      lenis.scrollTo(getCenterScrollPosition(contactEl), {
+        offset: 500,
+        duration: 1,
+        // force: true,
+        lock: currentScrollVel < 25,
+        lerp: 0.1,
+        easing: (t) => t,
+      })
+    }
     const contactEl: HTMLElement = document.querySelector('.introduction-contact')
     ScrollTrigger.create({
       trigger: contactEl,
       start: 'top center+=15%',
       onEnter: () => {
-        lenis.scrollTo(contactEl, { offset: 100, duration: 0.75, force: true, lock: true, easing: (t) => t })
+        scrollToContact()
         swapModel(contactEl.dataset.modelId)
       },
       onEnterBack: () => {

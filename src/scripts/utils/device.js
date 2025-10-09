@@ -17,4 +17,11 @@ const isPointerInElement = (e, targetEl) => {
   return x >= left && x <= right && y >= top && y <= bottom
 }
 
-export { isTouchDevice, isPointerInElement }
+const getCenterScrollPosition = (element) => {
+  const rect = element.getBoundingClientRect()
+  const absoluteElementTop = rect.top + window.pageYOffset
+  const offset = window.innerHeight / 2 - rect.height / 2
+  return absoluteElementTop - offset
+}
+
+export { isTouchDevice, isPointerInElement, getCenterScrollPosition }

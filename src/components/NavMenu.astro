@@ -2,6 +2,10 @@
 import type { HTMLAttributes } from 'astro/types'
 import NavLink, { type LinkProps } from './NavLink.astro'
 import { twMerge } from 'tailwind-merge'
+import AudioHint from './AudioHint.astro'
+import AudioPlayer from './AudioPlayer.astro'
+
+import droneAudio from '@/assets/audio/rvp-website-drone.mp3'
 
 interface Props extends HTMLAttributes<'nav'> {
   links?: LinkProps[]
@@ -24,6 +28,12 @@ const classes = twMerge('fixed w-full left-0 z-40 flex justify-center show', cla
         </div>
       )
     }
+  </div>
+  <div class="absolute left-0 pl-2 sm:pl-4 flex items">
+    <div class="absolute bottom-[-150%]">
+      <AudioHint direction="up" />
+    </div>
+    <AudioPlayer src={droneAudio} label="Yellow" color="salmon" audioPlayerProps={{ loop: true }} />
   </div>
 </nav>
 
@@ -57,10 +67,13 @@ const classes = twMerge('fixed w-full left-0 z-40 flex justify-center show', cla
 
 <style lang="scss">
   nav {
+    height: 40px;
     top: -40px;
     transition: top 0.35s ease-in-out;
+    background-color: #1f1f1fbb;
+
     @media screen and (min-width: var(--breakpoint-md)) {
-      top: -32px;
+      top: -40px;
     }
     &.show {
       top: 0;
@@ -68,7 +81,6 @@ const classes = twMerge('fixed w-full left-0 z-40 flex justify-center show', cla
   }
   .navigation-wrapper {
     /* background-color: #0d0d0ddd; */
-    background-color: #1f1f1fbb;
     /* border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem; */
   }
