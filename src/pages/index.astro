@@ -36,17 +36,14 @@ import AudioHint from '@/components/AudioHint.astro'
 
   <section
     id="about"
-    class="introduction-general flex items-center relative z-10 h-fit lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
+    class="introduction-general flex items-center relative z-10 h-fit md:max-lg:h-[45vh] lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
     data-model-id="3"
   >
     <div class="main-grid-layout h-fit">
       <h1
         id="igh"
-        class="text-heading-1 col-start-1 col-span-4 md:col-start-3 md:col-span-4 max-lg:px-4 lg:col-start-7 lg:col-span-5 lg:pr-12 2xl:col-start-8 3xl:col-start-9 3xl:col-span-5 2xl:pr-0"
+        class="text-heading-1 col-start-1 col-span-4 md:col-start-4 md:col-span-3 max-lg:px-4 lg:col-start-7 lg:col-span-5 lg:pr-12 2xl:col-start-8 3xl:col-start-9 3xl:col-span-5 2xl:pr-0"
       >
-        <!-- <span>ABO</span><SlicedLetter className="text-green wave-y-2 ml-4">U</SlicedLetter><InlineHighlight
-          color="white">T</InlineHighlight
-        > -->
         <span>AB<SlicedLetter className="wave-y-2 mx-4 text-salmon">O</SlicedLetter>UT</span>
       </h1>
 
@@ -62,7 +59,7 @@ import AudioHint from '@/components/AudioHint.astro'
       </p>
       <p
         id="igt2"
-        class="text-paragraph col-start-1 col-span-4 md:col-start-3 md:col-span-4 max-lg:px-4 lg:col-start-8 lg:col-span-5 lg:text-end lg:pr-12 2xl:col-start-9 3xl:col-start-10 3xl:col-span-5 2xl:pr-0"
+        class="text-paragraph col-start-1 col-span-4 md:col-start-3 md:col-span-4 md:text-end max-lg:px-4 lg:col-start-8 lg:col-span-5 lg:pr-12 2xl:col-start-9 3xl:col-start-10 3xl:col-span-5 2xl:pr-0"
       >
         Inspired by the natural world, its patterns, rhythms and quiet complexity often find their way into my work.<br
         />Through immersion and art I aim to evoke feeling,<InlineHighlight
@@ -74,20 +71,20 @@ import AudioHint from '@/components/AudioHint.astro'
   </section>
 
   <section
-    class="introduction-development flex items-center relative z-10 h-fit my-16 md:my-24 lg:my-32 xl:my-64 lg:w-screen"
+    class="introduction-development flex items-center relative z-10 md:max-lg:h-[45vh] my-16 md:my-24 lg:my-32 xl:my-64 lg:w-screen"
     data-model-id="4"
   >
     <div class="main-grid-layout h-fit">
       <h1
         id="idh"
-        class="text-heading-1 col-start-1 col-span-4 md:col-start-1 md:col-span-4 max-lg:px-4 lg:col-start-1 lg:col-span-6 lg:text-end lg:pl-12 2xl:col-start-2 3xl:col-start-4 3xl:col-span-5 2xl:pl-0"
+        class="text-heading-1 md:text-end col-start-1 col-span-4 md:col-start-1 md:col-span-3 max-lg:px-4 lg:col-start-1 lg:col-span-6 lg:pl-12 2xl:col-start-2 3xl:col-start-4 3xl:col-span-5 2xl:pl-0"
       >
         CO<SlicedLetter className="mx-4 wave-y-1 text-salmon">D</SlicedLetter>ING
       </h1>
 
       <p
         id="idt1"
-        class="text-paragraph col-start-1 col-span-4 md:col-start-1 md:col-span-4 max-lg:px-4 lg:col-start-1 lg:col-span-6 lg:text-end lg:pl-12 2xl:col-start-2 3xl:col-start-4 3xl:col-span-5 2xl:pl-0"
+        class="text-paragraph md:text-end col-start-1 col-span-4 md:col-start-1 max-lg:px-4 lg:col-start-1 lg:col-span-6 lg:pl-12 2xl:col-start-2 3xl:col-start-4 3xl:col-span-5 2xl:pl-0"
       >
         I'm a developer with a focus on building <InlineHighlight className="mx-6 font-semibold lg:mx-12" color="white"
           >interactive and engaging</InlineHighlight
@@ -96,7 +93,7 @@ import AudioHint from '@/components/AudioHint.astro'
 
       <p
         id="idt2"
-        class="text-paragraph col-start-1 col-span-4 md:col-start-1 md:col-span-4 max-lg:px-4 lg:col-start-1 lg:col-span-5 lg:pl-12 2xl:col-start-2 3xl:col-start-3 3xl:col-span-5 2xl:pl-0"
+        class="text-paragraph col-start-1 col-span-4 md:col-start-1 max-lg:px-4 lg:col-start-1 lg:col-span-5 lg:pl-12 2xl:col-start-2 3xl:col-start-3 3xl:col-span-5 2xl:pl-0"
       >
         I use modern tools and frameworks to <InlineHighlight className="font-semibold mx-6 lg:mx-12" color="white"
           >bring ideas to life.</InlineHighlight
@@ -106,17 +103,46 @@ import AudioHint from '@/components/AudioHint.astro'
     </div>
   </section>
 
-  <section id="projects" class="relative z-10">
+  <section
+    id="sound"
+    class="introduction-sound flex items-center relative z-10 h-fit md:max-lg:h-[45vh] lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
+    data-model-id="5"
+  >
+    <div class="main-grid-layout h-fit">
+      <h1
+        id="ish"
+        class="text-heading-1 col-start-1 col-span-4 md:col-start-4 md:col-span-3 max-lg:px-4 lg:col-start-7 lg:col-span-5 lg:pr-12 2xl:col-start-8 3xl:col-start-9 3xl:col-span-5 2xl:pr-0"
+      >
+        <span>SO<SlicedLetter className="wave-y-2 mx-4 text-salmon">U</SlicedLetter>ND</span>
+      </h1>
+
+      <p
+        id="ist1"
+        class="text-paragraph col-start-1 col-span-4 md:col-start-3 md:col-span-4 max-lg:px-4 lg:col-start-7 lg:col-span-6 lg:pr-12 2xl:col-start-8 3xl:col-start-9 3xl:col-span-5 2xl:pr-0"
+      >
+        I'm passionate about technology,<InlineHighlight className="mx-6 lg:mx-12 font-semibold" color="white"
+          >I love to create.</InlineHighlight
+        >Storytelling, emotion, mystery: these are the words that shape my approach to creativity and art. I work with
+        both<InlineHighlight className="mx-6 lg:mx-12 font-semibold" color="white">code and sound</InlineHighlight>as
+        means to translate my vision to the world.
+      </p>
+      <p
+        id="ist2"
+        class="text-paragraph col-start-1 col-span-4 md:col-start-3 md:col-span-4 md:text-end max-lg:px-4 lg:col-start-8 lg:col-span-5 lg:pr-12 2xl:col-start-9 3xl:col-start-10 3xl:col-span-5 2xl:pr-0"
+      >
+        Inspired by the natural world, its patterns, rhythms and quiet complexity often find their way into my work.<br
+        />Through immersion and art I aim to evoke feeling,<InlineHighlight
+          className="font-semibold mx-6 lg:mx-12"
+          color="white">spark curiosity</InlineHighlight
+        > and invite a moment of reflection.
+      </p>
+    </div>
+  </section>
+
+  <section id="projects" class="relative z-10" data-model-id="6">
     <ContentBlock class="my-0!">
       <h1 class="text-heading-1">PRO<SlicedLetter className="text-salmon mx-4 wave-y-2">J</SlicedLetter>ECTS</h1>
     </ContentBlock>
-    <!-- <div class="main-grid-layout relative z-10 my-0 md:my-8 lg:my-16">
-      <div
-        class="col-start-1 col-span-6 lg:col-start-4 lg:col-span-9 2xl:col-start-4 2xl:col-span-8 3xl:col-start-5 max-lg:px-4 lg:pr-12 2xl:pr-0"
-      >
-        
-      </div>
-    </div> -->
     <ProjectsPreview
       class="lg:col-start-2 lg:col-span-10 px-4 lg:px-12"
       projects={[
@@ -142,22 +168,17 @@ import AudioHint from '@/components/AudioHint.astro'
     />
   </section>
 
-  <section class="introduction-xp" data-model-id="5">
-    <div class="main-grid-layout relative z-10 my-16 md:my-24 lg:my-32">
-      <div
-        class="col-start-1 col-span-6 lg:col-start-4 lg:col-span-9 2xl:col-start-4 2xl:col-span-8 3xl:col-start-5 max-lg:px-4 lg:pr-12 2xl:pr-0"
-      >
-        <h1 class="text-heading-1">
-          EXP<SlicedLetter className="mx-4 wave-y-1 text-salmon">E</SlicedLetter>RIENCE
-        </h1>
-        <p class="text-paragraph">
-          A selection of past and current roles that outline my professional experience and areas of focus.
-        </p>
-      </div>
-    </div>
+  <section class="introduction-xp relative z-10" data-model-id="7">
+    <ContentBlock class="mt-16 mb-8 md:mt-24 lg:my-32">
+      <h1 class="text-heading-1">
+        EXP<SlicedLetter className="mx-4 wave-y-1 text-salmon">E</SlicedLetter>RIENCE
+      </h1>
+      <p class="text-paragraph">
+        A selection of past and current roles that outline my professional experience and areas of focus.
+      </p>
+    </ContentBlock>
 
     <Timeline
-      class="relative z-10 my-16 md:my-24 lg:my-32"
       items={[
         {
           dateFrom: '2024',
@@ -199,15 +220,8 @@ import AudioHint from '@/components/AudioHint.astro'
     />
   </section>
 
-  <!-- <section
-    id="contact"
-    class="introduction-contact flex items-center relative z-10 mt-24 md:mt-32 lg:mt-64 h-screen w-screen"
-    data-model-id="6"
-  >
-    
-  </section> -->
   <Contact
-    data-model-id="6"
+    data-model-id="8"
     id="contact"
     class="introduction-contact h-screen w-screen relative z-10 my-0! flex flex-col justify-end"
     textContainerClass="relative bottom-[10%] lg:bottom-[15%] xl:bottom-[15%]"
@@ -215,17 +229,6 @@ import AudioHint from '@/components/AudioHint.astro'
   />
 
   <ScrollIcon />
-  <!-- <div
-    class="fixed z-50 max-lg:top-0 max-lg:left-0 pl-2 md:pl-4 lg:bottom-[40px] lg:right-[20px] flex items-center justify-center"
-  >
-    <div class="absolute top-[-150%] max-lg:hidden">
-      <AudioHint direction="down" />
-    </div>
-    <div class="absolute bottom-[-150%] lg:hidden">
-      <AudioHint direction="up" />
-    </div>
-    <AudioPlayer src={droneAudio} label="Yellow" color="salmon" audioPlayerProps={{ loop: true }} />
-  </div> -->
 </Layout>
 
 <script>
@@ -268,6 +271,7 @@ import AudioHint from '@/components/AudioHint.astro'
     const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
     const generalEl: HTMLElement = document.querySelector('.introduction-general')
     const devEl: HTMLElement = document.querySelector('.introduction-development')
+    const soundEl: HTMLElement = document.querySelector('.introduction-sound')
     const projectsEl: HTMLElement = document.querySelector('#projects')
     const xpEl: HTMLElement = document.querySelector('.introduction-xp')
 
@@ -354,6 +358,9 @@ import AudioHint from '@/components/AudioHint.astro'
           easing: easeInOutQuad,
         })
       },
+      onEnterBack: () => {
+        swapModel(introductionSections.length - 1)
+      },
       onLeaveBack: () => {
         if (isScrollingToAnchor) return
         scrollToIntroSection(introductionSections[introductionSections.length - 1] as HTMLElement)
@@ -433,7 +440,7 @@ import AudioHint from '@/components/AudioHint.astro'
     }
     ScrollTrigger.create({
       trigger: generalEl,
-      start: startMap[getCurrentBreakpoint()],
+      start: 'top center',
       end: 'bottom center',
       onEnter: () => {
         window.entropy = 0
@@ -443,7 +450,15 @@ import AudioHint from '@/components/AudioHint.astro'
         swapModel(generalEl.dataset.modelId)
       },
       onLeaveBack: () => {
+        lenis.scrollTo(getCenterScrollPosition(entropyEl), {
+          // offset: entropyEl.offsetHeight,
+          duration: 2,
+          lerp: 0.1,
+          lock: currentScrollVel < 15,
+          easing: easeInOutQuad,
+        })
         window.entropy = 1
+        swapModel(introductionSections.length - 1)
       },
     })
 
@@ -500,10 +515,70 @@ import AudioHint from '@/components/AudioHint.astro'
       },
       onLeaveBack: () => {
         scrollToGeneral()
-        swapModel(parseInt(xpEl.dataset.modelId) - 1)
+        swapModel(parseInt(devEl.dataset.modelId) - 1)
       },
       onEnterBack: () => {
         swapModel(devEl.dataset.modelId)
+      },
+    })
+
+    //
+    // Animations for entering the sound section
+    const scrollToSound = () => {
+      if (isScrollingToAnchor) return
+      lenis.stop()
+      lenis.start()
+      lenis.scrollTo(getCenterScrollPosition(soundEl), {
+        duration: map(currentScrollVel, 0, 20, 1, 0.6),
+        lerp: 0.1,
+        lock: currentScrollVel < 25,
+        easing: easeInOutQuad,
+      })
+    }
+    const soundTL = gsap.timeline({
+      onStart: scrollToSound,
+      scrollTrigger: {
+        trigger: soundEl,
+        start: 'top bottom-=25%',
+        end: 'top center',
+        scrub: true,
+      },
+    })
+    soundTL.addLabel('animationStart')
+    soundTL.fromTo('#ist1', { x: 150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
+    soundTL.fromTo('#ish', { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 2, ease: 'none' })
+    soundTL.fromTo('#ist2', { x: -150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
+
+    //
+    // Animations for leaving the sound section
+    const soundOutTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: soundEl,
+        start: 'top top+=20%',
+        end: 'bottom top',
+        scrub: true,
+      },
+    })
+    soundOutTL.addLabel('animationStart')
+    soundOutTL.fromTo('#ish', { y: 0 }, { y: -180, duration: 4, ease: 'none' }, 'animationStart')
+    soundOutTL.fromTo('#ist1', { y: 0 }, { y: -150, duration: 4, ease: 'none' }, 'animationStart+=0.33')
+    soundOutTL.fromTo('#ist2', { y: 0 }, { y: -120, duration: 4, ease: 'none' }, 'animationStart+=0.66')
+
+    //
+    // ScrollTrigger for the sound section
+    ScrollTrigger.create({
+      trigger: soundEl,
+      start: 'top center+=15%',
+      end: 'bottom center',
+      onEnter: () => {
+        swapModel(soundEl.dataset.modelId)
+      },
+      onLeaveBack: () => {
+        scrollToDev()
+        swapModel(parseInt(soundEl.dataset.modelId) - 1)
+      },
+      onEnterBack: () => {
+        swapModel(soundEl.dataset.modelId)
       },
     })
 

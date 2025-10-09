@@ -114,6 +114,7 @@ uniform float uForce;
 uniform float uTime;
 uniform float uEntropy;
 uniform float uVerticalDrift;
+uniform float uResponsiveMultiplier;
 
 void main() {
   vec2 vUv = gl_FragCoord.xy / resolution.xy;
@@ -159,10 +160,11 @@ void main() {
   float falloff = easeInOutSine(normDist); // get easing-based force
 
   // Add extra wiggle in x direction
-  velocity.x += cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025;
+  velocity.x += cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025 * uResponsiveMultiplier;
 
   // Force that pushes particles towards their current target
-  vec3 attraction = (direction * falloff * 0.05 + noise * clamp(falloff, 0.005, 1.0) * 1.5) * step(0.001, dist);
+  vec3 attraction =
+    (direction * falloff * 0.05 + noise * clamp(falloff, 0.005, 1.0) * 1.5 * uResponsiveMultiplier) * step(0.001, dist);
   velocity += attraction * (info.y * 0.15 + 0.85); // Force that pushes particles towards their current target
 
   // Mouse repel force

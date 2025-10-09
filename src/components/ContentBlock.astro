@@ -13,7 +13,7 @@ const classes = twMerge('content-block content-margins-t px-4 lg:px-0', classNam
 
 <Section class={classes}>
   <div
-    class="col-start-1 col-span-4 md:col-span-6 lg:col-span-8 lg:col-start-4 2xl:col-start-5 3xl:col-start-6 content-wrapper"
+    class="col-start-1 col-span-4 md:col-start-2 md:col-span-6 lg:col-span-8 lg:col-start-4 2xl:col-start-5 3xl:col-start-6 content-wrapper"
   >
     <slot />
   </div>
@@ -24,25 +24,21 @@ const classes = twMerge('content-block content-margins-t px-4 lg:px-0', classNam
 
   .content-wrapper {
     h1 {
-      @apply text-5xl lg:text-6xl xl:text-7xl 3xl:text-8xl mb-8 lg:mb-8 xl:mb-8 font-bold uppercase;
+      @apply text-5xl lg:text-6xl xl:text-7xl 3xl:text-8xl mb-4 md:mb-6 xl:mb-8 font-bold uppercase;
       line-height: 1em;
     }
 
     h2 {
-      @apply text-3xl lg:text-4xl xl:text-5xl 3xl:text-6xl mb-6 lg:mb-8 xl:mb-8 font-semibold uppercase;
+      @apply text-3xl lg:text-4xl xl:text-5xl 3xl:text-6xl mb-4 md:mb-6 xl:mb-8 font-semibold uppercase;
     }
 
     h3 {
-      @apply text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl mb-6 lg:mb-8 xl:mb-8 font-normal uppercase;
+      @apply text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl mb-4 md:mb-6 xl:mb-8 font-normal uppercase;
     }
 
     p {
-      @apply text-base mb-6 xl:text-lg 2xl:text-xl lg:mb-8 xl:mb-8 font-extralight last:mb-0;
+      @apply text-base mb-4 md:mb-6 xl:text-lg 2xl:text-xl xl:mb-8 font-extralight last:mb-0;
       line-height: 1.5em;
-
-      &:last-child {
-        @apply mb-0;
-      }
     }
 
     ul,

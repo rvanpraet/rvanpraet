@@ -6,6 +6,17 @@ import simFragment from './shaders/simFragment.glsl?raw'
 import simFragmentVelocity from './shaders/simFragmentVelocity.glsl?raw'
 import vertexShader from './shaders/vertex.glsl?raw'
 import fragmentShader from './shaders/fragment.glsl?raw'
+import { getCurrentBreakpoint, isSM } from '@/scripts/utils/breakpoints.js'
+
+const noiseMultiplierMap = {
+  xs: 0.2,
+  sm: 0.3,
+  md: 0.6,
+  lg: 1.0,
+  xl: 1.2,
+  xxl: 1.5,
+  xxxl: 1.8,
+}
 
 // GPGPU allows us to simulate a large number of particles using the GPU, using a compute shader and swapping textures
 // It is used to create a particle system that can be attracted to different targets in the scene
@@ -78,6 +89,9 @@ export default class GPGPU {
     this.uniforms.velocityUniforms.uTarget = {
       value: null,
     } // Target position for particles to attract to
+    this.uniforms.velocityUniforms.uResponsiveMultiplier = { value: noiseMultiplierMap[getCurrentBreakpoint()] } // Responsive multiplier for mobile devices
+
+    // Set wrapping mode for the textures
 
     this.gpgpuCompute.init()
   }
@@ -113,6 +127,7 @@ export default class GPGPU {
         uMaxAlpha: { value: this.params.maxAlpha },
         uInfo: { value: this.uniforms.positionUniforms.uInfo.value },
         uTime: { value: 0 },
+        uResponsiveMultiplier: { value: noiseMultiplierMap[getCurrentBreakpoint()] },
       },
       vertexShader,
       fragmentShader,
@@ -151,7 +166,6 @@ export default class GPGPU {
   }
 
   swapTarget(targetIndex) {
-    console.log('swapping target to', targetIndex)
     this.uniforms.velocityUniforms.uTarget.value = this.targetsPositions[targetIndex]
     this.events.updateRaycasterMesh(this.targets[targetIndex])
   }

@@ -42,7 +42,7 @@ const classes = twMerge('audio-hint', className)
 <div class={classes} data-direction={direction} {...props}>
   <span class="hint-text">Play</span>
   <span class="hint-arrow-wrapper">
-    <span class="hint-arrow">→</span>
+    <span class="hint-arrow text-sm lg:text-base">→</span>
   </span>
 </div>
 
@@ -80,7 +80,6 @@ const classes = twMerge('audio-hint', className)
   }
 
   .hint-arrow {
-    font-size: 1.25rem;
     color: var(--color-salmon);
     animation: bounceArrow 2s ease-in-out infinite;
   }

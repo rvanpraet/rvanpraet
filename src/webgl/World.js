@@ -55,10 +55,14 @@ export default class Mask extends Handler {
   setupModels() {
     const contactModel = this.resources.models.text.pop()
     const xpModel = this.resources.models.text.pop()
+    const projectsModel = this.resources.models.text.pop()
     this.model = this.resources.models.text[0]
-    this.models = [...this.resources.models.text, ...Object.values(this.resources.models.main), xpModel, contactModel]
+    const { reinald, coding, waveform } = this.resources.models.main
+    this.models = [...this.resources.models.text, reinald, coding, waveform, projectsModel, xpModel, contactModel]
 
     console.log(this.models)
+
+    // this.scene.add(this.resources.models.main.waveform)
   }
 
   setupCameraPosition() {
@@ -97,51 +101,6 @@ export default class Mask extends Handler {
   }
 
   setupListeners() {
-    window.addEventListener('wheel', (event) => {
-      if (this.isScrolling) return
-
-      // CONSTANTS
-      const POS_SCROLL_VALUE = 40
-      const SCROLL_DURATION = 1000
-      const MAX = this.models.length - 1
-
-      //   document.documentElement.style.overflow = 'auto'
-
-      // INTERCEPT SCROLL WHEN AT LAST TEXT MODEL
-      //   if (this.targetId === MAX - 1) {
-      //     console.log('ended locked phase')
-      //     document.documentElement.style.overflow = 'auto'
-      //     this.params.force = 0.25
-
-      //     // const nextEl = document.querySelector('.introduction-general')
-      //     // nextEl.scrollIntoView({
-      //     //     block: 'start',
-      //     //     behavior: 'smooth',
-      //     // })
-
-      //     return
-      //   }
-
-      // if (Math.abs(event.deltaY) >= POS_SCROLL_VALUE) {
-      //     console.log('start scroll animation')
-      //     this.isScrolling = true
-
-      //     console.log(this.targetId)
-
-      //     this.targetId =
-      //         event.deltaY > 0
-      //             ? (this.targetId + 1) % MAX
-      //             : (this.targetId - 1 + MAX) % MAX
-
-      //     this.gpgpu.swapTarget(this.targetId)
-
-      //     clearTimeout(this.scrollTimeout)
-      //     this.scrollTimeout = setTimeout(() => {
-      //         this.isScrolling = false
-      //     }, SCROLL_DURATION)
-      // }
-    })
-
     // add an appropriate event listener
     document.addEventListener('swap-target', (e) => {
       const { targetId } = e.detail

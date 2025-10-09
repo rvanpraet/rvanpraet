@@ -4,6 +4,10 @@ import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
 import { FontLoader } from 'three/addons/loaders/FontLoader.js'
+import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
+import { Line2 } from 'three/addons/lines/Line2.js'
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js'
 import * as THREE from 'three'
 
 // Assets
@@ -14,33 +18,8 @@ import fontPath from '/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 import { getCurrentBreakpoint } from '@/scripts/utils/breakpoints'
 import { modelConfig, textModelConfig } from './ResourcesConfig'
 
-//
+// Calculate total progress, total of all resource sizes
 const TOTAL_PROGRESS = 165190 + 4045609 + 7886300
-
-// const modelConfig = {
-//   reinald: {
-//     x: -4,
-//     y: -1.5,
-//     z: 0,
-//     rotateX: 0,
-//     rotateY: Math.PI * 0.25,
-//     rotateZ: 0,
-//     scaleX: 2.5,
-//     scaleY: 2.5,
-//     scaleZ: 2.5,
-//   },
-//   coding: {
-//     x: 4,
-//     y: -1,
-//     z: 0,
-//     rotateX: 0,
-//     rotateY: Math.PI * -0.25,
-//     rotateZ: 0,
-//     scaleX: 10,
-//     scaleY: 10,
-//     scaleZ: 10,
-//   },
-// }
 
 export default class Resources extends EventEmitter {
   static instance
@@ -98,6 +77,7 @@ export default class Resources extends EventEmitter {
 
   loadModelResources() {
     this.createTextMeshes() // Create text meshes after font is loaded
+    this.createLineMesh2() // Create line mesh for waveform
     this.loadOBJModel('reinald', reinaldPath)
     this.loadGLBModel('coding', codingPath)
   }
@@ -118,13 +98,7 @@ export default class Resources extends EventEmitter {
 
     // Define the texts to create with their parameters
     const texts = textModelConfig[getCurrentBreakpoint()]
-    // const texts = [
-    //   ["HI, I'M REINALD", { size: 1.2, offsets: { x: 0, y: 0, z: 0 } }],
-    //   ['CREATIVE', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
-    //   ['DEVELOPER', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
-    //   ['XP', { size: 1.8, offsets: { x: -5, y: 0, z: 0, rotateX: Math.PI * 0.5 } }],
-    // ]
-    this.models.text = texts.map(([text, config]) => this.createText(text, { ...baseTextParams, ...config }))
+    this.models.text = texts.map(([text, config]) => this.createTextV2(text, { ...baseTextParams, ...config }))
   }
 
   createText(text, params) {
@@ -148,6 +122,135 @@ export default class Resources extends EventEmitter {
     geometry.translate(offsets.x, offsets.y, offsets.z)
 
     return mesh
+  }
+
+  createTextV2(text, params) {
+    const { offsets, ...geometryParams } = params
+
+    // Split text by newlines to handle multi-line text
+    const words = text.split(/\n+/).filter((word) => word.length > 0)
+
+    if (words.length === 0) {
+      // Return empty mesh if no text
+      const geometry = new THREE.BufferGeometry()
+      const material = new THREE.MeshBasicMaterial({ color: 'white' })
+      return new THREE.Mesh(geometry, material)
+    }
+
+    // Create geometries for each word
+    const wordGeometries = []
+    let currentY = 0
+
+    // Calculate line height from first word's bounding box
+    const firstWordGeometry = new TextGeometry(words[0], geometryParams)
+    firstWordGeometry.computeBoundingBox()
+    const lineHeight = firstWordGeometry.boundingBox.max.y - firstWordGeometry.boundingBox.min.y
+    const lineSpacing = lineHeight * 1.5 // 50% spacing between lines
+
+    // Create and position each word geometry
+    for (let i = 0; i < words.length; i++) {
+      const wordGeometry = new TextGeometry(words[i], geometryParams)
+      wordGeometry.computeBoundingBox()
+
+      // Center each word horizontally
+      const wordWidth = wordGeometry.boundingBox.max.x - wordGeometry.boundingBox.min.x
+      const wordCenterX = (wordGeometry.boundingBox.max.x + wordGeometry.boundingBox.min.x) / 2
+
+      // Position word: centered horizontally, stacked vertically
+      wordGeometry.translate(-wordCenterX, -currentY, 0)
+
+      wordGeometries.push(wordGeometry)
+
+      // Move to next line position
+      currentY += lineSpacing
+    }
+
+    // Merge all word geometries into a single geometry
+    const mergedGeometry = BufferGeometryUtils.mergeGeometries(wordGeometries)
+
+    // Compute bounding box and sphere for the merged geometry
+    mergedGeometry.computeBoundingBox()
+    mergedGeometry.computeBoundingSphere()
+
+    const material = new THREE.MeshBasicMaterial({ color: 'white' })
+    const mesh = new THREE.Mesh(mergedGeometry, material)
+
+    // Notify that this mesh uses a plane mouse interaction
+    mesh.userData.hasPlaneRaycast = true
+
+    // Offset the geometry's vertex positions by half of its bounding box
+    const offset = new THREE.Vector3()
+    mergedGeometry.boundingBox.getCenter(offset).negate()
+    mergedGeometry.translate(offset.x, offset.y, offset.z)
+
+    // Apply model specific transformations
+    mergedGeometry.translate(offsets.x, offsets.y, offsets.z)
+
+    return mesh
+  }
+
+  createLineMesh() {
+    // Line material
+
+    const matLine = new LineMaterial({
+      color: 0xffffff,
+      linewidth: 0.5, // in world units with size attenuation, pixels otherwise
+      worldUnits: true,
+      // vertexColors: true,
+
+      // alphaToCoverage: true,
+    })
+
+    // Position and THREE.Color Data
+
+    const positions = []
+    const colors = []
+    const points = []
+    for (let i = -15; i < 15; i++) {
+      const t = i / 3
+      points.push(new THREE.Vector3(-3, t, 0))
+    }
+
+    const spline = new THREE.CatmullRomCurve3(points)
+    const divisions = Math.round(3 * points.length)
+    const point = new THREE.Vector3()
+    const color = new THREE.Color()
+
+    for (let i = 0, l = divisions; i < l; i++) {
+      const t = i / l
+
+      spline.getPoint(t, point)
+      positions.push(point.x, point.y, point.z)
+
+      // color.setHSL(t, 1.0, 0.5, THREE.SRGBColorSpace)
+      // colors.push(color.r, color.g, color.b)
+    }
+
+    const lineGeometry = new LineGeometry()
+    lineGeometry.setPositions(positions)
+    // lineGeometry.setColors(colors)
+
+    const line = new Line2(lineGeometry, matLine)
+    // line.computeLineDistances()
+    line.scale.set(1, 1, 1)
+
+    this.models.main.waveform = line
+  }
+
+  createLineMesh2() {
+    // Line material
+    const config = modelConfig[getCurrentBreakpoint()].waveform
+    const material = new THREE.MeshBasicMaterial({ color: 'white', side: THREE.DoubleSide })
+    const geometry = new THREE.PlaneGeometry(0.2, 10, 1, 1)
+
+    geometry.translate(-4, 0, 0)
+
+    // geometry.computeBoundingBox()
+
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.userData.hasPlaneRaycast = true
+    // mesh.position.set(-4, 0, 0)
+    this.models.main.waveform = mesh
   }
 
   loadOBJModel(name, path) {

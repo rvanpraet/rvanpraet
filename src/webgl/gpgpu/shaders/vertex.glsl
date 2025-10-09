@@ -112,6 +112,7 @@ uniform float uParticleSize;
 uniform float uTime;
 uniform sampler2D uPositionTexture;
 uniform sampler2D uInfo;
+uniform float uResponsiveMultiplier;
 
 void main() {
   vUv = uv;
@@ -123,7 +124,7 @@ void main() {
 
   newpos.xyz = positionDT.xyz;
 
-  newpos.y += float(snoise(info.xyz * uTime * 0.1) * 2.0 - 1.0) * 0.05;
+  newpos.y += float(snoise(info.xyz * uTime * 0.1) * 2.0 - 1.0) * 0.05 * uResponsiveMultiplier;
 
   vPosition = newpos;
 

@@ -38,7 +38,7 @@ const classes = twMerge('audio-player', className)
         stroke-width="3"
         stroke-linecap="round"></path>
     </svg>
-    <span class="audio-label">Muted</span>
+    <!-- <span class="audio-label">Muted</span> -->
   </button>
 </div>
 
@@ -52,11 +52,11 @@ const classes = twMerge('audio-player', className)
       const audioHint: HTMLElement = document.querySelector('.audio-hint')
       const audio: HTMLAudioElement = playerEl.querySelector('.audio-element')
       const button: HTMLButtonElement = playerEl.querySelector('.audio-button')
-      const label: HTMLSpanElement = playerEl.querySelector('.audio-label')
+      // const label: HTMLSpanElement = playerEl.querySelector('.audio-label')
       const wavePath: SVGPathElement = playerEl.querySelector('.wave-path')
 
       audio.onplay = () => {
-        label.textContent = 'Playing'
+        // label.textContent = 'Playing'
         startWaveAnimation()
 
         if (audioHint) {
@@ -72,7 +72,7 @@ const classes = twMerge('audio-player', className)
       }
 
       audio.onpause = () => {
-        label.textContent = 'Muted'
+        // label.textContent = 'Muted'
         stopWaveAnimation()
       }
 
