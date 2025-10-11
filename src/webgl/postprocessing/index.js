@@ -36,7 +36,7 @@ export default class PostProcessing {
       directionX: 0.1,
       directionY: 0.1,
       // After Image pass
-      damp: 0.75,
+      damp: 0.775,
       // RGB Shift pass
       amount: 0.0,
       angle: 0.0,
@@ -72,8 +72,8 @@ export default class PostProcessing {
 
     this.composer = new EffectComposer(this.renderer)
     this.composer.addPass(renderScene)
-    // this.composer.addPass(this.afterImagePass)
-    this.composer.addPass(this.bloomPass)
+    // this.composer.addPass(this.afterImagePass) // Disabled for performance reasons
+    // this.composer.addPass(this.bloomPass) // Disabled for performance reasons
     this.composer.addPass(this.rgbShiftPass)
     this.composer.addPass(outputPass)
   }

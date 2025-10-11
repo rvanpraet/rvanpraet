@@ -2,7 +2,45 @@ import Experience from './Experience.js'
 import Handler from './abstract/Handler.js'
 import * as THREE from 'three'
 import GPGPU from './gpgpu/GPGPU.js'
-import { isMobileDevice } from '@/scripts/utils.js'
+import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints.js'
+
+const worldConfig = {
+  xs: {
+    force: 0.6,
+    particleSize: 10,
+    particleCount: 100,
+  },
+  sm: {
+    force: 0.6,
+    particleSize: 15,
+    particleCount: 64,
+  },
+  md: {
+    force: 0.6,
+    particleSize: 15,
+    particleCount: 64,
+  },
+  lg: {
+    force: 0.5,
+    particleSize: 15,
+    particleCount: 128,
+  },
+  xl: {
+    force: 0.5,
+    particleSize: 12,
+    particleCount: 128,
+  },
+  xxl: {
+    force: 0.5,
+    particleSize: 12,
+    particleCount: 150,
+  },
+  xxxl: {
+    force: 0.5,
+    particleSize: 15,
+    particleCount: 200,
+  },
+}
 
 export default class Mask extends Handler {
   static instance
@@ -36,10 +74,10 @@ export default class Mask extends Handler {
     this.params = {
       color: new THREE.Color('#fff'),
       // color: new THREE.Color(0xc18383),
-      size: isMobileDevice() ? 15.0 : 15.0,
-      minAlpha: 0.8,
+      size: worldConfig[getCurrentBreakpoint()].particleSize,
+      minAlpha: 0.7,
       maxAlpha: 1,
-      force: 0.5,
+      force: worldConfig[getCurrentBreakpoint()].force,
     }
 
     this.init()
@@ -57,12 +95,22 @@ export default class Mask extends Handler {
     const xpModel = this.resources.models.text.pop()
     const projectsModel = this.resources.models.text.pop()
     this.model = this.resources.models.text[0]
-    const { reinald, coding, waveform } = this.resources.models.main
-    this.models = [...this.resources.models.text, reinald, coding, waveform, projectsModel, xpModel, contactModel]
+    let { reinald, coding, waveform } = this.resources.models.main
+
+    const actualCodingModel = isMaxMD() ? coding : this.resources.models.textCoding
+    this.models = [
+      ...this.resources.models.text,
+      reinald,
+      actualCodingModel,
+      waveform,
+      projectsModel,
+      xpModel,
+      contactModel,
+    ]
 
     console.log(this.models)
 
-    // this.scene.add(this.resources.models.main.waveform)
+    // this.scene.add(this.resources.models.text2)
   }
 
   setupCameraPosition() {
@@ -71,7 +119,7 @@ export default class Mask extends Handler {
 
   setupGPGPU() {
     this.gpgpu = new GPGPU({
-      size: isMobileDevice() ? 75 : 150,
+      size: worldConfig[getCurrentBreakpoint()].particleCount,
       camera: this.camera.target,
       renderer: this.renderer.webglRenderer,
       mouse: this.mouse,

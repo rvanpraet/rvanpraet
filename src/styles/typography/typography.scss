@@ -13,7 +13,7 @@
   }
 
   .text-paragraph {
-    @apply text-base mb-4 md:mb-6 xl:text-lg 2xl:text-xl xl:mb-8 font-extralight last:mb-0;
+    @apply text-lg mb-6 md:mb-6 xl:text-lg 2xl:text-xl xl:mb-8 font-extralight last:mb-0;
     line-height: 1.5em;
   }
 }

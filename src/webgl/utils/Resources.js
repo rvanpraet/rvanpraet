@@ -16,7 +16,7 @@ import codingPath from '/webgl/assets/models/coding.glb?url'
 import particleTexture from '/webgl/assets/textures/particle2.png?url'
 import fontPath from '/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 import { getCurrentBreakpoint } from '@/scripts/utils/breakpoints'
-import { modelConfig, textModelConfig } from './ResourcesConfig'
+import { modelConfig, textCoding, textCodingConfig, textModelConfig } from './ResourcesConfig'
 
 // Calculate total progress, total of all resource sizes
 const TOTAL_PROGRESS = 165190 + 4045609 + 7886300
@@ -44,6 +44,7 @@ export default class Resources extends EventEmitter {
     this.models = {
       text: null,
       main: {},
+      textCoding: null,
     }
     this.textures = {}
     this.loadingCount = 0
@@ -78,6 +79,21 @@ export default class Resources extends EventEmitter {
   loadModelResources() {
     this.createTextMeshes() // Create text meshes after font is loaded
     this.createLineMesh2() // Create line mesh for waveform
+    this.models.textCoding = this.createTextV2(textCoding, {
+      // offsets: { x: 2, y: 0, z: 0 },
+      font: this.font,
+      // size: 0.2,
+      depth: 0.02,
+      curveSegments: 60,
+      bevelEnabled: true,
+      bevelThickness: 0.03,
+      bevelSize: 0.02,
+      bevelOffset: 0,
+      bevelSegments: 5,
+      useWordCenterX: false,
+      alignRight: true,
+      ...textCodingConfig[getCurrentBreakpoint()],
+    })
     this.loadOBJModel('reinald', reinaldPath)
     this.loadGLBModel('coding', codingPath)
   }
@@ -94,6 +110,8 @@ export default class Resources extends EventEmitter {
       bevelSize: 0.02,
       bevelOffset: 0,
       bevelSegments: 5,
+      useWordCenterX: true,
+      alignRight: false,
     }
 
     // Define the texts to create with their parameters
@@ -125,7 +143,7 @@ export default class Resources extends EventEmitter {
   }
 
   createTextV2(text, params) {
-    const { offsets, ...geometryParams } = params
+    const { offsets, useWordCenterX, alignRight, ...geometryParams } = params
 
     // Split text by newlines to handle multi-line text
     const words = text.split(/\n+/).filter((word) => word.length > 0)
@@ -140,15 +158,28 @@ export default class Resources extends EventEmitter {
     // Create geometries for each word
     const wordGeometries = []
     let currentY = 0
+    let currentX = 0
 
     // Calculate line height from first word's bounding box
     const firstWordGeometry = new TextGeometry(words[0], geometryParams)
     firstWordGeometry.computeBoundingBox()
     const lineHeight = firstWordGeometry.boundingBox.max.y - firstWordGeometry.boundingBox.min.y
     const lineSpacing = lineHeight * 1.5 // 50% spacing between lines
+    const tabIndent = 0.5
 
     // Create and position each word geometry
     for (let i = 0; i < words.length; i++) {
+      // Scan for tab indents
+      if (words[i].includes('<tab>')) {
+        words[i] = words[i].replace('<tab>', '')
+        currentX += tabIndent
+      }
+
+      if (words[i].includes('<-tab>')) {
+        words[i] = words[i].replace('<-tab>', '')
+        currentX -= tabIndent
+      }
+
       const wordGeometry = new TextGeometry(words[i], geometryParams)
       wordGeometry.computeBoundingBox()
 
@@ -156,8 +187,9 @@ export default class Resources extends EventEmitter {
       const wordWidth = wordGeometry.boundingBox.max.x - wordGeometry.boundingBox.min.x
       const wordCenterX = (wordGeometry.boundingBox.max.x + wordGeometry.boundingBox.min.x) / 2
 
-      // Position word: centered horizontally, stacked vertically
-      wordGeometry.translate(-wordCenterX, -currentY, 0)
+      // Position word: centered horizontally (if useWordCenterX), stacked vertically
+      // Offset by currentX for tab indents
+      wordGeometry.translate(-wordCenterX * Number(useWordCenterX) + currentX, -currentY, 0)
 
       wordGeometries.push(wordGeometry)
 
@@ -184,7 +216,7 @@ export default class Resources extends EventEmitter {
     mergedGeometry.translate(offset.x, offset.y, offset.z)
 
     // Apply model specific transformations
-    mergedGeometry.translate(offsets.x, offsets.y, offsets.z)
+    mergedGeometry.translate(offsets.x - offset.x * Number(alignRight) * 1.5, offsets.y, offsets.z)
 
     return mesh
   }
@@ -239,17 +271,17 @@ export default class Resources extends EventEmitter {
 
   createLineMesh2() {
     // Line material
-    const config = modelConfig[getCurrentBreakpoint()].waveform
+    const { x, y, z, rotateX, rotateY, rotateZ } = modelConfig[getCurrentBreakpoint()].waveform
     const material = new THREE.MeshBasicMaterial({ color: 'white', side: THREE.DoubleSide })
     const geometry = new THREE.PlaneGeometry(0.2, 10, 1, 1)
 
-    geometry.translate(-4, 0, 0)
-
-    // geometry.computeBoundingBox()
+    geometry.translate(x, y, z)
+    geometry.rotateX(rotateX)
+    geometry.rotateY(rotateY)
+    geometry.rotateZ(rotateZ)
 
     const mesh = new THREE.Mesh(geometry, material)
     mesh.userData.hasPlaneRaycast = true
-    // mesh.position.set(-4, 0, 0)
     this.models.main.waveform = mesh
   }
 

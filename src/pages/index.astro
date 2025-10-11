@@ -8,8 +8,6 @@ import InlineHighlight from '@/components/InlineHighlight.astro'
 import SlicedLetter from '@/components/SlicedLetter.astro'
 import Timeline from '@/components/Timeline.astro'
 import ProjectsPreview from '@/components/ProjectsPreview.astro'
-import Section from '@/components/Section.astro'
-import AudioPlayer from '@/components/AudioPlayer.astro'
 import Contact from '@/components/Contact.astro'
 import ContentBlock from '@/components/ContentBlock.astro'
 
@@ -17,8 +15,6 @@ import ContentBlock from '@/components/ContentBlock.astro'
 import jcbImage from '@/assets/images/projects/americana/americana_01.jpg'
 import depthArrayImage from '@/assets/images/projects/depth-array/DDW_01.jpg'
 import delverImage from '@/assets/images/projects/delver/DELVER.png'
-import droneAudio from '@/assets/audio/rvp-website-drone.mp3'
-import AudioHint from '@/components/AudioHint.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -36,7 +32,7 @@ import AudioHint from '@/components/AudioHint.astro'
 
   <section
     id="about"
-    class="introduction-general flex items-center relative z-10 h-fit md:max-lg:h-[45vh] lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
+    class="introduction-general flex items-center relative z-10 h-fit max-sm:h-[100dvh] md:max-lg:h-[70dvh] lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
     data-model-id="3"
   >
     <div class="main-grid-layout h-fit">
@@ -71,7 +67,7 @@ import AudioHint from '@/components/AudioHint.astro'
   </section>
 
   <section
-    class="introduction-development flex items-center relative z-10 md:max-lg:h-[45vh] my-16 md:my-24 lg:my-32 xl:my-64 lg:w-screen"
+    class="introduction-development flex items-center relative z-10 max-sm:h-[100dvh] md:max-lg:h-[70dvh] my-16 md:my-24 lg:my-32 xl:my-64 lg:w-screen"
     data-model-id="4"
   >
     <div class="main-grid-layout h-fit">
@@ -105,7 +101,7 @@ import AudioHint from '@/components/AudioHint.astro'
 
   <section
     id="sound"
-    class="introduction-sound flex items-center relative z-10 h-fit md:max-lg:h-[45vh] lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
+    class="introduction-sound flex items-center relative z-10 h-fit max-sm:h-[100dvh] md:max-lg:h-[70dvh] lg:w-screen lg:h-[100dvh] my-16 md:my-24 lg:my-32 xl:my-64"
     data-model-id="5"
   >
     <div class="main-grid-layout h-fit">
@@ -140,9 +136,9 @@ import AudioHint from '@/components/AudioHint.astro'
   </section>
 
   <section id="projects" class="relative z-10" data-model-id="6">
-    <ContentBlock class="my-0!">
+    <!-- <ContentBlock class="my-0!">
       <h1 class="text-heading-1">PRO<SlicedLetter className="text-salmon mx-4 wave-y-2">J</SlicedLetter>ECTS</h1>
-    </ContentBlock>
+    </ContentBlock> -->
     <ProjectsPreview
       class="lg:col-start-2 lg:col-span-10 px-4 lg:px-12"
       projects={[
@@ -232,19 +228,40 @@ import AudioHint from '@/components/AudioHint.astro'
 </Layout>
 
 <script>
-  import { getCurrentBreakpoint } from '@/scripts/utils/breakpoints'
+  import { isMaxMD } from '@/scripts/utils/breakpoints'
   import { getCenterScrollPosition } from '@/scripts/utils/device'
   import { easeInOutQuad } from '@/scripts/utils/easings'
   import Lenis from 'lenis'
   import gsap from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
-  import { map } from '@/scripts/utils/math'
+  import { map, triangleRamp, ramp } from '@/scripts/utils/math'
+
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const event = new Event('world-ready')
+  //   document.dispatchEvent(event)
+  // })
+
+  // Constants
+  const MAX_ENTROPY = 0.01
+  const SCROLL_LERP_SLOWER = 0.08
+  const SCROLL_LERP_FASTER = 0.15
+  window.entropy = 0
+  window.waveform = 0
+  window.codingMult = 1
+
+  // ScrollTrigger.config({
+  //   ignoreMobileResize: true,
+  // })
 
   gsap.registerPlugin(ScrollTrigger)
   const lenis = new Lenis({
     autoRaf: false,
-    lerp: 0.3,
+    lerp: SCROLL_LERP_FASTER,
     wheelMultiplier: 0.5,
+    touchMultiplier: 0.75,
+    touchInertiaMultiplier: 20,
+    syncTouch: true,
+    syncTouchLerp: 0.05,
   })
 
   let currentScrollVel = 0
@@ -259,10 +276,7 @@ import AudioHint from '@/components/AudioHint.astro'
 
   // NavLink anchor smooth scroll
   let isScrollingToAnchor = false
-
-  // Entropy variables
-  const MAX_ENTROPY = 0.01
-  window.entropy = 0
+  let isScrollToSectionDisabled = false
 
   // Only start building scroll listeners when the THREE World is ready
   document.addEventListener('world-ready', () => {
@@ -299,7 +313,8 @@ import AudioHint from '@/components/AudioHint.astro'
             isScrollingToAnchor = true
             lenis.scrollTo(href === '#about' ? getCenterScrollPosition(target) : target, {
               offset: href === '#contact' ? 500 : 0,
-              duration: 3,
+              duration: 2,
+              lock: true,
               onComplete: () => (isScrollingToAnchor = false),
             })
           }
@@ -309,13 +324,14 @@ import AudioHint from '@/components/AudioHint.astro'
       })
     })
 
+    // Scroll function to center section in viewport
     const scrollToIntroSection = (section: HTMLElement) => {
-      if (isScrollingToAnchor) return
-      lenis.stop()
-      lenis.start()
+      if (isScrollingToAnchor || isMaxMD()) return
+      // lenis.stop()
+      // lenis.start()
       lenis.scrollTo(getCenterScrollPosition(section), {
         duration: 1.25,
-        lerp: 0.1,
+        lerp: SCROLL_LERP_SLOWER,
         lock: currentScrollVel < 15,
         easing: easeInOutQuad,
       })
@@ -339,7 +355,34 @@ import AudioHint from '@/components/AudioHint.astro'
           swapModel(section.dataset.modelId)
         },
       })
+      // ScrollTrigger.create({
+      //   trigger: section,
+      //   start: 'center center',
+      //   end: 'center center',
+      //   onEnter: () => {
+      //     if (index === 0) return
+      //     scrollToIntroSection(section)
+      //     swapModel(section.dataset.modelId)
+      //   },
+
+      //   onEnterBack: () => {
+      //     scrollToIntroSection(section)
+      //     swapModel(section.dataset.modelId)
+      //   },
+      // })
     })
+
+    const scrollToEntropy = () => {
+      if (isScrollToSectionDisabled) return
+      if (isScrollingToAnchor || isMaxMD()) return
+      // lenis.stop()
+      // lenis.start()
+      lenis.scrollTo(getCenterScrollPosition(entropyEl), {
+        duration: 1.5,
+        lock: currentScrollVel < 15,
+        easing: easeInOutQuad,
+      })
+    }
 
     //
     // ScrollTrigger for the entropy section
@@ -349,14 +392,7 @@ import AudioHint from '@/components/AudioHint.astro'
       end: '+=190%',
       pin: true,
       onEnter: () => {
-        if (isScrollingToAnchor) return
-        lenis.scrollTo(entropyEl, {
-          offset: window.innerHeight * 0.5,
-          duration: 1.75,
-          lerp: 0.1,
-          lock: currentScrollVel < 15,
-          easing: easeInOutQuad,
-        })
+        scrollToEntropy()
       },
       onEnterBack: () => {
         swapModel(introductionSections.length - 1)
@@ -367,6 +403,14 @@ import AudioHint from '@/components/AudioHint.astro'
         swapModel(introductionSections.length - 1)
       },
       onUpdate: (self) => {
+        if (self.progress > 0.5) {
+          // slow down lerp when more than halfway through the section
+          lenis.options.lerp = map(self.progress, 0.5, 1, 0.15, 0.08)
+          // const rampedWaveformVal = map(self.progress, 0.5, 1, 0, 1)
+          // window.waveform = ramp(rampedWaveformVal) * 0.1
+        }
+
+        // Increase entropy based on scroll progress
         window.entropy = self.progress * MAX_ENTROPY
       },
     })
@@ -388,12 +432,13 @@ import AudioHint from '@/components/AudioHint.astro'
 
     //Scroll functions for the general section
     const scrollToGeneral = () => {
-      if (isScrollingToAnchor) return
-      lenis.stop()
-      lenis.start()
+      if (isScrollToSectionDisabled) return
+      if (isScrollingToAnchor || isMaxMD()) return
+      // lenis.stop()
+      // lenis.start()
       lenis.scrollTo(getCenterScrollPosition(generalEl), {
         duration: map(currentScrollVel, 0, 20, 1, 0.6),
-        lerp: 0.1,
+        lerp: SCROLL_LERP_SLOWER,
         lock: currentScrollVel < 25,
         easing: easeInOutQuad,
       })
@@ -407,7 +452,7 @@ import AudioHint from '@/components/AudioHint.astro'
         scrub: true,
       },
     })
-    generalTL.fromTo('#igh', { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 3, ease: 'none' })
+    generalTL.fromTo('#igh', { y: 0, opacity: 0 }, { y: 0, opacity: 1, duration: 3, ease: 'none' })
     generalTL.fromTo('#igt1', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' }, '-=1')
     generalTL.fromTo('#igt2', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
 
@@ -438,6 +483,7 @@ import AudioHint from '@/components/AudioHint.astro'
       xxl: 'top center',
       xxxl: 'top center',
     }
+
     ScrollTrigger.create({
       trigger: generalEl,
       start: 'top center',
@@ -450,13 +496,7 @@ import AudioHint from '@/components/AudioHint.astro'
         swapModel(generalEl.dataset.modelId)
       },
       onLeaveBack: () => {
-        lenis.scrollTo(getCenterScrollPosition(entropyEl), {
-          // offset: entropyEl.offsetHeight,
-          duration: 2,
-          lerp: 0.1,
-          lock: currentScrollVel < 15,
-          easing: easeInOutQuad,
-        })
+        scrollToEntropy()
         window.entropy = 1
         swapModel(introductionSections.length - 1)
       },
@@ -465,12 +505,14 @@ import AudioHint from '@/components/AudioHint.astro'
     //
     // Animations for entering the development section
     const scrollToDev = () => {
-      if (isScrollingToAnchor) return
-      lenis.stop()
-      lenis.start()
+      if (isScrollToSectionDisabled) return
+
+      if (isScrollingToAnchor || isMaxMD()) return
+      // lenis.stop()
+      // lenis.start()
       lenis.scrollTo(getCenterScrollPosition(devEl), {
         duration: map(currentScrollVel, 0, 20, 1, 0.6),
-        lerp: 0.1,
+        lerp: SCROLL_LERP_SLOWER,
         lock: currentScrollVel < 25,
         easing: easeInOutQuad,
       })
@@ -485,9 +527,9 @@ import AudioHint from '@/components/AudioHint.astro'
       },
     })
     devTL.addLabel('animationStart')
-    devTL.fromTo('#idt1', { x: 150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
-    devTL.fromTo('#idh', { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 2, ease: 'none' })
-    devTL.fromTo('#idt2', { x: -150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
+    devTL.fromTo('#idt1', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
+    devTL.fromTo('#idh', { y: 0, opacity: 0 }, { y: 0, opacity: 1, duration: 3, ease: 'none' })
+    devTL.fromTo('#idt2', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
 
     //
     // Animations for leaving the development section
@@ -512,29 +554,39 @@ import AudioHint from '@/components/AudioHint.astro'
       end: 'bottom center',
       onEnter: () => {
         swapModel(devEl.dataset.modelId)
-      },
-      onLeaveBack: () => {
-        scrollToGeneral()
-        swapModel(parseInt(devEl.dataset.modelId) - 1)
+        window.codingMult = 0
       },
       onEnterBack: () => {
         swapModel(devEl.dataset.modelId)
+        window.codingMult = 0
+      },
+      onLeave: () => {
+        window.codingMult = 1
+      },
+      onLeaveBack: () => {
+        scrollToGeneral()
+        window.codingMult = 1
+        swapModel(parseInt(devEl.dataset.modelId) - 1)
       },
     })
 
     //
     // Animations for entering the sound section
     const scrollToSound = () => {
-      if (isScrollingToAnchor) return
-      lenis.stop()
-      lenis.start()
+      if (isScrollToSectionDisabled) return
+
+      if (isScrollingToAnchor || isMaxMD()) return
+      // lenis.stop()
+      // lenis.start()
       lenis.scrollTo(getCenterScrollPosition(soundEl), {
         duration: map(currentScrollVel, 0, 20, 1, 0.6),
-        lerp: 0.1,
+        lerp: SCROLL_LERP_SLOWER,
         lock: currentScrollVel < 25,
         easing: easeInOutQuad,
       })
     }
+
+    // Sound section animation timeline
     const soundTL = gsap.timeline({
       onStart: scrollToSound,
       scrollTrigger: {
@@ -545,9 +597,9 @@ import AudioHint from '@/components/AudioHint.astro'
       },
     })
     soundTL.addLabel('animationStart')
-    soundTL.fromTo('#ist1', { x: 150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
-    soundTL.fromTo('#ish', { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 2, ease: 'none' })
-    soundTL.fromTo('#ist2', { x: -150, opacity: 0 }, { x: 0, opacity: 2, duration: 3, ease: 'none' })
+    soundTL.fromTo('#ish', { y: 0, opacity: 0 }, { y: 0, opacity: 1, duration: 3, ease: 'none' })
+    soundTL.fromTo('#ist1', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
+    soundTL.fromTo('#ist2', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
 
     //
     // Animations for leaving the sound section
@@ -572,13 +624,18 @@ import AudioHint from '@/components/AudioHint.astro'
       end: 'bottom center',
       onEnter: () => {
         swapModel(soundEl.dataset.modelId)
+        window.waveform = 1
       },
+      onLeave: () => {},
       onLeaveBack: () => {
         scrollToDev()
         swapModel(parseInt(soundEl.dataset.modelId) - 1)
       },
       onEnterBack: () => {
         swapModel(soundEl.dataset.modelId)
+      },
+      onUpdate: (self) => {
+        window.waveform = triangleRamp(self.progress)
       },
     })
 
@@ -588,15 +645,16 @@ import AudioHint from '@/components/AudioHint.astro'
       start: 'top center+=25%',
       end: 'bottom center',
 
-      // onEnter: () => {
-      //   swapModel(xpEl.dataset.modelId)
-      // },
+      onEnter: () => {
+        lenis.options.lerp = SCROLL_LERP_FASTER
+        swapModel(projectsEl.dataset.modelId)
+      },
       // onEnterBack: () => {
       //   swapModel(xpEl.dataset.modelId)
       // },
       onLeaveBack: () => {
-        scrollToDev()
-        // swapModel(parseInt(xpEl.dataset.modelId) - 1)
+        scrollToSound()
+        swapModel(parseInt(projectsEl.dataset.modelId) - 1)
       },
     })
 
@@ -642,14 +700,14 @@ import AudioHint from '@/components/AudioHint.astro'
     // ScrollTrigger for the contact section
     const scrollToContact = () => {
       if (isScrollingToAnchor) return
-      lenis.stop()
-      lenis.start()
+      // lenis.stop()
+      // lenis.start()
       lenis.scrollTo(getCenterScrollPosition(contactEl), {
         offset: 500,
         duration: 1,
         // force: true,
         lock: currentScrollVel < 25,
-        lerp: 0.1,
+        lerp: SCROLL_LERP_SLOWER,
         easing: (t) => t,
       })
     }
@@ -673,13 +731,6 @@ import AudioHint from '@/components/AudioHint.astro'
 
 <style lang="scss" is:global>
   @reference '../styles/global.css';
-
-  .introduction-dummy {
-    // height: 200vh !important;
-  }
-  .introduction-general {
-    z-index: 2;
-  }
 
   .wave-y-1 {
     display: inline-block;

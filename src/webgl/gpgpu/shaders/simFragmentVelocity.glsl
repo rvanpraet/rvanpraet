@@ -113,8 +113,10 @@ uniform float uMouseSpeed;
 uniform float uForce;
 uniform float uTime;
 uniform float uEntropy;
+uniform float uWaveform;
 uniform float uVerticalDrift;
 uniform float uResponsiveMultiplier;
+uniform float uCodingMultiplier;
 
 void main() {
   vec2 vUv = gl_FragCoord.xy / resolution.xy;
@@ -129,21 +131,32 @@ void main() {
   velocity *= uForce;
 
   // Noise -- Curl noise seems to be too taxing on the GPU for a web app with computation renderer
-  vec3 noise = snoiseVec3(position) * 0.005;
+  vec3 noise = snoiseVec3(vec3(position.x * 1.0, position.y * 1.0, position.z * 1.0)) * 0.005;
+  // vec3 noise = curlNoise(vec3(position.x * 5.0, position.y * 1.0, position.z * 1.0)) * 0.001;
   // vec3 transitionNoise = snoiseVec3(vec3(position.x * 1.0, position.y * 10.0, position.z * 1.0)) * 0.005;
   // vec3 transitionNoise = curlNoise(vec3(position.x * 1.0, position.y * 10.0, position.z * 5.0) * info.w) * 0.005;
 
   // Entropy --- TOFIX: No IF statements in shaders
-  if (uEntropy > 0.0) {
-    float rVar = 0.3 + info.z * 0.7;
-    float r = 500.0 * rVar;
+  float entropyStep = step(0.0001, uEntropy);
+  // if (uEntropy > 0.0) {
+  float rVar = 0.3 + info.z * 0.7;
+  float r = 500.0 * rVar;
 
-    float entropy = clamp(uEntropy, 0.5 * 0.01, 1.0 * 0.01);
+  float entropy = clamp(uEntropy, 0.5 * 0.01, 1.0 * 0.01) * entropyStep;
 
-    target.x = cos(uTime + info.x * M_PI * 2.0) * r * entropy;
-    target.y = sin(uTime + info.x * M_PI * 2.0) * r * entropy;
-    target.z = (info.z * 2.0 - 1.0) * entropy;
-  }
+  target.x = cos(uTime + info.x * M_PI * 2.0) * r * entropy + target.x * (1.0 - entropyStep);
+  target.y = sin(uTime + info.x * M_PI * 2.0) * r * entropy + target.y * (1.0 - entropyStep);
+  target.z = (info.z * 2.0 - 1.0) * entropy + target.z * (1.0 - entropyStep);
+  // }
+
+  // Create waveform animation based on global window variable set in JS
+  float modTime = mod(uTime, M_PI * 2.0);
+  // float amplitude = noise.x * 400.0 * (abs(sin(info.y)) + 0.5);
+  vec3 waveNoise = snoiseVec3(vec3(position.x * 1.0, position.y * 25.0, position.z * 1.0)) * 0.005;
+  float amplitude = 2.0 + sin(uTime) * 0.5 + waveNoise.y * 400.0 * (abs(sin(uTime * info.y)) + 0.5);
+  float frequency = 1.7 + sin(uTime * 0.2) * 0.2;
+  float phase = position.y * frequency + uTime;
+  target.x += amplitude * sin(frequency * uTime + phase) * uWaveform;
 
   // Add some vertical drift to the particles when scrolling
   float driftStrength = abs(position.x * 2.0 - 1.0);
@@ -160,24 +173,25 @@ void main() {
   float falloff = easeInOutSine(normDist); // get easing-based force
 
   // Add extra wiggle in x direction
-  velocity.x += cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025 * uResponsiveMultiplier;
+  velocity.x += cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025 * uResponsiveMultiplier * (1.0 - entropyStep);
 
   // Force that pushes particles towards their current target
-  vec3 attraction =
-    (direction * falloff * 0.05 + noise * clamp(falloff, 0.005, 1.0) * 1.5 * uResponsiveMultiplier) * step(0.001, dist);
+  vec3 attractionStrength = direction * falloff * 0.05;
+  vec3 noiseStrength = vec3(0.0, 0.0, 0.0);
+  // vec3 noiseStrength = noise * clamp(falloff, 0.005, 1.0) * 1.5 * uResponsiveMultiplier * uCodingMultiplier;
+  float distanceStep = step(0.001, dist);
+  vec3 attraction = (attractionStrength + noiseStrength) * distanceStep;
   velocity += attraction * (info.y * 0.15 + 0.85); // Force that pushes particles towards their current target
 
   // Mouse repel force
-  float mouseDistance = distance(position, uMouse);
-  float maxDistance = 0.75;
+  float mouseDistance = abs(distance(position, uMouse)); // Distance between pixel and mouse
+  float maxDistance = 1.0; // Max distance at which particles are affected by the mouse
+  float rangeStep = 1.0 - smoothstep(maxDistance - 0.25, maxDistance, mouseDistance); // 0.0 to 1.0 based on distance
+  vec3 pushDirection = normalize(position - uMouse); // Direction to push particle away from mouse
 
-  // TODO: No if statements...
-  if (mouseDistance < maxDistance) {
-    vec3 pushDirection = normalize(position - uMouse);
-    vec3 mouseAttraction = (pushDirection * (1.0 - mouseDistance / maxDistance) * 0.035 + noise) * uMouseSpeed;
-    velocity += mouseAttraction;
-
-  }
+  vec3 mouseAttraction =
+    (pushDirection * (1.0 - mouseDistance / maxDistance) * 0.035 + noise * 1.35) * uMouseSpeed * rangeStep;
+  velocity += mouseAttraction;
 
   gl_FragColor = vec4(velocity, 1.0);
 }

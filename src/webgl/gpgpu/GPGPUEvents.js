@@ -2,12 +2,15 @@ import * as THREE from 'three'
 import { MeshBVH, acceleratedRaycast } from 'three-mesh-bvh'
 
 export default class GPGPUEvents {
-  constructor(mouse, camera, mesh, uniforms) {
+  constructor(mouse, camera, mesh, uniforms, materialUniforms) {
     this.camera = camera
     this.mouse = mouse
     this.geometry = mesh.geometry
     this.uniforms = uniforms
     this.mesh = mesh
+    this.materialUniforms = materialUniforms
+
+    console.log('GPGPUEvents', this.materialUniforms)
 
     // Mouse
 
@@ -18,7 +21,6 @@ export default class GPGPUEvents {
 
   init() {
     // Remember initial camera position
-    // console.log(this.camera)
     this.initialCameraPosition = this.camera.position
 
     this.setupMouse()
@@ -70,15 +72,23 @@ export default class GPGPUEvents {
     this.verticalDrift *= 0.7
     this.entropy = window.entropy
 
+    console.log(window.codingMult)
+
     // Velocity uniform updates
     if (this.uniforms.velocityUniforms.uMouseSpeed) this.uniforms.velocityUniforms.uMouseSpeed.value = this.mouseSpeed
-    if (this.uniforms.velocityUniforms.uEntropy) this.uniforms.velocityUniforms.uEntropy.value = this.entropy
+    if (this.uniforms.velocityUniforms.uEntropy) this.uniforms.velocityUniforms.uEntropy.value = window.entropy
+    if (this.uniforms.velocityUniforms.uWaveform) this.uniforms.velocityUniforms.uWaveform.value = window.waveform
+    if (this.uniforms.velocityUniforms.uCodingMultiplier)
+      this.uniforms.velocityUniforms.uCodingMultiplier.value = window.codingMult
     if (this.uniforms.velocityUniforms.uVerticalDrift) {
       this.uniforms.velocityUniforms.uVerticalDrift.value = this.verticalDrift || 0
     }
 
     // Position uniform updates
-    if (this.uniforms.positionUniforms.uEntropy) this.uniforms.positionUniforms.uEntropy.value = this.entropy
+    if (this.uniforms.positionUniforms.uEntropy) this.uniforms.positionUniforms.uEntropy.value = window.entropy
+
+    // Material uniform updates
+    if (this.materialUniforms.uCodingMultiplier) this.materialUniforms.uCodingMultiplier.value = window.codingMult
 
     // On mouse move, gently nudge the camera
     const { x: mouseX, y: mouseY } = this.mouse.cursorPosition

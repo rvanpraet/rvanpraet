@@ -35,6 +35,30 @@ const isXXXL = () => {
   return window.innerWidth >= BREAKPOINTS.XXXL
 }
 
+const isMaxSM = () => {
+  return window.innerWidth < BREAKPOINTS.SM
+}
+
+const isMaxMD = () => {
+  return window.innerWidth < BREAKPOINTS.MD
+}
+
+const isMaxLG = () => {
+  return window.innerWidth < BREAKPOINTS.LG
+}
+
+const isMaxXL = () => {
+  return window.innerWidth < BREAKPOINTS.XL
+}
+
+const isMaxXXL = () => {
+  return window.innerWidth < BREAKPOINTS.XXL
+}
+
+const isMaxXXXL = () => {
+  return window.innerWidth < BREAKPOINTS.XXXL
+}
+
 const isDesktop = () => window.innerWidth >= BREAKPOINTS.LG
 const isMobile = () => !isDesktop()
 
@@ -42,4 +66,22 @@ const getCurrentBreakpoint = () => {
   return isXS() ? 'xs' : isSM() ? 'sm' : isMD() ? 'md' : isLG() ? 'lg' : isXL() ? 'xl' : isXXL() ? 'xxl' : 'xxxl'
 }
 
-export { BREAKPOINTS, isXS, isSM, isMD, isLG, isXL, isXXL, isXXXL, isMobile, isDesktop, getCurrentBreakpoint }
+export {
+  BREAKPOINTS,
+  isXS,
+  isSM,
+  isMD,
+  isLG,
+  isXL,
+  isXXL,
+  isXXXL,
+  isMaxSM,
+  isMaxMD,
+  isMaxLG,
+  isMaxXL,
+  isMaxXXL,
+  isMaxXXXL,
+  isMobile,
+  isDesktop,
+  getCurrentBreakpoint,
+}

@@ -9,9 +9,9 @@ import fragmentShader from './shaders/fragment.glsl?raw'
 import { getCurrentBreakpoint, isSM } from '@/scripts/utils/breakpoints.js'
 
 const noiseMultiplierMap = {
-  xs: 0.2,
-  sm: 0.3,
-  md: 0.6,
+  xs: 0.05,
+  sm: 0.15,
+  md: 0.5,
   lg: 1.0,
   xl: 1.2,
   xxl: 1.5,
@@ -42,10 +42,9 @@ export default class GPGPU {
 
     this.initGPGPU()
     this.createTargets()
-
-    this.events = new GPGPUEvents(this.mouse, this.camera, this.model, this.uniforms)
-
     this.createParticles()
+
+    this.events = new GPGPUEvents(this.mouse, this.camera, this.model, this.uniforms, this.materialUniforms)
   }
 
   // The GPUComputationRenderer allows us to create multiple shaders and have these influence each other
@@ -78,9 +77,10 @@ export default class GPGPU {
       value: positionTexture,
     } // Original position texture
     this.uniforms.velocityUniforms.uEntropy = { value: 0 } // Entropy value for moving shape
+    this.uniforms.velocityUniforms.uWaveform = { value: 0 } // Waveform value for moving shape
     this.uniforms.velocityUniforms.uInfo = { value: randomInfoTexture } // Random info texture for particles
     this.uniforms.velocityUniforms.uMouse = {
-      value: this.mouse.cursorPosition,
+      value: { x: 0.0, y: 0.0, z: 0.0 },
     } // Mouse position in world space
     this.uniforms.velocityUniforms.uMouseSpeed = { value: 0 } // Mouse speed, set by GPGPUEvents
     this.uniforms.velocityUniforms.uVerticalDrift = { value: 0 } // Vertical drift for particles when scrolling
@@ -89,10 +89,11 @@ export default class GPGPU {
     this.uniforms.velocityUniforms.uTarget = {
       value: null,
     } // Target position for particles to attract to
+    // this.uniforms.velocityUniforms.uResponsiveMultiplier = { value: 0.0 } // Responsive multiplier for mobile devices
+    this.uniforms.velocityUniforms.uCodingMultiplier = { value: 1.0 } // Responsive multiplier for mobile devices
     this.uniforms.velocityUniforms.uResponsiveMultiplier = { value: noiseMultiplierMap[getCurrentBreakpoint()] } // Responsive multiplier for mobile devices
 
     // Set wrapping mode for the textures
-
     this.gpgpuCompute.init()
   }
 
@@ -128,6 +129,7 @@ export default class GPGPU {
         uInfo: { value: this.uniforms.positionUniforms.uInfo.value },
         uTime: { value: 0 },
         uResponsiveMultiplier: { value: noiseMultiplierMap[getCurrentBreakpoint()] },
+        uCodingMultiplier: { value: 1.0 },
       },
       vertexShader,
       fragmentShader,
@@ -153,6 +155,7 @@ export default class GPGPU {
 
     // Setup Points
 
+    this.materialUniforms = this.material.uniforms
     this.mesh = new THREE.Points(geometry, this.material)
     this.scene.add(this.mesh)
   }

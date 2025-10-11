@@ -86,16 +86,19 @@ const willDiffClass = 'will-diff '
 
     &.will-diff {
       &::before {
+        z-index: 1;
+        pointer-events: none;
+
         @supports (mix-blend-mode: difference) {
           background-color: var(--color-white);
           mix-blend-mode: difference;
         }
-        z-index: 1;
-        pointer-events: none;
       }
 
       &::after {
         background-color: var(--mainColor);
+        z-index: -1;
+
         @supports (mix-blend-mode: difference) {
           // background-color: adjust-hue(#ffe66d, 180);
           background-color: var(--difColor);
@@ -103,7 +106,6 @@ const willDiffClass = 'will-diff '
           //#e20074; <- desired color, complementary color does not match exactly
           // filter: hue-rotate(-180deg) brightness(2);
         }
-        z-index: -1;
       }
 
       &.animation-in {

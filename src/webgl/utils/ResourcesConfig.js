@@ -22,6 +22,14 @@ export const modelConfig = {
       scaleY: 6,
       scaleZ: 6,
     },
+    waveform: {
+      x: 2,
+      y: 0,
+      z: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+    },
   },
   sm: {
     reinald: {
@@ -46,10 +54,18 @@ export const modelConfig = {
       scaleY: 6,
       scaleZ: 6,
     },
+    waveform: {
+      x: 2,
+      y: 0,
+      z: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+    },
   },
   md: {
     reinald: {
-      x: -2.25,
+      x: -3,
       y: 0,
       z: 0,
       rotateX: 0,
@@ -69,6 +85,14 @@ export const modelConfig = {
       scaleX: 7.5,
       scaleY: 7.5,
       scaleZ: 7.5,
+    },
+    waveform: {
+      x: -2,
+      y: 0,
+      z: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
     },
   },
   lg: {
@@ -94,6 +118,14 @@ export const modelConfig = {
       scaleY: 10,
       scaleZ: 10,
     },
+    waveform: {
+      x: -3,
+      y: 0,
+      z: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+    },
   },
   xl: {
     reinald: {
@@ -117,6 +149,14 @@ export const modelConfig = {
       scaleX: 10,
       scaleY: 10,
       scaleZ: 10,
+    },
+    waveform: {
+      x: -4,
+      y: 0,
+      z: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
     },
   },
   xxl: {
@@ -142,6 +182,14 @@ export const modelConfig = {
       scaleY: 10,
       scaleZ: 10,
     },
+    waveform: {
+      x: -4,
+      y: 0,
+      z: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+    },
   },
   xxxl: {
     reinald: {
@@ -165,6 +213,14 @@ export const modelConfig = {
       scaleX: 10,
       scaleY: 10,
       scaleZ: 10,
+    },
+    waveform: {
+      x: -4,
+      y: 0,
+      z: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
     },
   },
 }
@@ -211,19 +267,60 @@ export const textModelConfig = {
     ["LET'S CONNECT", { size: 0.9, offsets: { x: 0, y: 0.5, z: 0 } }],
   ],
   xxl: [
-    ["HI\nI'M REINALD", { size: 1.2, offsets: { x: 0, y: 0, z: 0 } }],
-    ['CREATIVE\nDEVELOPER', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
-    ['SOUND\nDESIGNER', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
-    ['PROJECTS', { size: 1, offsets: { x: 0, y: 0, z: 0 } }],
+    ["HI\nI'M REINALD", { size: 0.9, offsets: { x: 0, y: 0, z: 0 } }],
+    ['CREATIVE\nDEVELOPER', { size: 0.91, offsets: { x: 0, y: 0, z: 0 } }],
+    ['SOUND\nDESIGNER', { size: 0.9, offsets: { x: 0, y: 0, z: 0 } }],
+    ['PROJECTS', { size: 1.5, offsets: { x: 0, y: 0, z: 0 } }],
     ['XP', { size: 4, offsets: { x: -5, y: 0, z: 0 } }],
     ["LET'S CONNECT", { size: 1, offsets: { x: 0, y: 0.5, z: 0 } }],
   ],
   xxxl: [
-    ["HI\nI'M REINALD", { size: 1.2, offsets: { x: 0, y: 0, z: 0 } }],
-    ['CREATIVE\nDEVELOPER', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
-    ['SOUND\nDESIGNER', { size: 1.3, offsets: { x: 0, y: 0, z: 0 } }],
-    ['PROJECTS', { size: 1, offsets: { x: 0, y: 0, z: 0 } }],
+    ["HI\nI'M REINALD", { size: 0.9, offsets: { x: 0, y: 0, z: 0 } }],
+    ['CREATIVE\nDEVELOPER', { size: 0.91, offsets: { x: 0, y: 0, z: 0 } }],
+    ['SOUND\nDESIGNER', { size: 0.9, offsets: { x: 0, y: 0, z: 0 } }],
+    ['PROJECTS', { size: 1.5, offsets: { x: 0, y: 0, z: 0 } }],
     ['XP', { size: 4, offsets: { x: -5, y: 0, z: 0 } }],
     ["LET'S CONNECT", { size: 1, offsets: { x: 0, y: 0.5, z: 0 } }],
   ],
+}
+
+// export const codingText = `function make() {\n<tab>inNeedOfHelp = true\nisReinaldAvailable = true\nisCoffeeReady = true\n\nif (inNeedOfHelp && isReinaldAvailable && isCoffeeReady) {\n<tab>return "Reinald is here to help!"\n<-tab>}\n<-tab>}`
+export const textCoding = `function make() {\n<tab>inNeedOfHelp = true\nisReinaldAvailable = true\nisCoffeeReady = true\n\nif (\n<tab>inNeedOfHelp &&\nisReinaldAvailable &&\nisCoffeeReady\n<-tab>) {\n<tab>return "Reinald is here to help!"\n<-tab>}\n<-tab>}`
+
+export const textCodingConfig = {
+  xs: {
+    size: 0.1,
+    offsets: { x: 0, y: 0, z: 0 },
+    tab: 0.25,
+  },
+  sm: {
+    size: 0.15,
+    offsets: { x: 0, y: 0, z: 0 },
+    tab: 0.3,
+  },
+  md: {
+    size: 0.15,
+    offsets: { x: 0, y: 0, z: 0 },
+    tab: 0.35,
+  },
+  lg: {
+    size: 0.2,
+    offsets: { x: 0, y: 0, z: 0 },
+    tab: 0.4,
+  },
+  xl: {
+    size: 0.225,
+    offsets: { x: 0, y: 0, z: 0 },
+    tab: 0.75,
+  },
+  xxl: {
+    size: 0.3,
+    offsets: { x: 0, y: 0, z: 0 },
+    tab: 0.875,
+  },
+  xxxl: {
+    size: 0.35,
+    offsets: { x: 0, y: 0, z: 0 },
+    tab: 1.0,
+  },
 }
