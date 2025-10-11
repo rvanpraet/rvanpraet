@@ -36,9 +36,9 @@ const worldConfig = {
     particleCount: 150,
   },
   xxxl: {
-    force: 0.5,
-    particleSize: 15,
-    particleCount: 200,
+    force: 0.55,
+    particleSize: 16,
+    particleCount: 150,
   },
 }
 
