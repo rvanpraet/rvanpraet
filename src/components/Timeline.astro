@@ -105,9 +105,14 @@ const classes = twMerge(componentClasses, classList)
 
 <script>
   import { isXS } from '@/scripts/utils/breakpoints'
+  import gsap from 'gsap'
 
   const initDateSeparators = () => {
-    document.querySelectorAll('.timeline-date-separator').forEach((el: HTMLElement, index) => {
+    const separatorEls = document.querySelectorAll('.timeline-date-separator')
+
+    if (separatorEls.length === 0) return
+
+    separatorEls.forEach((el: HTMLElement, index) => {
       el.style.width = `100%`
 
       // Rotate the element based on its index (odd/even)
@@ -123,6 +128,27 @@ const classes = twMerge(componentClasses, classList)
       el.style.transform = `rotate(${angle * sign}deg)`
       el.style.transformOrigin = 'center center'
       el.style.width = `${2}px`
+    })
+
+    // Animations for the timeline items
+    separatorEls.forEach((el) => {
+      gsap.fromTo(
+        el,
+        {
+          height: 0,
+        },
+        {
+          height: '110%',
+          duration: 1,
+          // ease: 'power2.inOut',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top bottom',
+            end: 'top center',
+            scrub: true,
+          },
+        }
+      )
     })
   }
 

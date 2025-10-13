@@ -26,11 +26,14 @@ export default class Mouse extends EventEmitter {
       z: 0,
     }
 
-    window.addEventListener('mousemove', (event) => {
-      this.cursorPosition.x = (event.clientX / this.sizes.width) * 2 - 1
-      this.cursorPosition.y = (-event.clientY / this.sizes.height) * 2 + 1
+    window.addEventListener('mousemove', this.handleMouseMove.bind(this))
+    // window.addEventListener('touchmove', this.handleMouseMove.bind(this))
+  }
 
-      this.emit('mousemove', this.cursorPosition)
-    })
+  handleMouseMove(evt) {
+    this.cursorPosition.x = (evt.clientX / this.sizes.width) * 2 - 1
+    this.cursorPosition.y = (-evt.clientY / this.sizes.height) * 2 + 1
+
+    this.emit('mousemove', this.cursorPosition)
   }
 }

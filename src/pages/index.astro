@@ -28,11 +28,11 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="1"></section>
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="2"></section>
 
-  <section class="introduction-entropy relative z-10 h-screen w-screen"></section>
+  <section class="introduction-entropy relative z-10 h-[200dvh] w-screen"></section>
 
   <section
     id="about"
-    class="introduction-general flex items-center relative z-10 h-fit max-sm:h-[100dvh] md:max-lg:h-[70dvh] lg:h-[70dvh] lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
+    class="introduction-general flex items-center relative z-10 w-screen max-sm:h-[100dvh] md:max-lg:h-[100dvh] lg:h-[100dvh]"
     data-model-id="3"
   >
     <div class="main-grid-layout h-fit">
@@ -67,7 +67,7 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
   </section>
 
   <section
-    class="introduction-development flex items-center relative z-10 max-sm:h-[100dvh] md:max-lg:h-[70dvh] lg:h-[70dvh] lg:w-screen my-16 md:my-24 lg:my-32 xl:my-64"
+    class="introduction-development flex items-center relative z-10 w-screen max-sm:h-[100dvh] md:max-lg:h-[100dvh] lg:h-[100dvh]"
     data-model-id="4"
   >
     <div class="main-grid-layout h-fit">
@@ -101,7 +101,7 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
 
   <section
     id="sound"
-    class="introduction-sound flex items-center relative z-10 h-fit max-sm:h-[100dvh] md:max-lg:h-[70dvh] lg:w-screen lg:h-[70dvh] my-16 md:my-24 lg:my-32 xl:my-64"
+    class="introduction-sound flex items-center relative z-10 w-screen max-sm:h-[100dvh] md:max-lg:h-[100dvh] lg:h-[100dvh]"
     data-model-id="5"
   >
     <div class="main-grid-layout h-fit">
@@ -228,18 +228,13 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
 </Layout>
 
 <script>
-  import { isMaxMD } from '@/scripts/utils/breakpoints'
-  import { getCenterScrollPosition } from '@/scripts/utils/device'
-  import { easeInOutQuad } from '@/scripts/utils/easings'
-  import Lenis from 'lenis'
-  import gsap from 'gsap'
+  import { isMaxMD, isMaxSM } from '@/scripts/utils/breakpoints'
+  import { getCenterScrollPosition, isTouchDevice } from '@/scripts/utils/device'
+  import { easeInOutQuad, easeLinear } from '@/scripts/utils/easings'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { map, triangleRamp, ramp } from '@/scripts/utils/math'
-
-  // document.addEventListener('DOMContentLoaded', () => {
-  //   const event = new Event('world-ready')
-  //   document.dispatchEvent(event)
-  // })
+  import Lenis from 'lenis'
+  import gsap from 'gsap'
 
   // Constants
   const MAX_ENTROPY = 0.01
@@ -248,31 +243,39 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
   window.entropy = 0
   window.waveform = 0
   window.codingMult = 1
+  window.scrollVelocity = 1
+
+  gsap.registerPlugin(ScrollTrigger)
+  ScrollTrigger.normalizeScroll(isTouchDevice() || isMaxSM())
 
   // ScrollTrigger.config({
   //   ignoreMobileResize: true,
   // })
 
-  gsap.registerPlugin(ScrollTrigger)
   const lenis = new Lenis({
     autoRaf: false,
     lerp: SCROLL_LERP_FASTER,
     wheelMultiplier: 0.5,
-    touchMultiplier: 0.75,
-    touchInertiaMultiplier: 20,
-    syncTouch: true,
-    syncTouchLerp: 0.05,
+    touchMultiplier: 0.25,
+    // touchInertiaMultiplier: 20,
+    // syncTouch: true,
+    // syncTouchLerp: 0.05,
   })
 
+  // Scroll listener
   let currentScrollVel = 0
   lenis.on('scroll', (e) => {
     currentScrollVel = Math.abs(e.velocity)
+    window.scrollVelocity = e.velocity
     ScrollTrigger.update()
   })
 
+  // GSAP ticker to drive Lenis
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000)
   })
+  // Disable lag smoothing in GSAP to prevent any delay in scroll animations
+  // gsap.ticker.lagSmoothing(0)
 
   // NavLink anchor smooth scroll
   let isScrollingToAnchor = false
@@ -324,15 +327,17 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
       })
     })
 
+    // Reset scroll on first load
+    lenis.scrollTo(0, { onStart: () => swapModel(0), duration: 0, lock: true, force: true })
+
     // Scroll function to center section in viewport
     const scrollToIntroSection = (section: HTMLElement) => {
-      if (isScrollingToAnchor || isMaxMD()) return
-      // lenis.stop()
-      // lenis.start()
+      if (isScrollingToAnchor) return
       lenis.scrollTo(getCenterScrollPosition(section), {
         duration: 1.25,
-        lerp: SCROLL_LERP_SLOWER,
-        lock: currentScrollVel < 15,
+        lerp: SCROLL_LERP_FASTER,
+        lock: currentScrollVel < 25,
+        // lock: true,
         easing: easeInOutQuad,
       })
     }
@@ -342,10 +347,12 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
     introductionSections.forEach((section: HTMLElement, index: number) => {
       ScrollTrigger.create({
         trigger: section,
-        start: 'top bottom-=10%',
-        end: 'bottom top+=10%',
+        start: 'center bottom',
+        end: 'center top',
         onEnter: () => {
+          console.log('entering section', index)
           if (index === 0) return
+
           scrollToIntroSection(section)
           swapModel(section.dataset.modelId)
         },
@@ -355,30 +362,13 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
           swapModel(section.dataset.modelId)
         },
       })
-      // ScrollTrigger.create({
-      //   trigger: section,
-      //   start: 'center center',
-      //   end: 'center center',
-      //   onEnter: () => {
-      //     if (index === 0) return
-      //     scrollToIntroSection(section)
-      //     swapModel(section.dataset.modelId)
-      //   },
-
-      //   onEnterBack: () => {
-      //     scrollToIntroSection(section)
-      //     swapModel(section.dataset.modelId)
-      //   },
-      // })
     })
 
     const scrollToEntropy = () => {
       if (isScrollToSectionDisabled) return
       if (isScrollingToAnchor || isMaxMD()) return
-      // lenis.stop()
-      // lenis.start()
       lenis.scrollTo(getCenterScrollPosition(entropyEl), {
-        duration: 1.5,
+        duration: 1.25,
         lock: currentScrollVel < 15,
         easing: easeInOutQuad,
       })
@@ -388,26 +378,19 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
     // ScrollTrigger for the entropy section
     ScrollTrigger.create({
       trigger: entropyEl,
-      start: 'top bottom-=10%',
-      end: '+=190%',
-      pin: true,
+      start: 'center-=25% bottom',
+      end: 'center+=25% top',
       onEnter: () => {
         scrollToEntropy()
       },
       onEnterBack: () => {
         swapModel(introductionSections.length - 1)
-      },
-      onLeaveBack: () => {
-        if (isScrollingToAnchor) return
-        scrollToIntroSection(introductionSections[introductionSections.length - 1] as HTMLElement)
-        swapModel(introductionSections.length - 1)
+        scrollToEntropy()
       },
       onUpdate: (self) => {
         if (self.progress > 0.5) {
           // slow down lerp when more than halfway through the section
-          lenis.options.lerp = map(self.progress, 0.5, 1, 0.15, 0.08)
-          // const rampedWaveformVal = map(self.progress, 0.5, 1, 0, 1)
-          // window.waveform = ramp(rampedWaveformVal) * 0.1
+          lenis.options.lerp = map(self.progress, 0.5, 1, SCROLL_LERP_FASTER, SCROLL_LERP_SLOWER)
         }
 
         // Increase entropy based on scroll progress
@@ -434,141 +417,143 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
     const scrollToGeneral = () => {
       if (isScrollToSectionDisabled) return
       if (isScrollingToAnchor || isMaxMD()) return
-      // lenis.stop()
-      // lenis.start()
+
       lenis.scrollTo(getCenterScrollPosition(generalEl), {
-        duration: map(currentScrollVel, 0, 20, 1, 0.6),
+        duration: map(currentScrollVel, 0, 25, 1.5, 0.5),
         lerp: SCROLL_LERP_SLOWER,
         lock: currentScrollVel < 25,
         easing: easeInOutQuad,
       })
     }
+
     const generalTL = gsap.timeline({
-      onStart: scrollToGeneral,
       scrollTrigger: {
         trigger: generalEl,
         start: 'center bottom',
-        end: 'center center',
+        end: 'center top',
         scrub: true,
+        onEnter: () => {
+          scrollToGeneral()
+          swapModel(generalEl.dataset.modelId)
+          window.entropy = 0
+        },
+        onEnterBack: () => {
+          scrollToGeneral()
+          swapModel(generalEl.dataset.modelId)
+        },
       },
     })
-    generalTL.fromTo('#igh', { y: 0, opacity: 0 }, { y: 0, opacity: 1, duration: 3, ease: 'none' })
-    generalTL.fromTo('#igt1', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' }, '-=1')
-    generalTL.fromTo('#igt2', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
 
-    //
-    // Animations for leaving the general section
-    const generalOutTL = gsap.timeline({
-      scrollTrigger: {
-        trigger: generalEl,
-        start: 'top top+=20%',
-        end: 'bottom top',
-        scrub: true,
-      },
-    })
-    generalOutTL.addLabel('animationStart')
-    generalOutTL.fromTo('#igh', { y: 0 }, { y: -180, duration: 4, ease: 'none' }, 'animationStart')
-    generalOutTL.fromTo('#igt1', { y: 0 }, { y: -150, duration: 4, ease: 'none' }, 'animationStart+=0.33')
-    generalOutTL.fromTo('#igt2', { y: 0 }, { y: -120, duration: 4, ease: 'none' }, 'animationStart+=0.66')
+    // Set initial state of elements to prevent flickering
+    // gsap.set(['#igh', '#igt1', '#igt2'], { visibility: 'hidden' })
 
-    //
-    // ScrollTrigger for the general section
-    // Extra mapping to adjust start position based on breakpoint
-    const startMap = {
-      xs: 'top center',
-      sm: 'top center',
-      md: 'top bottom-=25%',
-      lg: 'top center',
-      xl: 'top center',
-      xxl: 'top center',
-      xxxl: 'top center',
-    }
+    // Create timeline animations
 
-    ScrollTrigger.create({
-      trigger: generalEl,
-      start: 'top center',
-      end: 'bottom center',
-      onEnter: () => {
-        window.entropy = 0
-        swapModel(generalEl.dataset.modelId)
-      },
-      onEnterBack: () => {
-        swapModel(generalEl.dataset.modelId)
-      },
-      onLeaveBack: () => {
-        scrollToEntropy()
-        window.entropy = 1
-        swapModel(introductionSections.length - 1)
-      },
-    })
+    // Animation entry sequence
+    generalTL.fromTo('#igh', { y: 0, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 3, ease: 'none' })
+    generalTL.fromTo(
+      '#igt1',
+      { x: isMaxMD() ? 0 : -150, autoAlpha: 0 },
+      { x: 0, autoAlpha: 1, duration: 3, ease: 'none' }
+    )
+    generalTL.fromTo(
+      '#igt2',
+      { x: isMaxMD() ? 0 : 150, autoAlpha: 0 },
+      { x: 0, autoAlpha: 1, duration: 3, ease: 'none' }
+    )
+
+    // Animation pause for a short duration
+    generalTL.fromTo(generalEl, { y: 0 }, { y: 0, duration: 2, ease: 'none' })
+
+    // Animation exit sequence
+    generalTL.fromTo(
+      '#igh',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -80, autoAlpha: 0, duration: 4, ease: 'none', immediateRender: false }
+    )
+    generalTL.fromTo(
+      '#igt1',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -120, autoAlpha: 0, duration: 3, ease: 'none', immediateRender: false },
+      '-=1'
+    )
+    generalTL.fromTo(
+      '#igt2',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -120, autoAlpha: 0, duration: 2, ease: 'none', immediateRender: false },
+      '-=1'
+    )
 
     //
     // Animations for entering the development section
+
     const scrollToDev = () => {
       if (isScrollToSectionDisabled) return
-
       if (isScrollingToAnchor || isMaxMD()) return
-      // lenis.stop()
-      // lenis.start()
+
       lenis.scrollTo(getCenterScrollPosition(devEl), {
-        duration: map(currentScrollVel, 0, 20, 1, 0.6),
+        duration: map(currentScrollVel, 0, 25, 1.5, 0.5),
         lerp: SCROLL_LERP_SLOWER,
         lock: currentScrollVel < 25,
         easing: easeInOutQuad,
       })
     }
+
+    // Development section animation timeline
     const devTL = gsap.timeline({
-      onStart: scrollToDev,
       scrollTrigger: {
         trigger: devEl,
-        start: 'top bottom-=25%',
-        end: 'top center',
+        start: 'center bottom',
+        end: 'center top',
         scrub: true,
+        onEnter: () => {
+          scrollToDev()
+          swapModel(devEl.dataset.modelId)
+          window.codingMult = 0
+        },
+        onEnterBack: () => {
+          scrollToDev()
+          swapModel(devEl.dataset.modelId)
+          window.codingMult = 0
+        },
+        onLeave: () => {
+          window.codingMult = 1
+        },
+        onLeaveBack: () => {
+          window.codingMult = 1
+        },
       },
     })
-    devTL.addLabel('animationStart')
-    devTL.fromTo('#idt1', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
-    devTL.fromTo('#idh', { y: 0, opacity: 0 }, { y: 0, opacity: 1, duration: 3, ease: 'none' })
-    devTL.fromTo('#idt2', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
 
-    //
-    // Animations for leaving the development section
-    const devOutTL = gsap.timeline({
-      scrollTrigger: {
-        trigger: devEl,
-        start: 'top top+=20%',
-        end: 'bottom top',
-        scrub: true,
-      },
-    })
-    devOutTL.addLabel('animationStart')
-    devOutTL.fromTo('#idh', { y: 0 }, { y: -180, duration: 4, ease: 'none' }, 'animationStart')
-    devOutTL.fromTo('#idt1', { y: 0 }, { y: -150, duration: 4, ease: 'none' }, 'animationStart+=0.33')
-    devOutTL.fromTo('#idt2', { y: 0 }, { y: -120, duration: 4, ease: 'none' }, 'animationStart+=0.66')
+    // Set initial state of elements to prevent flickering
+    // gsap.set(['#idh', '#idt1', '#idt2'], { visibility: 'hidden' })
 
-    //
-    // ScrollTrigger for the development section
-    ScrollTrigger.create({
-      trigger: devEl,
-      start: 'top center+=15%',
-      end: 'bottom center',
-      onEnter: () => {
-        swapModel(devEl.dataset.modelId)
-        window.codingMult = 0
-      },
-      onEnterBack: () => {
-        swapModel(devEl.dataset.modelId)
-        window.codingMult = 0
-      },
-      onLeave: () => {
-        window.codingMult = 1
-      },
-      onLeaveBack: () => {
-        scrollToGeneral()
-        window.codingMult = 1
-        swapModel(parseInt(devEl.dataset.modelId) - 1)
-      },
-    })
+    // Animation entry sequence
+    devTL.fromTo('#idh', { y: 0, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 3, ease: 'none' })
+    devTL.fromTo('#idt1', { x: isMaxMD() ? 0 : 150, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 3, ease: 'none' })
+    devTL.fromTo('#idt2', { x: isMaxMD() ? 0 : -150, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 3, ease: 'none' })
+
+    // Animation pause for a short duration
+    devTL.to(devEl, { y: 0, duration: 2, ease: 'none' })
+
+    // Animation exit sequence
+    devTL.fromTo(
+      '#idh',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -80, autoAlpha: 0, duration: 4, ease: 'none', immediateRender: false }
+    )
+    devTL.fromTo(
+      '#idt1',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -150, autoAlpha: 0, duration: 3, ease: 'none', immediateRender: false },
+      '-=1'
+    )
+    devTL.fromTo(
+      '#idt2',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -120, autoAlpha: 0, duration: 2, ease: 'none', immediateRender: false },
+      '-=1'
+    )
 
     //
     // Animations for entering the sound section
@@ -576,10 +561,8 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
       if (isScrollToSectionDisabled) return
 
       if (isScrollingToAnchor || isMaxMD()) return
-      // lenis.stop()
-      // lenis.start()
       lenis.scrollTo(getCenterScrollPosition(soundEl), {
-        duration: map(currentScrollVel, 0, 20, 1, 0.6),
+        duration: map(currentScrollVel, 0, 25, 1.5, 0.5),
         lerp: SCROLL_LERP_SLOWER,
         lock: currentScrollVel < 25,
         easing: easeInOutQuad,
@@ -588,142 +571,119 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
 
     // Sound section animation timeline
     const soundTL = gsap.timeline({
-      onStart: scrollToSound,
       scrollTrigger: {
+        immediateRender: true,
         trigger: soundEl,
-        start: 'top bottom-=25%',
-        end: 'top center',
+        start: 'center bottom',
+        end: 'center top',
         scrub: true,
-      },
-    })
-    soundTL.addLabel('animationStart')
-    soundTL.fromTo('#ish', { y: 0, opacity: 0 }, { y: 0, opacity: 1, duration: 3, ease: 'none' })
-    soundTL.fromTo('#ist1', { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
-    soundTL.fromTo('#ist2', { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 3, ease: 'none' })
-
-    //
-    // Animations for leaving the sound section
-    const soundOutTL = gsap.timeline({
-      scrollTrigger: {
-        trigger: soundEl,
-        start: 'top top+=20%',
-        end: 'bottom top',
-        scrub: true,
-      },
-    })
-    soundOutTL.addLabel('animationStart')
-    soundOutTL.fromTo('#ish', { y: 0 }, { y: -180, duration: 4, ease: 'none' }, 'animationStart')
-    soundOutTL.fromTo('#ist1', { y: 0 }, { y: -150, duration: 4, ease: 'none' }, 'animationStart+=0.33')
-    soundOutTL.fromTo('#ist2', { y: 0 }, { y: -120, duration: 4, ease: 'none' }, 'animationStart+=0.66')
-
-    //
-    // ScrollTrigger for the sound section
-    ScrollTrigger.create({
-      trigger: soundEl,
-      start: 'top center+=15%',
-      end: 'bottom center',
-      onEnter: () => {
-        swapModel(soundEl.dataset.modelId)
-        window.waveform = 1
-      },
-      onLeave: () => {},
-      onLeaveBack: () => {
-        scrollToDev()
-        swapModel(parseInt(soundEl.dataset.modelId) - 1)
-      },
-      onEnterBack: () => {
-        swapModel(soundEl.dataset.modelId)
-      },
-      onUpdate: (self) => {
-        window.waveform = triangleRamp(self.progress)
+        onEnter: () => {
+          scrollToSound()
+          swapModel(soundEl.dataset.modelId)
+          window.waveform = 1
+        },
+        onEnterBack: () => {
+          scrollToSound()
+          swapModel(soundEl.dataset.modelId)
+          window.waveform = 1
+        },
+        onLeave: () => {
+          window.waveform = 0
+        },
+        onLeaveBack: () => {
+          window.waveform = 0
+        },
+        onUpdate: (self) => {
+          if (self.progress <= 0.75) {
+            const mappedProgress = map(self.progress, 0, 0.75, 0, 1)
+            window.waveform = triangleRamp(mappedProgress)
+          }
+        },
       },
     })
 
-    // ScrollTrigger for projects section
+    // Set initial state of elements to prevent flickering
+    gsap.set(['#ish', '#ist1', '#ist2'], { visibility: 'hidden' })
+
+    // Animation entry sequence
+    soundTL.fromTo('#ish', { y: 0, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 3, ease: 'none' })
+    soundTL.fromTo(
+      '#ist1',
+      { x: isMaxMD() ? 0 : -150, autoAlpha: 0 },
+      { x: 0, autoAlpha: 1, duration: 3, ease: 'none' }
+    )
+    soundTL.fromTo('#ist2', { x: isMaxMD() ? 0 : 150, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 3, ease: 'none' })
+
+    // Animation pause for a short duration
+    soundTL.to(soundTL, { y: 0, duration: 2, ease: 'none' })
+
+    // Animation exit sequence
+    soundTL.fromTo(
+      '#ish',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -80, autoAlpha: 0, duration: 4, ease: 'none', immediateRender: false }
+    )
+    soundTL.fromTo(
+      '#ist1',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -150, autoAlpha: 0, duration: 3, ease: 'none', immediateRender: false },
+      '-=1'
+    )
+    soundTL.fromTo(
+      '#ist2',
+      { y: 0, autoAlpha: 1 },
+      { y: isMaxMD() ? 0 : -120, autoAlpha: 0, duration: 2, ease: 'none', immediateRender: false },
+      '-=1'
+    )
+
+    // ScrollTrigger for the projects section
     ScrollTrigger.create({
       trigger: projectsEl,
-      start: 'top center+=25%',
+      start: 'top top',
       end: 'bottom center',
 
       onEnter: () => {
-        lenis.options.lerp = SCROLL_LERP_FASTER
+        window.waveform = 0
         swapModel(projectsEl.dataset.modelId)
       },
-      // onEnterBack: () => {
-      //   swapModel(xpEl.dataset.modelId)
-      // },
-      onLeaveBack: () => {
-        scrollToSound()
-        swapModel(parseInt(projectsEl.dataset.modelId) - 1)
+      onEnterBack: () => {
+        swapModel(projectsEl.dataset.modelId)
       },
     })
 
     // ScrollTrigger for the experience section
     ScrollTrigger.create({
       trigger: xpEl,
-      start: 'top center+=15%',
+      start: 'top center',
       end: 'bottom center',
-
       onEnter: () => {
         swapModel(xpEl.dataset.modelId)
       },
       onEnterBack: () => {
         swapModel(xpEl.dataset.modelId)
       },
-      onLeaveBack: () => {
-        swapModel(parseInt(xpEl.dataset.modelId) - 1)
-      },
-    })
-
-    // Animations for the timeline items
-    const separatorEls = document.querySelectorAll('.timeline-date-separator')
-    separatorEls.forEach((el) => {
-      gsap.fromTo(
-        el,
-        {
-          height: 0,
-        },
-        {
-          height: '110%',
-          duration: 1,
-          // ease: 'power2.inOut',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top bottom',
-            end: 'top center',
-            scrub: true,
-          },
-        }
-      )
     })
 
     // ScrollTrigger for the contact section
     const scrollToContact = () => {
-      if (isScrollingToAnchor) return
-      // lenis.stop()
-      // lenis.start()
+      if (isScrollingToAnchor || isMaxMD()) return
       lenis.scrollTo(getCenterScrollPosition(contactEl), {
         offset: 500,
-        duration: 1,
-        // force: true,
+        duration: map(currentScrollVel, 0, 25, 1.5, 0.5),
         lock: currentScrollVel < 25,
         lerp: SCROLL_LERP_SLOWER,
-        easing: (t) => t,
+        easing: easeLinear,
       })
     }
+
     const contactEl: HTMLElement = document.querySelector('.introduction-contact')
     ScrollTrigger.create({
       trigger: contactEl,
-      start: 'top center+=15%',
+      start: 'top center',
+      end: 'bottom bottom',
       onEnter: () => {
         scrollToContact()
         swapModel(contactEl.dataset.modelId)
-      },
-      onEnterBack: () => {
-        swapModel(contactEl.dataset.modelId)
-      },
-      onLeaveBack: () => {
-        swapModel(parseInt(contactEl.dataset.modelId) - 1)
       },
     })
   })
@@ -731,6 +691,20 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
 
 <style lang="scss" is:global>
   @reference '../styles/global.css';
+
+  #igh,
+  #igt1,
+  #igt2,
+  #idh,
+  #idt1,
+  #idt2,
+  #ish,
+  #ist1,
+  #ist2 {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }
 
   .wave-y-1 {
     display: inline-block;

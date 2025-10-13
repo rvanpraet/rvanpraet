@@ -6,9 +6,9 @@ import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints.js'
 
 const worldConfig = {
   xs: {
-    force: 0.6,
-    particleSize: 10,
-    particleCount: 100,
+    force: 0.7,
+    particleSize: 15,
+    particleCount: 64,
   },
   sm: {
     force: 0.6,
@@ -21,23 +21,23 @@ const worldConfig = {
     particleCount: 64,
   },
   lg: {
-    force: 0.5,
+    force: 0.6,
     particleSize: 15,
     particleCount: 128,
   },
   xl: {
-    force: 0.5,
+    force: 0.6,
     particleSize: 12,
     particleCount: 128,
   },
   xxl: {
-    force: 0.5,
+    force: 0.8,
     particleSize: 12,
     particleCount: 150,
   },
   xxxl: {
-    force: 0.55,
-    particleSize: 16,
+    force: 0.8,
+    particleSize: 14,
     particleCount: 150,
   },
 }

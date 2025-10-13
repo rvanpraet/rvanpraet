@@ -1,3 +1,4 @@
+import { isTouchDevice } from '@/scripts/utils/device'
 import * as THREE from 'three'
 import { MeshBVH, acceleratedRaycast } from 'three-mesh-bvh'
 
@@ -9,8 +10,6 @@ export default class GPGPUEvents {
     this.uniforms = uniforms
     this.mesh = mesh
     this.materialUniforms = materialUniforms
-
-    console.log('GPGPUEvents', this.materialUniforms)
 
     // Mouse
 
@@ -60,19 +59,18 @@ export default class GPGPUEvents {
   }
 
   setupScroll() {
+    this.verticalDrift = 0
+    this.scrollDrift = 0 // Used for desktop scroll
+
     window.addEventListener('wheel', (e) => {
-      this.verticalDrift = Math.sign(e.deltaY)
+      this.scrollDrift = Math.sign(e.deltaY)
     })
   }
 
   update() {
     if (!this.mouse.cursorPosition) return // Don't update if cursorPosition is undefined
 
-    this.mouseSpeed *= 0.95
-    this.verticalDrift *= 0.7
-    this.entropy = window.entropy
-
-    console.log(window.codingMult)
+    this.verticalDrift = isTouchDevice() ? window.scrollVelocity * 0.075 : this.scrollDrift
 
     // Velocity uniform updates
     if (this.uniforms.velocityUniforms.uMouseSpeed) this.uniforms.velocityUniforms.uMouseSpeed.value = this.mouseSpeed
@@ -94,6 +92,9 @@ export default class GPGPUEvents {
     const { x: mouseX, y: mouseY } = this.mouse.cursorPosition
     this.camera.position.x = mouseX * 0.02
     this.camera.position.y = mouseY * 0.02
+
+    this.mouseSpeed *= 0.95
+    this.scrollDrift *= 0.4
   }
 
   updateRaycasterMesh(mesh) {

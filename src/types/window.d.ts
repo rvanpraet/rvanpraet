@@ -5,5 +5,6 @@ declare global {
     entropy: number
     waveform: number
     codingMult: number
+    scrollVelocity: number
   }
 }

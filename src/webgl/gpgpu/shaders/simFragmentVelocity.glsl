@@ -131,23 +131,21 @@ void main() {
   velocity *= uForce;
 
   // Noise -- Curl noise seems to be too taxing on the GPU for a web app with computation renderer
-  vec3 noise = snoiseVec3(vec3(position.x * 1.0, position.y * 1.0, position.z * 1.0)) * 0.005;
+  vec3 noise = snoiseVec3(position) * 0.005;
   // vec3 noise = curlNoise(vec3(position.x * 5.0, position.y * 1.0, position.z * 1.0)) * 0.001;
   // vec3 transitionNoise = snoiseVec3(vec3(position.x * 1.0, position.y * 10.0, position.z * 1.0)) * 0.005;
   // vec3 transitionNoise = curlNoise(vec3(position.x * 1.0, position.y * 10.0, position.z * 5.0) * info.w) * 0.005;
 
-  // Entropy --- TOFIX: No IF statements in shaders
+  // Entropy scene - particles move in a circle when entropy is > 0
   float entropyStep = step(0.0001, uEntropy);
-  // if (uEntropy > 0.0) {
+  float entropyStepInverse = 1.0 - entropyStep;
   float rVar = 0.3 + info.z * 0.7;
   float r = 500.0 * rVar;
-
   float entropy = clamp(uEntropy, 0.5 * 0.01, 1.0 * 0.01) * entropyStep;
 
-  target.x = cos(uTime + info.x * M_PI * 2.0) * r * entropy + target.x * (1.0 - entropyStep);
-  target.y = sin(uTime + info.x * M_PI * 2.0) * r * entropy + target.y * (1.0 - entropyStep);
-  target.z = (info.z * 2.0 - 1.0) * entropy + target.z * (1.0 - entropyStep);
-  // }
+  target.x = cos(uTime + info.x * M_PI * 2.0) * r * entropy + target.x * entropyStepInverse;
+  target.y = sin(uTime + info.x * M_PI * 2.0) * r * entropy + target.y * entropyStepInverse;
+  target.z = (info.z * 2.0 - 1.0) * entropy + target.z * entropyStepInverse;
 
   // Create waveform animation based on global window variable set in JS
   float modTime = mod(uTime, M_PI * 2.0);
@@ -160,7 +158,7 @@ void main() {
 
   // Add some vertical drift to the particles when scrolling
   float driftStrength = abs(position.x * 2.0 - 1.0);
-  target.y += uVerticalDrift * driftStrength * 0.03 * (info.w * 0.2 + 0.8);
+  target.y += uVerticalDrift * driftStrength * 0.05 * (info.w * 0.2 + 0.8);
   // target.y += uVerticalDrift * 0.05;
 
   // Particle attraction to shape force
@@ -173,7 +171,8 @@ void main() {
   float falloff = easeInOutSine(normDist); // get easing-based force
 
   // Add extra wiggle in x direction
-  velocity.x += cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025 * uResponsiveMultiplier * (1.0 - entropyStep);
+  float wiggle = cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025 * uResponsiveMultiplier;
+  velocity.x += wiggle * 0.05; // For now dis
 
   // Force that pushes particles towards their current target
   vec3 attractionStrength = direction * falloff * 0.05;
@@ -188,9 +187,9 @@ void main() {
   float maxDistance = 1.0; // Max distance at which particles are affected by the mouse
   float rangeStep = 1.0 - smoothstep(maxDistance - 0.25, maxDistance, mouseDistance); // 0.0 to 1.0 based on distance
   vec3 pushDirection = normalize(position - uMouse); // Direction to push particle away from mouse
-
   vec3 mouseAttraction =
     (pushDirection * (1.0 - mouseDistance / maxDistance) * 0.035 + noise * 1.35) * uMouseSpeed * rangeStep;
+  velocity.x += wiggle;
   velocity += mouseAttraction;
 
   gl_FragColor = vec4(velocity, 1.0);

@@ -13,9 +13,9 @@ const noiseMultiplierMap = {
   sm: 0.15,
   md: 0.5,
   lg: 1.0,
-  xl: 1.2,
-  xxl: 1.5,
-  xxxl: 1.8,
+  xl: 1.0,
+  xxl: 1.0,
+  xxxl: 1.0,
 }
 
 // GPGPU allows us to simulate a large number of particles using the GPU, using a compute shader and swapping textures
