@@ -1,21 +1,21 @@
 ---
 import GenericContent from '@/components/GenericContent.astro'
 import ContentLayout from '@/layouts/ContentLayout.astro'
-import dunes01 from '@/assets/artworks/DUNES_01.jpeg'
-import dunes02 from '@/assets/artworks/DUNES_02.jpeg'
-import dunes03 from '@/assets/artworks/DUNES_03.jpeg'
-import dunes04 from '@/assets/artworks/DUNES_04.jpeg'
-import dunes05 from '@/assets/artworks/DUNES_05.jpeg'
-import dunes06 from '@/assets/artworks/DUNES_06.jpeg'
-import monolith01 from '@/assets/artworks/MONOLITH_01.jpeg'
-import monolith02 from '@/assets/artworks/MONOLITH_02.jpeg'
-import monolith03 from '@/assets/artworks/MONOLITH_03.jpeg'
-import ArtItem from '@/components/ArtItem.astro'
-import Section from '@/components/Section.astro'
-import ArtGallery from '@/components/ArtGallery.astro'
+// import dunes01 from '@/assets/artworks/DUNES_01.jpeg'
+// import dunes02 from '@/assets/artworks/DUNES_02.jpeg'
+// import dunes03 from '@/assets/artworks/DUNES_03.jpeg'
+// import dunes04 from '@/assets/artworks/DUNES_04.jpeg'
+// import dunes05 from '@/assets/artworks/DUNES_05.jpeg'
+// import dunes06 from '@/assets/artworks/DUNES_06.jpeg'
+// import monolith01 from '@/assets/artworks/MONOLITH_01.jpeg'
+// import monolith02 from '@/assets/artworks/MONOLITH_02.jpeg'
+// import monolith03 from '@/assets/artworks/MONOLITH_03.jpeg'
+// import ArtItem from '@/components/ArtItem.astro'
+// import Section from '@/components/Section.astro'
+// import ArtGallery from '@/components/ArtGallery.astro'
 ---
 
-<ContentLayout>
+<ContentLayout title="Art">
   <GenericContent variant="introduction">
     <h1>Code as a generative art tool</h1>
     <p>
@@ -32,27 +32,4 @@ import ArtGallery from '@/components/ArtGallery.astro'
       and physical.
     </p>
   </GenericContent>
-
-  <ArtGallery
-    items={[
-      { title: 'Dunes 01', image: { src: dunes01, alt: 'Dunes 01' }, year: '2023' },
-      { title: 'Dunes 02', image: { src: dunes02, alt: 'Dunes 02' }, year: '2023' },
-      { title: 'Dunes 03', image: { src: dunes03, alt: 'Dunes 03' }, year: '2023' },
-      { title: 'Dunes 04', image: { src: dunes04, alt: 'Dunes 04' }, year: '2023' },
-      { title: 'Dunes 05', image: { src: dunes05, alt: 'Dunes 05' }, year: '2023' },
-      { title: 'Dunes 06', image: { src: dunes06, alt: 'Dunes 06' }, year: '2023' },
-      { title: 'Monolith 01', image: { src: monolith01, alt: 'Monolith 01' }, year: '2023' },
-      { title: 'Monolith 02', image: { src: monolith02, alt: 'Monolith 02' }, year: '2023' },
-      { title: 'Monolith 03', image: { src: monolith03, alt: 'Monolith 03' }, year: '2023' },
-    ]}
-  />
-
-  <!-- <ContentImage variant="left" image={{ variant: 'square', src: contentImage, alt: 'Reinald portrait' }}>
-    <h1>Lorem Ipsum</h1>
-
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo aut illo beatae similique officia ducimus, ut porro,
-      optio, rem maxime soluta exercitationem sint odio atque dignissimos? Saepe praesentium nobis laudantium!
-    </p>
-  </ContentImage> -->
 </ContentLayout>
