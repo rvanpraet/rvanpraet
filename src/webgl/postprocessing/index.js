@@ -154,13 +154,13 @@ export default class PostProcessing {
   }
 
   update() {
-    this.shiftAmount *= 0.975 // Dampen the vertical drift effect
-
     if (this.rgbShiftPass.uniforms.amount) {
       this.rgbShiftPass.uniforms.amount.value = this.shiftAmount
     }
 
     if (this.composer) this.composer.render()
+
+    this.shiftAmount *= 0.875 // Dampen the vertical drift effect
   }
 
   dispose() {
@@ -171,11 +171,6 @@ export default class PostProcessing {
     window.addEventListener('wheel', (e) => {
       // shift amount should be 0 whenever entropy is other than 0
       this.shiftAmount = Math.sign(e.deltaY) * (entropy > 0 ? 0 : 1)
-
-      // this.shiftAmount = e.deltaY * 0.01 // Adjust the vertical drift based on scroll speed
-
-      // this.rgbShiftPass.uniforms.amount.value = Math.abs(e.deltaY * 0.0002)
-      // this.rgbShiftPass.uniforms.angle.value = this.rgbShiftPass.uniforms.angle.value * Math.sign(e.deltaY)
     })
   }
 }

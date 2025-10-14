@@ -4,40 +4,42 @@ import * as THREE from 'three'
 import GPGPU from './gpgpu/GPGPU.js'
 import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints.js'
 
+console.log('devicepx ::: ', devicePixelRatio)
+
 const worldConfig = {
   xs: {
     force: 0.7,
-    particleSize: 15,
+    particleSize: 14 + Math.ceil(devicePixelRatio * 2),
     particleCount: 64,
   },
   sm: {
-    force: 0.6,
-    particleSize: 15,
+    force: 0.7,
+    particleSize: 14 + Math.ceil(devicePixelRatio * 2),
     particleCount: 64,
   },
   md: {
-    force: 0.6,
-    particleSize: 15,
+    force: 0.7,
+    particleSize: 14 + Math.ceil(devicePixelRatio * 2),
     particleCount: 64,
   },
   lg: {
-    force: 0.6,
-    particleSize: 15,
-    particleCount: 128,
+    force: 0.7,
+    particleSize: 11 + Math.ceil(devicePixelRatio * 2),
+    particleCount: 100,
   },
   xl: {
-    force: 0.6,
-    particleSize: 12,
+    force: 0.7,
+    particleSize: 12 + Math.ceil(devicePixelRatio * 2),
     particleCount: 128,
   },
   xxl: {
-    force: 0.8,
-    particleSize: 12,
+    force: 0.7,
+    particleSize: 13 + Math.ceil(devicePixelRatio * 2),
     particleCount: 150,
   },
   xxxl: {
-    force: 0.8,
-    particleSize: 14,
+    force: 0.75,
+    particleSize: 14 + Math.ceil(devicePixelRatio * 2),
     particleCount: 150,
   },
 }
