@@ -12,17 +12,17 @@ import Contact from '@/components/Contact.astro'
 import ContentBlock from '@/components/ContentBlock.astro'
 
 // Assets
-import jcbImage from '@/assets/images/projects/americana/americana_01.jpg'
-import depthArrayImage from '@/assets/images/projects/depth-array/DDW_01.jpg'
-import delverImage from '@/assets/images/projects/delver/DELVER.png'
+import jcbImage from '../assets/images/projects/americana/americana_01.jpg'
+import depthArrayImage from '../assets/images/projects/depth-array/DDW_01.jpg'
+import delverImage from '../assets/images/projects/delver/DELVER.png'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-  <ExperienceLoader />
-  <Three />
+  <ExperienceLoader client:load />
+  <Three client:load />
 
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="0"></section>
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="1"></section>
@@ -232,7 +232,7 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
   import { getCenterScrollPosition, isTouchDevice } from '@/scripts/utils/device'
   import { easeInOutQuad, easeLinear } from '@/scripts/utils/easings'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
-  import { map, triangleRamp, ramp } from '@/scripts/utils/math'
+  import { map, triangleRamp } from '@/scripts/utils/math'
   import Lenis from 'lenis'
   import gsap from 'gsap'
 
@@ -247,10 +247,6 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
 
   gsap.registerPlugin(ScrollTrigger)
   ScrollTrigger.normalizeScroll(isTouchDevice() || isMaxSM())
-
-  // ScrollTrigger.config({
-  //   ignoreMobileResize: true,
-  // })
 
   const lenis = new Lenis({
     autoRaf: false,
@@ -284,7 +280,7 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
   // Only start building scroll listeners when the THREE World is ready
   document.addEventListener('world-ready', () => {
     // Elements
-    const introductionSections = document.querySelectorAll('.introduction-dummy')
+    const introductionSections: NodeListOf<HTMLElement> = document.querySelectorAll('.introduction-dummy')
     const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
     const generalEl: HTMLElement = document.querySelector('.introduction-general')
     const devEl: HTMLElement = document.querySelector('.introduction-development')
@@ -376,6 +372,7 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
 
     //
     // ScrollTrigger for the entropy section
+
     ScrollTrigger.create({
       trigger: entropyEl,
       start: 'center-=25% bottom',
@@ -384,7 +381,7 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
         scrollToEntropy()
       },
       onEnterBack: () => {
-        swapModel(introductionSections.length - 1)
+        swapModel(introductionSections[introductionSections.length - 1].dataset.modelId)
         scrollToEntropy()
       },
       onUpdate: (self) => {
