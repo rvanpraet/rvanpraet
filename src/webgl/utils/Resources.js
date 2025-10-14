@@ -11,11 +11,11 @@ import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js'
 import * as THREE from 'three'
 
 // Assets
-import reinaldPath from '/webgl/assets/models/reinald1.obj?url'
-import codingPath from '/webgl/assets/models/coding.glb?url'
-import particleTexture from '/webgl/assets/textures/particle2.png?url'
-import fontPath from '/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
-import { getCurrentBreakpoint } from '@/scripts/utils/breakpoints'
+import reinaldPath from '@/webgl/assets/models/reinald.glb?url'
+import codingPath from '@/webgl/assets/models/coding.glb?url'
+import particleTexture from '@/webgl/assets/textures/particle2.png?url'
+import fontPath from '@/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
+import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints'
 import { modelConfig, textCoding, textCodingConfig, textModelConfig } from './ResourcesConfig'
 
 // Calculate total progress, total of all resource sizes
@@ -79,23 +79,27 @@ export default class Resources extends EventEmitter {
   loadModelResources() {
     this.createTextMeshes() // Create text meshes after font is loaded
     this.createLineMesh2() // Create line mesh for waveform
-    this.models.textCoding = this.createTextV2(textCoding, {
-      // offsets: { x: 2, y: 0, z: 0 },
-      font: this.font,
-      // size: 0.2,
-      depth: 0.02,
-      curveSegments: 60,
-      bevelEnabled: true,
-      bevelThickness: 0.03,
-      bevelSize: 0.02,
-      bevelOffset: 0,
-      bevelSegments: 5,
-      useWordCenterX: false,
-      alignRight: true,
-      ...textCodingConfig[getCurrentBreakpoint()],
-    })
-    this.loadOBJModel('reinald', reinaldPath)
-    this.loadGLBModel('coding', codingPath)
+
+    // Make sure the textCoding model is only used for desktop and larger tablets
+    if (isMaxMD()) {
+      this.loadGLBModel('coding', codingPath)
+    } else {
+      this.models.textCoding = this.createTextV2(textCoding, {
+        font: this.font,
+        depth: 0.02,
+        curveSegments: 60,
+        bevelEnabled: true,
+        bevelThickness: 0.03,
+        bevelSize: 0.02,
+        bevelOffset: 0,
+        bevelSegments: 5,
+        useWordCenterX: false,
+        alignRight: true,
+        ...textCodingConfig[getCurrentBreakpoint()],
+      })
+    }
+
+    this.loadGLBModel('reinald', reinaldPath)
   }
 
   createTextMeshes() {
