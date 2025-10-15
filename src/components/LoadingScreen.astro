@@ -1,22 +1,24 @@
 ---
 import Button from './Button.astro'
-import CosmosLoader from './CosmosLoader.astro'
 
 export interface Props {
   progress?: number
   class?: string
 }
 
-const { progress = 0, class: className = '' } = Astro.props
+const { class: className = '' } = Astro.props
 ---
 
-<div class={`loading-screen ${className}`} data-progress={progress}>
-  <div class="loading-text">
-    <CosmosLoader class="loading-canvas w-[80px] h-[80px] 3xl:w-[120px] 3xl:h-[120px]" />
-    <p class="loading-label">Loading</p>
-    <p class="loading-percentage"><span class="progress-value">{progress}</span>%</p>
+<div class={`loading-screen ${className}`}>
+  <canvas class="loading-canvas"></canvas>
+  <div class="loading-text text-white">
+    <p class="loading-label text-lg">Loading</p>
+    <p class="loading-percentage text-sm"><span class="progress-value">0</span>%</p>
   </div>
   <Button class="loading-button">Enter</Button>
+  <!-- <div class="loading-button flex flex-col items-center justify-center">
+    <p class="text-paragraph">It is adviced to not use low power mode for the best experience</p>
+  </div> -->
 </div>
 
 <style>
@@ -34,33 +36,28 @@ const { progress = 0, class: className = '' } = Astro.props
   }
 
   .loading-canvas {
-    /* opacity: 0;
+    opacity: 0;
     position: absolute;
     inset: 0;
     width: 100%;
-    height: 100%; */
+    height: 100%;
   }
 
   .loading-text {
     position: relative;
     z-index: 1;
     text-align: center;
-    color: var(--loading-text-color, #ffffff);
     font-weight: var(--font-weight-extralight);
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
 
   .loading-label {
-    font-size: 1.5rem;
-    margin: 0;
     margin-bottom: calc(var(--spacing) * 0.5);
-    opacity: 0.7;
+    opacity: 0.75;
   }
 
   .loading-percentage {
-    font-size: 3rem;
-    font-weight: var(--font-weight-light);
     margin: 0;
     line-height: 1;
   }
@@ -68,16 +65,6 @@ const { progress = 0, class: className = '' } = Astro.props
   .loading-button {
     display: none;
     opacity: 0;
-  }
-
-  @media (min-width: 768px) {
-    .loading-label {
-      font-size: 2rem;
-    }
-
-    .loading-percentage {
-      font-size: 4rem;
-    }
   }
 </style>
 
@@ -91,10 +78,10 @@ const { progress = 0, class: className = '' } = Astro.props
 
   // Customizable variables
   const CONFIG = {
-    spotCount: 128,
+    spotCount: 200,
     spotColor: colorWhite,
     spotMinSize: 1,
-    spotMaxSize: 3,
+    spotMaxSize: 4,
     speed: 3,
     fov: 90, // Field of view (lower = more perspective)
     spawnDistance: 2000, // How far away spots spawn
@@ -104,140 +91,143 @@ const { progress = 0, class: className = '' } = Astro.props
     safeZoneHeight: 0.1, // Percentage of screen height (0.3 = 30%)
   }
 
-  // class Particle {
-  //   x: number
-  //   y: number
-  //   z: number
-  //   size: number
+  class Particle {
+    x: number
+    y: number
+    z: number
+    size: number
 
-  //   constructor(canvas: HTMLCanvasElement) {
-  //     this.reset(canvas, true)
-  //   }
+    constructor(canvas: HTMLCanvasElement) {
+      this.reset(canvas, true)
+    }
 
-  //   reset(canvas: HTMLCanvasElement, initial = false) {
-  //     const spread = 1500
+    reset(canvas: HTMLCanvasElement, initial = false) {
+      const spread = 1500
 
-  //     let x, y
-  //     do {
-  //       x = (Math.random() - 0.5) * spread
-  //       y = (Math.random() - 0.5) * spread
-  //     } while (this.isInSafeZone(x, y, canvas))
+      let x, y
+      do {
+        x = (Math.random() - 0.5) * spread
+        y = (Math.random() - 0.5) * spread
+      } while (this.isInSafeZone(x, y, canvas))
 
-  //     this.x = x
-  //     this.y = y
-  //     this.z = initial ? Math.random() * CONFIG.spawnDistance : CONFIG.spawnDistance
-  //     this.size = Math.random() * (CONFIG.spotMaxSize - CONFIG.spotMinSize) + CONFIG.spotMinSize
-  //   }
+      this.x = x
+      this.y = y
+      this.z = initial ? Math.random() * CONFIG.spawnDistance : CONFIG.spawnDistance
+      this.size = Math.random() * (CONFIG.spotMaxSize - CONFIG.spotMinSize) + CONFIG.spotMinSize
+    }
 
-  //   isInSafeZone(x: number, y: number, canvas: HTMLCanvasElement): boolean {
-  //     const scale = CONFIG.fov / (CONFIG.fov + this.z)
-  //     const x2d = x * scale
-  //     const y2d = y * scale
+    isInSafeZone(x: number, y: number, canvas: HTMLCanvasElement): boolean {
+      const scale = CONFIG.fov / (CONFIG.fov + this.z)
+      const x2d = x * scale
+      const y2d = y * scale
 
-  //     const safeWidth = (canvas.width * CONFIG.safeZoneWidth) / 2
-  //     const safeHeight = (canvas.height * CONFIG.safeZoneHeight) / 2
+      const safeWidth = (canvas.width * CONFIG.safeZoneWidth) / 2
+      const safeHeight = (canvas.height * CONFIG.safeZoneHeight) / 2
 
-  //     return Math.abs(x2d) < safeWidth && Math.abs(y2d) < safeHeight
-  //   }
+      return Math.abs(x2d) < safeWidth && Math.abs(y2d) < safeHeight
+    }
 
-  //   update(canvas: HTMLCanvasElement, speed: number) {
-  //     this.z -= speed
+    update(canvas: HTMLCanvasElement, speed: number) {
+      this.z -= speed
 
-  //     if (this.z <= 0) {
-  //       this.reset(canvas)
-  //     }
-  //   }
+      if (this.z <= 0) {
+        this.reset(canvas)
+      }
+    }
 
-  //   draw(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-  //     const scale = CONFIG.fov / (CONFIG.fov + this.z)
-  //     const x2d = this.x * scale + canvas.width / 2
-  //     const y2d = this.y * scale + canvas.height / 2
-  //     const size = this.size * scale
+    draw(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+      const scale = CONFIG.fov / (CONFIG.fov + this.z)
+      const x2d = this.x * scale + canvas.width / 2
+      const y2d = this.y * scale + canvas.height / 2
+      const size = this.size * scale
 
-  //     let opacity = 1
-  //     if (this.z < CONFIG.fadeDistance) {
-  //       opacity = this.z / CONFIG.fadeDistance
-  //     }
+      let opacity = 1
+      if (this.z < CONFIG.fadeDistance) {
+        opacity = this.z / CONFIG.fadeDistance
+      }
 
-  //     if (x2d >= -size && x2d <= canvas.width + size && y2d >= -size && y2d <= canvas.height + size) {
-  //       ctx.fillStyle = CONFIG.spotColor
-  //       ctx.globalAlpha = opacity
-  //       ctx.beginPath()
-  //       ctx.arc(x2d, y2d, size, 0, Math.PI * 2)
-  //       ctx.fill()
-  //       ctx.globalAlpha = 1
-  //     }
-  //   }
-  // }
+      if (x2d >= -size && x2d <= canvas.width + size && y2d >= -size && y2d <= canvas.height + size) {
+        ctx.fillStyle = CONFIG.spotColor
+        ctx.globalAlpha = opacity
+        ctx.beginPath()
+        ctx.arc(x2d, y2d, size, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.globalAlpha = 1
+      }
+    }
+  }
 
-  // class LoadingAnimation {
-  //   canvas: HTMLCanvasElement
-  //   ctx: CanvasRenderingContext2D
-  //   particles: Particle[]
-  //   animationId: number | null = null
+  class LoadingAnimation {
+    canvas: HTMLCanvasElement
+    ctx: CanvasRenderingContext2D
+    particles: Particle[]
+    animationId: number | null = null
 
-  //   constructor(canvas: HTMLCanvasElement) {
-  //     this.canvas = canvas
-  //     this.ctx = canvas.getContext('2d')!
-  //     this.particles = []
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas
+      this.ctx = canvas.getContext('2d')!
+      this.particles = []
 
-  //     this.resize()
-  //     this.init()
-  //     window.addEventListener('resize', () => this.resize())
-  //   }
+      this.resize()
+      this.init()
+      window.addEventListener('resize', () => this.resize())
+    }
 
-  //   resize() {
-  //     this.canvas.width = window.innerWidth
-  //     this.canvas.height = window.innerHeight
-  //   }
+    resize() {
+      this.canvas.width = window.innerWidth
+      this.canvas.height = window.innerHeight
+    }
 
-  //   init() {
-  //     this.particles = []
-  //     for (let i = 0; i < CONFIG.spotCount; i++) {
-  //       this.particles.push(new Particle(this.canvas))
-  //     }
-  //   }
+    init() {
+      this.particles = []
+      for (let i = 0; i < CONFIG.spotCount; i++) {
+        this.particles.push(new Particle(this.canvas))
+      }
+    }
 
-  //   animate = () => {
-  //     this.ctx.fillStyle = `rgba(13, 13, 13, ${CONFIG.trailAlpha})`
-  //     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    animate = () => {
+      this.ctx.fillStyle = `rgba(13, 13, 13, ${CONFIG.trailAlpha})`
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
-  //     for (const particle of this.particles) {
-  //       particle.update(this.canvas, CONFIG.speed)
-  //       particle.draw(this.ctx, this.canvas)
-  //     }
+      for (const particle of this.particles) {
+        particle.update(this.canvas, CONFIG.speed)
+        particle.draw(this.ctx, this.canvas)
+      }
 
-  //     this.animationId = requestAnimationFrame(this.animate)
-  //   }
+      this.animationId = requestAnimationFrame(this.animate)
+    }
 
-  //   start() {
-  //     if (!this.animationId) {
-  //       this.animate()
-  //     }
-  //   }
+    start() {
+      if (!this.animationId) {
+        this.animate()
+      }
+    }
 
-  //   stop() {
-  //     if (this.animationId) {
-  //       cancelAnimationFrame(this.animationId)
-  //       this.animationId = null
-  //     }
-  //   }
+    stop() {
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId)
+        this.animationId = null
+      }
+    }
 
-  //   destroy() {
-  //     this.stop()
-  //     window.removeEventListener('resize', () => this.resize())
-  //   }
-  // }
+    destroy() {
+      this.stop()
+      window.removeEventListener('resize', () => this.resize())
+    }
+  }
 
   document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.querySelector('.loading-screen') as HTMLElement
     const canvas = loadingScreen?.querySelector('.loading-canvas') as HTMLCanvasElement
 
     if (canvas) {
-      // const animation = new LoadingAnimation(canvas)
-      // animation.start()
-      // ;(loadingScreen as any).__loadingAnimation = animation
+      const animation = new LoadingAnimation(canvas)
+      animation.start()
 
+      // Store reference to animation instance for later cleanup
+      ;(loadingScreen as any).__loadingAnimation = animation
+
+      // Fade in canvas
       gsap.to(canvas, {
         opacity: 1,
         duration: 0.5,
@@ -251,22 +241,24 @@ const { progress = 0, class: className = '' } = Astro.props
       })
     }
 
+    document.addEventListener('resource-load', (e: any) => {
+      const loadingPercent = e.detail.loadingPercent
+      updateLoadingProgress(loadingPercent)
+    })
+
     document.addEventListener('world-ready', () => {
       hideLoadingScreen()
-      // setTimeout(() => {
-      // }, 2000)
-      // hideLoadingScreen()
     })
   })
 
-  export function updateLoadingProgress(progress: number) {
+  function updateLoadingProgress(progress: number) {
     const progressElement = document.querySelector('.progress-value')
     if (progressElement) {
       progressElement.textContent = Math.round(progress).toString()
     }
   }
 
-  export function hideLoadingScreen() {
+  function hideLoadingScreen() {
     const loadingScreen = document.querySelector('.loading-screen') as HTMLElement
     const loadingText = document.querySelector('.loading-text') as HTMLElement
     const loadingButton = loadingScreen?.querySelector('.loading-button') as HTMLButtonElement
@@ -283,17 +275,20 @@ const { progress = 0, class: className = '' } = Astro.props
         loadingButton.style.pointerEvents = 'auto'
 
         loadingButton.addEventListener('click', () => {
+          // User clicked the enter experience button
           const event = new Event('enter-experience-clicked')
           document.dispatchEvent(event)
+
+          // Hide loading screen and kill animation
           gsap.to(loadingScreen, {
             opacity: 0,
             duration: 1,
             ease: 'power2.inOut',
             onComplete: () => {
-              // const animation = (loadingScreen as any).__loadingAnimation
-              // if (animation) {
-              //   animation.destroy()
-              // }
+              const animation = (loadingScreen as any).__loadingAnimation
+              if (animation) {
+                animation.destroy()
+              }
               loadingScreen.style.display = 'none'
             },
           })
@@ -305,8 +300,6 @@ const { progress = 0, class: className = '' } = Astro.props
           ease: 'power2.in',
           onComplete: () => {},
         })
-        // const event = new Event('loading-screen-hidden')
-        // document.dispatchEvent(event)
       },
     })
   }

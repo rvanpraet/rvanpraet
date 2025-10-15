@@ -18,8 +18,13 @@ const noiseMultiplierMap = {
   xxxl: 1.0,
 }
 
-// GPGPU allows us to simulate a large number of particles using the GPU, using a compute shader and swapping textures
-// It is used to create a particle system that can be attracted to different targets in the scene
+/**
+ * GPGPU (General-Purpose computing on Graphics Processing Units)
+ * GPGPU allows us to simulate a large number of particles using the GPU, using a compute shader and swapping textures
+ * It is used to create a particle system that can be attracted to different targets in the scene
+ *
+ * @param {Object} options - Configuration options for the GPGPU system.
+ */
 export default class GPGPU {
   constructor({ size, camera, renderer, mouse, scene, model, sizes, debug, targets, params, particleMask }) {
     this.camera = camera // Camera
@@ -180,6 +185,6 @@ export default class GPGPU {
 
   swapTarget(targetIndex) {
     this.uniforms.velocityUniforms.uTarget.value = this.targetsPositions[targetIndex + 1] // +1 because the first texture is the random one
-    this.events.updateRaycasterMesh(this.targets[targetIndex + 1]) // Update raycaster mesh to the new target
+    this.events.updateRaycasterMesh(this.targets[targetIndex]) // Update raycaster mesh to the new target
   }
 }

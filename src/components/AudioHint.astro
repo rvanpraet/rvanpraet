@@ -46,6 +46,19 @@ const classes = twMerge('audio-hint', className)
   </span>
 </div>
 
+<script>
+  document.addEventListener('enter-experience-clicked', () => {
+    const audioHint: HTMLElement = document.querySelector('.audio-hint')
+
+    if (audioHint) {
+      audioHint.style.animation = `
+        bounceDirection 2s ease-in-out infinite,
+        fadeOut 1.5s ease-in-out 10s forwards;
+      `
+    }
+  })
+</script>
+
 <style
   define:vars={{
     flexDirection: config.flexDirection,

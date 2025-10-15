@@ -20,16 +20,16 @@ import textReinald from '@/webgl/assets/models/text-reinald.glb?url'
 import textCreative from '@/webgl/assets/models/text-creative.glb?url'
 import textSound from '@/webgl/assets/models/text-sound.glb?url'
 import textProjects from '@/webgl/assets/models/text-projects.glb?url'
-import textXp from '@/webgl/assets/models/text-xp.glb?url'
+import textXP from '@/webgl/assets/models/text-xp.glb?url'
 import textContact from '@/webgl/assets/models/text-contact.glb?url'
 
 import particleTexture from '@/webgl/assets/textures/particle2.png?url'
 import fontPath from '@/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints'
-import { modelConfig, textCoding, textCodingConfig, textModelConfig } from './ResourcesConfig'
+import { modelConfig } from './ResourcesConfig'
 
 // Calculate total progress, total of all resource sizes
-const TOTAL_PROGRESS = 165190 + 4045609 + 7886300
+const TOTAL_PROGRESS = 41896 + 83392 + 94912 + 1028448 + 9788 + 692352 + 60352 + 12340 + 64956
 
 export default class Resources extends EventEmitter {
   static instance
@@ -92,44 +92,20 @@ export default class Resources extends EventEmitter {
     this.createLineMesh() // Create line mesh for waveform
 
     const modelsToLoad = [
-      ['textReinald', textReinald],
-      ['textCreative', textCreative],
-      ['textSound', textSound],
-      ['reinald', reinaldPath],
-      ['coding', codingPath],
-      ['textProjects', textProjects],
-      ['textXp', textXp],
-      ['textContact', textContact],
+      ['textReinald', textReinald, modelConfig[getCurrentBreakpoint()].textReinald],
+      ['textCreative', textCreative, modelConfig[getCurrentBreakpoint()].textCreative],
+      ['textSound', textSound, modelConfig[getCurrentBreakpoint()].textSound],
+      ['reinald', reinaldPath, modelConfig[getCurrentBreakpoint()].reinald],
+      ['coding', codingPath, modelConfig[getCurrentBreakpoint()].coding],
+      ['textCoding', textCoding, modelConfig[getCurrentBreakpoint()].textCoding],
+      ['textProjects', textProjects, modelConfig[getCurrentBreakpoint()].textProjects],
+      ['textXP', textXP, modelConfig[getCurrentBreakpoint()].textXP],
+      ['textContact', textContact, modelConfig[getCurrentBreakpoint()].textContact],
     ]
 
-    modelsToLoad.forEach(([name, path]) => {
-      this.loadGLBModel(name, path)
+    modelsToLoad.forEach(([name, path, config]) => {
+      this.loadGLBModel(name, path, config)
     })
-    this.loadGLBModel('reinald', reinaldPath)
-    // this.loadGLBModel('coding', codingPath)
-
-    // Load in models based on config
-    // Make sure the textCoding model is only used for desktop and larger tablets
-    if (isMaxMD()) {
-      this.loadGLBModel('coding', codingPath)
-    } else {
-      this.models.textCoding = this.createText(textCoding, {
-        font: this.font,
-        depth: 0.02,
-        curveSegments: 1,
-        bevelEnabled: false,
-        bevelThickness: 0.03,
-        bevelSize: 0.02,
-        bevelOffset: 0,
-        bevelSegments: 1,
-        useWordCenterX: false,
-        alignRight: true,
-        ...textCodingConfig[getCurrentBreakpoint()],
-      })
-    }
-
-    this.createTextMeshes() // Create text meshes after font is loaded
-    this.createLineMesh() // Create line mesh for waveform
   }
 
   createTextMeshes() {
@@ -269,35 +245,23 @@ export default class Resources extends EventEmitter {
     this.models.main.waveform = mesh
   }
 
-  loadOBJModel(name, path) {
-    this.loadingCount++
-    this.objLoader.load(
-      path,
-      (model) => {
-        const mesh = model.children[0]
-        this.onModelLoad(name, mesh)
-      },
-      this.onResourceProgress.bind(this),
-      (error) => console.error(`Error loading ${name} model:`, error)
-    )
-  }
-
-  loadGLBModel(name, path) {
+  loadGLBModel(name, path, config) {
     this.loadingCount++
     this.gltfLoader.load(
       path,
       (model) => {
         const mesh = model.scene.children[0]
-        this.onModelLoad(name, mesh)
+        console.log('model', name, mesh)
+        this.onModelLoad(name, mesh, config)
       },
-      this.onResourceProgress.bind(this),
+      this.onResourceProgress.bind(this, name),
       (error) => console.error(`Error loading ${name} model:`, error)
     )
   }
 
-  onModelLoad(name, mesh) {
+  onModelLoad(name, mesh, config) {
     const breakpoint = getCurrentBreakpoint()
-    const config = modelConfig[breakpoint][name]
+    // const config = modelConfig[breakpoint][name]
     // const config = modelConfig[name]
 
     // Create a scaling matrix
@@ -318,7 +282,7 @@ export default class Resources extends EventEmitter {
     modelGeometry.rotateZ(config.rotateZ)
 
     // Notify that this mesh does not use a plane mouse interaction
-    mesh.userData.hasPlaneRaycast = false
+    mesh.userData.hasPlaneRaycast = mesh.userData?.isTextMesh || false
 
     // Add model to available
     this.models.main[name] = mesh
@@ -332,13 +296,19 @@ export default class Resources extends EventEmitter {
     }
   }
 
-  onResourceProgress(e) {
+  onResourceProgress(...args) {
+    const [name, e] = args
+    console.log('name', name)
     console.log('e', e)
     if (e.loaded === e.total) {
       this.loadedProgress.push(e.loaded)
-      this.loadingPercentage.textContent = `${Math.round((this.getLoadedProgress() / TOTAL_PROGRESS) * 100)}`
+      const loadingPercent = Math.round((this.getLoadedProgress() / TOTAL_PROGRESS) * 100)
+      const event = new CustomEvent('resource-load', { detail: { loadingPercent } })
+      document.dispatchEvent(event)
+
+      // this.loadingPercentage.textContent = `${loadingPercent}`
     } else {
-      this.loadingPercentage.textContent = `${Math.round(((this.getLoadedProgress() + e.loaded) / TOTAL_PROGRESS) * 100)}`
+      // this.loadingPercentage.textContent = `${Math.round(((this.getLoadedProgress() + e.loaded) / TOTAL_PROGRESS) * 100)}`
     }
   }
 

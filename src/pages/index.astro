@@ -319,6 +319,7 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
 
     // Reset scroll on first load
     lenis.scrollTo(0, { onStart: () => swapModel(0), duration: 0, lock: true, force: true })
+    lenis.stop()
 
     // Scroll function to center section in viewport
     const scrollToIntroSection = (section: HTMLElement) => {
@@ -688,6 +689,7 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
         duration: 1,
         ease: 'power2.inOut',
       })
+      lenis.start()
     }
   })
 

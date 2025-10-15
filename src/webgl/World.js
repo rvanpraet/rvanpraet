@@ -18,12 +18,12 @@ const worldConfig = {
   md: {
     force: 0.7,
     particleSize: 14 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 64,
+    particleCount: 80,
   },
   lg: {
     force: 0.7,
     particleSize: 11 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 100,
+    particleCount: 96,
   },
   xl: {
     force: 0.7,
@@ -91,22 +91,36 @@ export default class Mask extends Handler {
   }
 
   setupModels() {
-    const contactModel = this.resources.models.text.pop()
-    const xpModel = this.resources.models.text.pop()
-    const projectsModel = this.resources.models.text.pop()
-    this.model = this.resources.models.text[0]
-    let { reinald, coding, waveform } = this.resources.models.main
+    // const contactModel = this.resources.models.text.pop()
+    // const xpModel = this.resources.models.text.pop()
+    // const projectsModel = this.resources.models.text.pop()
+    // this.model = this.resources.models.text[0]
+    let {
+      reinald,
+      coding,
+      waveform,
+      textReinald,
+      textCreative,
+      textSound,
+      textCoding,
+      textProjects,
+      textXP,
+      textContact,
+    } = this.resources.models.main
 
-    const actualCodingModel = isMaxMD() ? coding : this.resources.models.textCoding
+    const actualCodingModel = isMaxMD() ? coding : textCoding
     this.models = [
-      ...this.resources.models.text,
+      textReinald,
+      textCreative,
+      textSound,
       reinald,
       actualCodingModel,
       waveform,
-      projectsModel,
-      xpModel,
-      contactModel,
+      textProjects,
+      textXP,
+      textContact,
     ]
+    this.model = this.models[0]
 
     console.log(this.models)
 

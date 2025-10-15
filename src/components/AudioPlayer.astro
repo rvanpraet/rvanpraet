@@ -56,19 +56,18 @@ const classes = twMerge('audio-player', className)
       const wavePath: SVGPathElement = playerEl.querySelector('.wave-path')
 
       audio.onplay = () => {
-        // label.textContent = 'Playing'
         startWaveAnimation()
 
-        if (audioHint) {
-          gsap.to(audioHint, {
-            opacity: 0,
-            duration: 1.5,
-            ease: 'power2.out',
-            onComplete: () => {
-              audioHint.style.display = 'none'
-            },
-          })
-        }
+        // if (audioHint) {
+        //   gsap.to(audioHint, {
+        //     opacity: 0,
+        //     duration: 1.5,
+        //     ease: 'power2.out',
+        //     onComplete: () => {
+        //       audioHint.style.display = 'none'
+        //     },
+        //   })
+        // }
       }
 
       audio.onpause = () => {
@@ -177,6 +176,15 @@ const classes = twMerge('audio-player', className)
           // if (!isMuted) {
           //   startWaveAnimation()
           // }
+        }
+      })
+
+      document.addEventListener('enter-experience-clicked', () => {
+        // Auto play audio when user enters experience
+        if (!isPlaying) {
+          audio.play()
+          isPlaying = true
+          button.classList.add('playing')
         }
       })
 
