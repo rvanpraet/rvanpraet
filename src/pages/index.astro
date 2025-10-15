@@ -15,13 +15,15 @@ import ContentBlock from '@/components/ContentBlock.astro'
 import jcbImage from '@/assets/images/projects/americana/americana_01.jpg'
 import depthArrayImage from '@/assets/images/projects/depth-array/DDW_01.jpg'
 import delverImage from '@/assets/images/projects/delver/DELVER.png'
+import LoadingScreen from '@/components/LoadingScreen.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-  <ExperienceLoader />
+  <!-- <ExperienceLoader /> -->
+  <LoadingScreen />
   <Three />
 
   <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="0"></section>
@@ -281,7 +283,7 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
   let isScrollToSectionDisabled = false
 
   // Only start building scroll listeners when the THREE World is ready
-  document.addEventListener('world-ready', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     // Elements
     const introductionSections: NodeListOf<HTMLElement> = document.querySelectorAll('.introduction-dummy')
     const entropyEl: HTMLElement = document.querySelector('.introduction-entropy')
@@ -290,17 +292,6 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
     const soundEl: HTMLElement = document.querySelector('.introduction-sound')
     const projectsEl: HTMLElement = document.querySelector('#projects')
     const xpEl: HTMLElement = document.querySelector('.introduction-xp')
-
-    //
-    // Swap model function
-    function swapModel(targetId: string | number) {
-      const swapModelEvent = new CustomEvent('swap-target', {
-        detail: {
-          targetId: typeof targetId === 'string' ? parseInt(targetId) : targetId,
-        },
-      })
-      document.dispatchEvent(swapModelEvent)
-    }
 
     //
     // Add Anchor link listeners
@@ -687,6 +678,29 @@ import delverImage from '@/assets/images/projects/delver/DELVER.png'
       },
     })
   })
+
+  document.addEventListener('enter-experience-clicked', () => {
+    const canvas: HTMLElement = document.querySelector('canvas.experience__canvas')
+    if (canvas) {
+      swapModel(0)
+      gsap.to(canvas, {
+        opacity: 1,
+        duration: 1,
+        ease: 'power2.inOut',
+      })
+    }
+  })
+
+  //
+  // Swap model function
+  function swapModel(targetId: string | number) {
+    const swapModelEvent = new CustomEvent('swap-target', {
+      detail: {
+        targetId: typeof targetId === 'string' ? parseInt(targetId) : targetId,
+      },
+    })
+    document.dispatchEvent(swapModelEvent)
+  }
 </script>
 
 <style lang="scss" is:global>

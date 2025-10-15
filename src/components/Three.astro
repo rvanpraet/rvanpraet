@@ -4,13 +4,14 @@
   <script>
     import Experience from '@/webgl/Experience'
     import World from '@/webgl/World'
+    import gsap from 'gsap'
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const dummySection = document.querySelector('.introduction-dummy')
+    document.addEventListener('loading-screen-shown', () => {
+      // const dummySection = document.querySelector('.introduction-dummy')
 
-      setTimeout(() => {
-        dummySection?.scrollIntoView({ behavior: 'instant', block: 'start' })
-      }, 100)
+      // setTimeout(() => {
+      //   dummySection?.scrollIntoView({ behavior: 'instant', block: 'start' })
+      // }, 100)
 
       new Experience(document.querySelector('canvas.experience__canvas'), World)
     })
@@ -28,6 +29,7 @@
   }
 
   canvas {
+    opacity: 0;
     display: block;
     position: relative;
     z-index: 0;

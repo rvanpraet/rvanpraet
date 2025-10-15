@@ -7,12 +7,22 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { Line2 } from 'three/addons/lines/Line2.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
+import { OBJExporter } from 'three/examples/jsm/Addons.js'
+import { GLTFExporter } from 'three/examples/jsm/Addons.js'
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js'
 import * as THREE from 'three'
 
 // Assets
 import reinaldPath from '@/webgl/assets/models/reinald.glb?url'
 import codingPath from '@/webgl/assets/models/coding.glb?url'
+import textCoding from '@/webgl/assets/models/text-coding.glb?url'
+import textReinald from '@/webgl/assets/models/text-reinald.glb?url'
+import textCreative from '@/webgl/assets/models/text-creative.glb?url'
+import textSound from '@/webgl/assets/models/text-sound.glb?url'
+import textProjects from '@/webgl/assets/models/text-projects.glb?url'
+import textXp from '@/webgl/assets/models/text-xp.glb?url'
+import textContact from '@/webgl/assets/models/text-contact.glb?url'
+
 import particleTexture from '@/webgl/assets/textures/particle2.png?url'
 import fontPath from '@/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints'
@@ -40,6 +50,7 @@ export default class Resources extends EventEmitter {
 
     this.gltfLoader = new GLTFLoader().setDRACOLoader(dracoLoader)
     this.objLoader = new OBJLoader()
+    this.gltfExporter = new GLTFExporter()
 
     this.models = {
       text: null,
@@ -62,44 +73,63 @@ export default class Resources extends EventEmitter {
     const fontLoader = new FontLoader()
     const textureLoader = new THREE.TextureLoader()
     this.textures = {
-      mask: textureLoader.load(particleTexture),
+      mask: textureLoader.load(particleTexture, () => {
+        this.loadModelResources()
+      }),
     }
 
-    fontLoader.load(
-      fontPath,
-      (font) => {
-        this.font = font
-        this.loadModelResources() // Load model resources after initial resources are loaded
-        // this.emit('ready')
-      },
-      this.onResourceProgress.bind(this)
-    )
+    // fontLoader.load(
+    //   fontPath,
+    //   (font) => {
+    //     this.font = font
+    //     this.loadModelResources() // Load model resources after initial resources are loaded
+    //   },
+    //   this.onResourceProgress.bind(this)
+    // )
   }
 
   loadModelResources() {
-    this.createTextMeshes() // Create text meshes after font is loaded
-    this.createLineMesh2() // Create line mesh for waveform
+    this.createLineMesh() // Create line mesh for waveform
 
+    const modelsToLoad = [
+      ['textReinald', textReinald],
+      ['textCreative', textCreative],
+      ['textSound', textSound],
+      ['reinald', reinaldPath],
+      ['coding', codingPath],
+      ['textProjects', textProjects],
+      ['textXp', textXp],
+      ['textContact', textContact],
+    ]
+
+    modelsToLoad.forEach(([name, path]) => {
+      this.loadGLBModel(name, path)
+    })
+    this.loadGLBModel('reinald', reinaldPath)
+    // this.loadGLBModel('coding', codingPath)
+
+    // Load in models based on config
     // Make sure the textCoding model is only used for desktop and larger tablets
     if (isMaxMD()) {
       this.loadGLBModel('coding', codingPath)
     } else {
-      this.models.textCoding = this.createTextV2(textCoding, {
+      this.models.textCoding = this.createText(textCoding, {
         font: this.font,
         depth: 0.02,
-        curveSegments: 60,
-        bevelEnabled: true,
+        curveSegments: 1,
+        bevelEnabled: false,
         bevelThickness: 0.03,
         bevelSize: 0.02,
         bevelOffset: 0,
-        bevelSegments: 5,
+        bevelSegments: 1,
         useWordCenterX: false,
         alignRight: true,
         ...textCodingConfig[getCurrentBreakpoint()],
       })
     }
 
-    this.loadGLBModel('reinald', reinaldPath)
+    this.createTextMeshes() // Create text meshes after font is loaded
+    this.createLineMesh() // Create line mesh for waveform
   }
 
   createTextMeshes() {
@@ -108,45 +138,22 @@ export default class Resources extends EventEmitter {
       font: this.font,
       size: 1.2,
       depth: 0.02,
-      curveSegments: 60,
-      bevelEnabled: true,
+      curveSegments: 1,
+      bevelEnabled: false,
       bevelThickness: 0.03,
       bevelSize: 0.02,
       bevelOffset: 0,
-      bevelSegments: 5,
+      bevelSegments: 1,
       useWordCenterX: true,
       alignRight: false,
     }
 
     // Define the texts to create with their parameters
     const texts = textModelConfig[getCurrentBreakpoint()]
-    this.models.text = texts.map(([text, config]) => this.createTextV2(text, { ...baseTextParams, ...config }))
+    this.models.text = texts.map(([text, config]) => this.createText(text, { ...baseTextParams, ...config }))
   }
 
   createText(text, params) {
-    const { offsets, ...geometryParams } = params
-    const geometry = new TextGeometry(text, geometryParams)
-
-    geometry.computeBoundingBox()
-    geometry.computeBoundingSphere()
-    const material = new THREE.MeshBasicMaterial({ color: 'white' })
-    const mesh = new THREE.Mesh(geometry, material)
-
-    // Notify that this mesh uses a plane mouse interaction
-    mesh.userData.hasPlaneRaycast = true
-
-    // Offset the geometry's vertex positions by half of its bounding box
-    const offset = new THREE.Vector3()
-    geometry.boundingBox.getCenter(offset).negate()
-    geometry.translate(offset.x, offset.y, offset.z)
-
-    // Apply model specific transformations
-    geometry.translate(offsets.x, offsets.y, offsets.z)
-
-    return mesh
-  }
-
-  createTextV2(text, params) {
     const { offsets, useWordCenterX, alignRight, ...geometryParams } = params
 
     // Split text by newlines to handle multi-line text
@@ -213,6 +220,27 @@ export default class Resources extends EventEmitter {
 
     // Notify that this mesh uses a plane mouse interaction
     mesh.userData.hasPlaneRaycast = true
+    mesh.userData.isTextMesh = true
+
+    const data = this.gltfExporter.parse(
+      mesh,
+      (result) => {
+        const blob = new Blob([result], { type: 'application/octet-stream' })
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.href = URL.createObjectURL(blob)
+        link.download = 'model.glb'
+        link.click()
+        // Cleanup
+        setTimeout(() => {
+          URL.revokeObjectURL(link.href)
+          document.body.removeChild(link)
+        }, 100)
+      },
+      null,
+      { binary: true }
+    )
 
     // Offset the geometry's vertex positions by half of its bounding box
     const offset = new THREE.Vector3()
@@ -226,54 +254,6 @@ export default class Resources extends EventEmitter {
   }
 
   createLineMesh() {
-    // Line material
-
-    const matLine = new LineMaterial({
-      color: 0xffffff,
-      linewidth: 0.5, // in world units with size attenuation, pixels otherwise
-      worldUnits: true,
-      // vertexColors: true,
-
-      // alphaToCoverage: true,
-    })
-
-    // Position and THREE.Color Data
-
-    const positions = []
-    const colors = []
-    const points = []
-    for (let i = -15; i < 15; i++) {
-      const t = i / 3
-      points.push(new THREE.Vector3(-3, t, 0))
-    }
-
-    const spline = new THREE.CatmullRomCurve3(points)
-    const divisions = Math.round(3 * points.length)
-    const point = new THREE.Vector3()
-    const color = new THREE.Color()
-
-    for (let i = 0, l = divisions; i < l; i++) {
-      const t = i / l
-
-      spline.getPoint(t, point)
-      positions.push(point.x, point.y, point.z)
-
-      // color.setHSL(t, 1.0, 0.5, THREE.SRGBColorSpace)
-      // colors.push(color.r, color.g, color.b)
-    }
-
-    const lineGeometry = new LineGeometry()
-    lineGeometry.setPositions(positions)
-    // lineGeometry.setColors(colors)
-
-    const line = new Line2(lineGeometry, matLine)
-    // line.computeLineDistances()
-    line.scale.set(1, 1, 1)
-
-    this.models.main.waveform = line
-  }
-
-  createLineMesh2() {
     // Line material
     const { x, y, z, rotateX, rotateY, rotateZ } = modelConfig[getCurrentBreakpoint()].waveform
     const material = new THREE.MeshBasicMaterial({ color: 'white', side: THREE.DoubleSide })
@@ -347,12 +327,13 @@ export default class Resources extends EventEmitter {
     // Emit ready when all models are loaded
     if (this.loadingCount === 0) {
       this.emit('ready')
-      const loaderBg = document.querySelector('.loading-bg')
-      loaderBg.classList.remove('is-loading')
+      // const loaderBg = document.querySelector('.loading-bg')
+      // loaderBg.classList.remove('is-loading')
     }
   }
 
   onResourceProgress(e) {
+    console.log('e', e)
     if (e.loaded === e.total) {
       this.loadedProgress.push(e.loaded)
       this.loadingPercentage.textContent = `${Math.round((this.getLoadedProgress() / TOTAL_PROGRESS) * 100)}`

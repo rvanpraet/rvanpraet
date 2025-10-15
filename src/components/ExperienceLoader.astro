@@ -1,21 +1,16 @@
 ---
-
+import CosmosLoader from './CosmosLoader.astro'
 ---
 
 <!-- Credit: https://dribbble.com/shots/5092176-Newton-Loader -->
 <div class="loading-bg is-loading bg-black fixed inset-0 z-50">
-  <div class="gooey">
-    <span class="dot"></span>
-    <div class="dots">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div>
+  <CosmosLoader class="w-[80px] h-[80px] 3xl:w-[120px] 3xl:h-[120px]" />
   <p class="loading-text"><span>Loading </span><span class="loading-percentage">0</span>%</p>
 </div>
 
 <style>
+  @reference @/styles/global.css;
+
   .loading-bg {
     background: var(--color-black);
     display: none;
@@ -47,7 +42,7 @@
     height: 40px;
     /* margin: -20px 0 0 -71px; */
     background: var(--color-black);
-    filter: contrast(20);
+    filter: contrast(1);
   }
 
   .gooey .dot {
@@ -56,8 +51,8 @@
     height: 16px;
     top: 12px;
     left: 15px;
-    filter: blur(4px);
-    background: #fff;
+    filter: blur(0.4px);
+    background: var(--color-white);
     border-radius: 50%;
     transform: translateX(0);
     animation: dot 2.8s infinite;
@@ -76,8 +71,8 @@
     width: 16px;
     height: 16px;
     margin-left: 16px;
-    filter: blur(4px);
-    background: #fff;
+    filter: blur(0.4px);
+    background: var(--color-white);
     border-radius: 50%;
   }
 

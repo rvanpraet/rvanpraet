@@ -55,10 +55,7 @@ export default class Experience {
 
   setupEvents() {
     // <-- Setup update and resize events
-    this.sizes.on('resize', () => {
-      this.resize()
-      // debounce(this.resize(), 500)
-    })
+    this.sizes.on('resize', this.resize.bind(this))
 
     this.time.on('update', (time, delta) => {
       this.update({ time, delta })

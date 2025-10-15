@@ -1,0 +1,33 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { twMerge } from 'tailwind-merge'
+
+type Props = HTMLAttributes<'div'>
+
+const { class: className } = Astro.props
+const classes = twMerge('cosmos-loader', className)
+---
+
+<div class={classes}>
+  <canvas id="dotlottie-cosmos-loader-canvas" style="width: 100%; height: 100%;"></canvas>
+</div>
+
+<script>
+  import { DotLottie } from '@lottiefiles/dotlottie-web'
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const dotLottie = new DotLottie({
+      autoplay: true,
+      loop: true,
+      canvas: document.querySelector('#dotlottie-cosmos-loader-canvas'),
+      src: 'https://lottie.host/bd6c03e3-ae85-4926-b1fd-80448a55e7f6/qBlB35uHPp.lottie',
+    })
+  })
+</script>
+
+<style>
+  /* .cosmos-loader {
+    width: fit-content;
+    height: fit-content;
+  } */
+</style>

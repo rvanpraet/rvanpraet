@@ -56,6 +56,11 @@ export default class GPGPU {
     const velocityTexture = this.utils.getVelocityTexture()
     const randomInfoTexture = this.utils.createRandomData()
 
+    // Store the random info texture for use as random starting positions
+    this.randomInfoTexture = randomInfoTexture
+
+    // Create simulation variables
+
     this.positionVariable = this.gpgpuCompute.addVariable('uCurrentPosition', simFragment, positionTexture)
     this.velocityVariable = this.gpgpuCompute.addVariable('uCurrentVelocity', simFragmentVelocity, velocityTexture)
 
@@ -101,9 +106,14 @@ export default class GPGPU {
   // This will be used to attract the particles towards the target meshes
   createTargets() {
     console.log('targets', this.targets)
-    this.targetsPositions = this.targets.map((mesh) => {
-      return this.utils.createTargetDataFromMesh(mesh)
-    })
+    this.targetsPositions = [
+      this.randomInfoTexture,
+      ...this.targets.map((mesh) => {
+        return this.utils.createTargetDataFromMesh(mesh)
+      }),
+    ]
+
+    // Set initial target to the first target
     this.uniforms.velocityUniforms.uTarget.value = this.targetsPositions[0]
   }
 
@@ -169,7 +179,7 @@ export default class GPGPU {
   }
 
   swapTarget(targetIndex) {
-    this.uniforms.velocityUniforms.uTarget.value = this.targetsPositions[targetIndex]
-    this.events.updateRaycasterMesh(this.targets[targetIndex])
+    this.uniforms.velocityUniforms.uTarget.value = this.targetsPositions[targetIndex + 1] // +1 because the first texture is the random one
+    this.events.updateRaycasterMesh(this.targets[targetIndex + 1]) // Update raycaster mesh to the new target
   }
 }

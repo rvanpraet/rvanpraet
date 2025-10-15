@@ -4,8 +4,6 @@ import * as THREE from 'three'
 import GPGPU from './gpgpu/GPGPU.js'
 import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints.js'
 
-console.log('devicepx ::: ', devicePixelRatio)
-
 const worldConfig = {
   xs: {
     force: 0.7,

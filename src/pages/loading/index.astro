@@ -1,0 +1,31 @@
+---
+import LoadingScreen from '@/components/LoadingScreen.astro'
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout>
+  <div class="test">
+    <LoadingScreen />
+  </div>
+</Layout>
+
+<script>
+  setTimeout(() => {
+    const event = new Event('world-ready')
+    document.dispatchEvent(event)
+  }, 3000)
+</script>
+
+<style>
+  @reference @/styles/global.css;
+
+  .test {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-color: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
