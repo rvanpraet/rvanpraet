@@ -333,7 +333,7 @@ export const modelConfig = {
     },
     textCoding: {
       ...baseConfig,
-      x: 8,
+      x: 4,
       scaleX: 1.25,
       scaleY: 1.25,
       scaleZ: 1.25,

@@ -275,8 +275,6 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000)
   })
-  // Disable lag smoothing in GSAP to prevent any delay in scroll animations
-  // gsap.ticker.lagSmoothing(0)
 
   // NavLink anchor smooth scroll
   let isScrollingToAnchor = false
@@ -292,6 +290,18 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
     const soundEl: HTMLElement = document.querySelector('.introduction-sound')
     const projectsEl: HTMLElement = document.querySelector('#projects')
     const xpEl: HTMLElement = document.querySelector('.introduction-xp')
+
+    // Reset scroll on first load
+    // window.scrollTo({ top: 0, behavior: 'instant' })
+    lenis.scrollTo(getCenterScrollPosition(introductionSections[0]), {
+      onStart: () => swapModel(0),
+      onComplete: () => {
+        lenis.stop()
+      },
+      duration: 0,
+      lock: true,
+      force: true,
+    })
 
     //
     // Add Anchor link listeners
@@ -316,10 +326,6 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
         }
       })
     })
-
-    // Reset scroll on first load
-    lenis.scrollTo(0, { onStart: () => swapModel(0), duration: 0, lock: true, force: true })
-    lenis.stop()
 
     // Scroll function to center section in viewport
     const scrollToIntroSection = (section: HTMLElement) => {
