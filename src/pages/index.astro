@@ -11,7 +11,7 @@ import ContentBlock from '@/components/ContentBlock.astro'
 // Assets
 import jcbImage from '@/assets/images/projects/americana/americana_01.jpg'
 import depthArrayImage from '@/assets/images/projects/depth-array/DDW_01.jpg'
-import delverImage from '@/assets/images/projects/delver/DELVER.png'
+import delverImage from '@/assets/images/projects/delver/DELVER_01.jpg'
 import LoadingScreen from '@/components/LoadingScreen.astro'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -19,7 +19,6 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
 ---
 
 <Layout>
-  <!-- <ExperienceLoader /> -->
   <LoadingScreen />
   <Three />
 
@@ -149,11 +148,11 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
         {
           href: '/projects/americana',
           title: 'Americana',
-          tags: ['Development', 'Cultural Heritage'],
+          tags: ['Frontend Development', 'Cultural Heritage'],
           image: { src: jcbImage, alt: 'picture alt' },
         },
         {
-          href: '/projects/delver-music',
+          href: '/projects/delver',
           title: 'Delver Music',
           tags: ['Design', 'Development', 'Music'],
           image: { src: delverImage, alt: 'picture alt' },

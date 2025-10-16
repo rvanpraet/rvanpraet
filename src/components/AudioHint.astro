@@ -1,4 +1,5 @@
 ---
+import type { GetStaticPaths } from 'astro'
 import type { HTMLAttributes } from 'astro/types'
 import { twMerge } from 'tailwind-merge'
 
@@ -12,26 +13,26 @@ const directionConfig = {
   right: {
     flexDirection: 'row',
     arrowRotation: '0deg',
-    bounceAmountX: '8px',
+    bounceAmountX: '4px',
     bounceAmountY: '0px',
   },
   left: {
     flexDirection: 'row-reverse',
     arrowRotation: '180deg',
-    bounceAmountX: '-8px',
+    bounceAmountX: '-4px',
     bounceAmountY: '0px',
   },
   down: {
     flexDirection: 'column',
     arrowRotation: '90deg',
     bounceAmountX: '0px',
-    bounceAmountY: '8px',
+    bounceAmountY: '4px',
   },
   up: {
     flexDirection: 'column-reverse',
     arrowRotation: '270deg',
     bounceAmountX: '0px',
-    bounceAmountY: '-8px',
+    bounceAmountY: '-4px',
   },
 }
 
@@ -40,7 +41,7 @@ const classes = twMerge('audio-hint', className)
 ---
 
 <div class={classes} data-direction={direction} {...props}>
-  <span class="hint-text">toggle sound here</span>
+  <span class="hint-text">toggle sound</span>
   <span class="hint-arrow-wrapper">
     <span class="hint-arrow">→</span>
   </span>
@@ -74,8 +75,10 @@ const classes = twMerge('audio-hint', className)
     align-items: start;
     flex-direction: var(--flexDirection);
     white-space: nowrap;
+    gap: calc(var(--spacing) * 1);
     animation:
-      /* bounceDirection 2s ease-in-out infinite, */ fadeOut 1.5s ease-in-out 10s forwards;
+      bounceDirection 5s ease-in-out infinite,
+      fadeOut 1.5s ease-in-out 10s forwards;
   }
 
   .hint-text {

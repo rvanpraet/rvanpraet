@@ -4,6 +4,9 @@ import ddw03Image from '@/assets/images/projects/depth-array/DDW_03.jpg'
 import americanaImage from '@/assets/images/projects/americana/americana_01.jpg'
 import americanaImage02 from '@/assets/images/projects/americana/americana_02.jpg'
 import americanaImage03 from '@/assets/images/projects/americana/americana_03.jpg'
+import delverImage from '@/assets/images/projects/delver/DELVER_01.jpg'
+import delverImage02 from '@/assets/images/projects/delver/DELVER_02.jpg'
+import delverImage03 from '@/assets/images/projects/delver/DELVER_03.jpg'
 
 const projectsOverviewData = {
   slug: undefined,
@@ -149,18 +152,62 @@ const americanaData = {
   },
 }
 
-export default [
-  projectsOverviewData,
-  depthArrayData,
-  americanaData,
-  // {
-  //   slug: 'americana',
-  //   title: 'Americana',
-  //   text: 'If you want to learn Astro, you must read this book.',
-  // },
-  // {
-  //   slug: 'delver-music',
-  //   title: 'Delver Music',
-  //   text: 'If you want to learn Astro, you must read this book.',
-  // },
-]
+const delverData = {
+  slug: 'delver',
+  title: 'Delver Music',
+  data: {
+    header: {
+      title: 'Delver Music',
+      subtitle: 'Record label website',
+      image: {
+        src: delverImage,
+        alt: 'Delver Music - Hero Image',
+      },
+      metadata: {
+        client: 'Delver Music',
+        roles: ['Design', 'Development'],
+        website: 'https://www.delver-music.com',
+      },
+    },
+    blocks: [
+      {
+        type: 'content-block',
+        content: `<p>DELVER is an independent record label focused on deep, atmospheric, and emotive electronic music. It serves as a platform for artists to explore sound and release music that balances subtlety, texture, and depth.<br /><br />
+          For me, DELVER is also an ongoing creative framework. A space to experiment with sound, design, and technology. Its visual identity and digital presence extend beyond music, encompassing generative artworks and interactive web experiences.</p>`,
+        props: null,
+      },
+      {
+        type: 'content-image',
+        content: `<figcaption>Delver Music</figcaption>`,
+        props: {
+          variant: 'left',
+          image: {
+            variant: 'landscape',
+            src: delverImage02,
+            alt: 'Delver Music - Homepage Image',
+          },
+        },
+      },
+      {
+        type: 'content-block',
+        content: `<h2>A living interface</h2><p>The current landing page is an exploration of real-time shader coding for the web, reflecting the label’s aesthetic through motion and abstraction.
+Future development of the site will continue this approach, aiming to create an immersive environment that connects users with DELVER’s catalog in an experiential way, where design, sound, and code come together as one.</p>`,
+        props: null,
+      },
+      {
+        type: 'content-image',
+        content: `<figcaption>Delver Music</figcaption>`,
+        props: {
+          variant: 'right',
+          image: {
+            variant: 'landscape',
+            src: delverImage03,
+            alt: 'Delver Music - Homepage Image',
+          },
+        },
+      },
+    ],
+  },
+}
+
+export default [projectsOverviewData, depthArrayData, americanaData, delverData]

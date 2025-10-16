@@ -29,10 +29,8 @@ const classes = twMerge('fixed w-full left-0 z-40 flex justify-center show', cla
       )
     }
   </div>
-  <div class="absolute left-0 pl-2 sm:pl-4 flex items">
-    <div class="absolute bottom-[-120%]">
-      <AudioHint direction="up" />
-    </div>
+  <div class="absolute left-0 pl-2 sm:pl-4 flex flex-row-reverse items-center gap-2">
+    <AudioHint direction="left" />
     <AudioPlayer src={droneAudio} color="salmon" audioPlayerProps={{ loop: true }} />
   </div>
 </nav>
