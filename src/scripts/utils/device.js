@@ -1,10 +1,10 @@
 const isTouchDevice = () => 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
 
-if (!isTouchDevice()) {
-  console.log('is not touch')
-} else {
-  console.log('is touch')
-}
+// if (!isTouchDevice()) {
+//   console.log('is not touch')
+// } else {
+//   console.log('is touch')
+// }
 
 // Helper function to only react to events inside the canvas
 const isPointerInElement = (e, targetEl) => {

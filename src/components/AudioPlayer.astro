@@ -49,7 +49,6 @@ const classes = twMerge('audio-player', className)
     const audioPlayers = document.querySelectorAll('.audio-player')
 
     audioPlayers.forEach((playerEl) => {
-      const audioHint: HTMLElement = document.querySelector('.audio-hint')
       const audio: HTMLAudioElement = playerEl.querySelector('.audio-element')
       const button: HTMLButtonElement = playerEl.querySelector('.audio-button')
       // const label: HTMLSpanElement = playerEl.querySelector('.audio-label')
@@ -57,21 +56,9 @@ const classes = twMerge('audio-player', className)
 
       audio.onplay = () => {
         startWaveAnimation()
-
-        // if (audioHint) {
-        //   gsap.to(audioHint, {
-        //     opacity: 0,
-        //     duration: 1.5,
-        //     ease: 'power2.out',
-        //     onComplete: () => {
-        //       audioHint.style.display = 'none'
-        //     },
-        //   })
-        // }
       }
 
       audio.onpause = () => {
-        // label.textContent = 'Muted'
         stopWaveAnimation()
       }
 
@@ -205,12 +192,12 @@ const classes = twMerge('audio-player', className)
       //   }
       // })
 
-      // Handle audio end
-      audio.addEventListener('ended', () => {
-        isPlaying = false
-        button.classList.remove('playing')
-        stopWaveAnimation()
-      })
+      // // Handle audio end
+      // audio.addEventListener('ended', () => {
+      //   isPlaying = false
+      //   button.classList.remove('playing')
+      //   stopWaveAnimation()
+      // })
     })
   })
 </script>

@@ -234,7 +234,6 @@ const { class: className = '' } = Astro.props
         ease: 'power1.in',
         onComplete: () => {
           // Animation started
-          console.log('loading screen init')
           const event = new Event('loading-screen-shown')
           document.dispatchEvent(event)
         },

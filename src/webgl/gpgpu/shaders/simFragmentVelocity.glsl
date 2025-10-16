@@ -148,6 +148,7 @@ void main() {
   target.z = (info.z * 2.0 - 1.0) * entropy + target.z * entropyStepInverse;
 
   // Create waveform animation based on global window variable set in JS
+  float waveStep = step(0.0001, uWaveform);
   float modTime = mod(uTime, M_PI * 2.0);
   // float amplitude = noise.x * 400.0 * (abs(sin(info.y)) + 0.5);
   vec3 waveNoise = snoiseVec3(vec3(position.x * 1.0, position.y * 25.0, position.z * 1.0)) * 0.005;
@@ -157,7 +158,9 @@ void main() {
   target.x += amplitude * sin(frequency * uTime + phase) * uWaveform;
 
   // Add some vertical drift to the particles when scrolling
-  float driftStrength = abs(position.x * 2.0 - 1.0);
+  // More drift on the sides, less in the center
+  // No drift during entropy scene
+  float driftStrength = abs(position.x * 2.0 - 1.0) * (1.0 - entropyStep) * (1.0 - waveStep);
   target.y += uVerticalDrift * driftStrength * 0.05 * (info.w * 0.2 + 0.8);
   // target.y += uVerticalDrift * 0.05;
 
@@ -171,16 +174,17 @@ void main() {
   float falloff = easeInOutSine(normDist); // get easing-based force
 
   // Add extra wiggle in x direction
-  float wiggle = cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025 * uResponsiveMultiplier;
+  // No drift during entropy scene
+  float wiggle = cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025 * uResponsiveMultiplier * (1.0 - entropyStep);
   velocity.x += wiggle * 0.05; // For now dis
 
   // Force that pushes particles towards their current target
   vec3 attractionStrength = direction * falloff * 0.05;
   vec3 noiseStrength = vec3(0.0, 0.0, 0.0);
-  // vec3 noiseStrength = noise * clamp(falloff, 0.005, 1.0) * 1.5 * uResponsiveMultiplier * uCodingMultiplier;
+  // vec3 noiseStrength = noise * clamp(falloff, 0.005, 1.0) * 0.25 * uResponsiveMultiplier * uCodingMultiplier;
   float distanceStep = step(0.001, dist);
   vec3 attraction = (attractionStrength + noiseStrength) * distanceStep;
-  velocity += attraction * (info.y * 0.15 + 0.85); // Force that pushes particles towards their current target
+  velocity += attraction * (info.y * 0.25 + 0.75); // Force that pushes particles towards their current target
 
   // Mouse repel force
   float mouseDistance = abs(distance(position, uMouse)); // Distance between pixel and mouse

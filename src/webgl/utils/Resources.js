@@ -23,7 +23,7 @@ import textProjects from '@/webgl/assets/models/text-projects.glb?url'
 import textXP from '@/webgl/assets/models/text-xp.glb?url'
 import textContact from '@/webgl/assets/models/text-contact.glb?url'
 
-import particleTexture from '@/webgl/assets/textures/particle2.png?url'
+import particleTexture from '@/webgl/assets/textures/particle1.png?url'
 import fontPath from '@/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints'
 import { modelConfig } from './ResourcesConfig'
@@ -251,7 +251,6 @@ export default class Resources extends EventEmitter {
       path,
       (model) => {
         const mesh = model.scene.children[0]
-        console.log('model', name, mesh)
         this.onModelLoad(name, mesh, config)
       },
       this.onResourceProgress.bind(this, name),
@@ -298,8 +297,6 @@ export default class Resources extends EventEmitter {
 
   onResourceProgress(...args) {
     const [name, e] = args
-    console.log('name', name)
-    console.log('e', e)
     if (e.loaded === e.total) {
       this.loadedProgress.push(e.loaded)
       const loadingPercent = Math.round((this.getLoadedProgress() / TOTAL_PROGRESS) * 100)

@@ -6,5 +6,6 @@ declare global {
     waveform: number
     codingMult: number
     scrollVelocity: number
+    particleForce: number
   }
 }

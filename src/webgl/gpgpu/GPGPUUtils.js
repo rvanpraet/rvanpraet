@@ -1,3 +1,4 @@
+import { isMaxLG } from '@/scripts/utils/breakpoints'
 import * as THREE from 'three'
 
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js'
@@ -32,23 +33,40 @@ export default class GPGPUUtils {
       for (let j = 0; j < this.size; j++) {
         const index = i * this.size + j
 
-        // Pick random point from Mesh
+        // // Pick random point from Mesh
 
-        this.sampler.sample(this._position)
+        // this.sampler.sample(this._position)
 
-        // Setup for DataTexture
+        // // Setup for DataTexture
 
-        data[4 * index] = this._position.x
-        data[4 * index + 1] = this._position.y
-        data[4 * index + 2] = this._position.z
+        // data[4 * index] = this._position.x
+        // data[4 * index + 1] = this._position.y
+        // data[4 * index + 2] = this._position.z
 
-        // Setup positions attribute for geometry
+        // // Setup positions attribute for geometry
 
-        positions[3 * index] = this._position.x
-        positions[3 * index + 1] = this._position.y
-        positions[3 * index + 2] = this._position.z
+        // positions[3 * index] = this._position.x
+        // positions[3 * index + 1] = this._position.y
+        // positions[3 * index + 2] = this._position.z
 
-        // Setup UV attribute for geometry
+        const offset = isMaxLG() ? 25 : 75
+        const xMult = isMaxLG() ? 2 : 1
+
+        // Setup random numbers on x, y, z and w
+        const x = (Math.random() - 0.5) * offset * (window.innerWidth / window.innerHeight) * xMult
+        const y = (Math.random() - 0.5) * offset * (window.innerHeight / window.innerWidth)
+        const z = (Math.random() - 0.5) * offset * 0.5
+
+        data[4 * index] = x
+        data[4 * index + 1] = y
+        data[4 * index + 2] = z
+        data[4 * index + 3] = 1.0
+
+        positions[3 * index] = x
+        positions[3 * index + 1] = y
+        positions[3 * index + 2] = z
+
+        // // Setup UV attribute for geometry
 
         uvs[2 * index] = j / (this.size - 1)
         uvs[2 * index + 1] = i / (this.size - 1)
@@ -119,7 +137,7 @@ export default class GPGPUUtils {
    * Creates a data texture with exactly the size of the textures in this simulation, used for unique transformations
    * @returns {THREE.DataTexture}
    */
-  createRandomData() {
+  createRandomData(options = 0) {
     const data = new Float32Array(4 * this.number)
 
     for (let i = 0; i < this.size; i++) {

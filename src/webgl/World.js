@@ -121,10 +121,6 @@ export default class Mask extends Handler {
       textContact,
     ]
     this.model = this.models[0]
-
-    console.log(this.models)
-
-    // this.scene.add(this.resources.models.text2)
   }
 
   setupCameraPosition() {

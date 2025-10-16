@@ -110,9 +110,8 @@ export default class GPGPU {
   // Create target coordinates from the meshes
   // This will be used to attract the particles towards the target meshes
   createTargets() {
-    console.log('targets', this.targets)
     this.targetsPositions = [
-      this.randomInfoTexture,
+      this.utils.positionTexture,
       ...this.targets.map((mesh) => {
         return this.utils.createTargetDataFromMesh(mesh)
       }),
@@ -177,13 +176,14 @@ export default class GPGPU {
 
   compute(state) {
     this.gpgpuCompute.compute()
-    this.events.update()
+    this.events.update(state)
     this.uniforms.velocityUniforms.uTime.value = state.time
     this.uniforms.positionUniforms.uTime.value = state.time
     this.material.uniforms.uTime.value = state.time
   }
 
   swapTarget(targetIndex) {
+    console.log('swapping to model ::: ', targetIndex)
     this.uniforms.velocityUniforms.uTarget.value = this.targetsPositions[targetIndex + 1] // +1 because the first texture is the random one
     this.events.updateRaycasterMesh(this.targets[targetIndex]) // Update raycaster mesh to the new target
   }

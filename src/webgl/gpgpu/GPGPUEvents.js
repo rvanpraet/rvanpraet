@@ -1,6 +1,7 @@
 import { isTouchDevice } from '@/scripts/utils/device'
 import * as THREE from 'three'
 import { MeshBVH, acceleratedRaycast } from 'three-mesh-bvh'
+import { damp } from 'three/src/math/MathUtils.js'
 
 export default class GPGPUEvents {
   constructor(mouse, camera, mesh, uniforms, materialUniforms) {
@@ -67,13 +68,14 @@ export default class GPGPUEvents {
     })
   }
 
-  update() {
+  update(state) {
     if (!this.mouse.cursorPosition) return // Don't update if cursorPosition is undefined
 
     this.verticalDrift = isTouchDevice() ? window.scrollVelocity * 0.075 : this.scrollDrift
 
     // Velocity uniform updates
     if (this.uniforms.velocityUniforms.uMouseSpeed) this.uniforms.velocityUniforms.uMouseSpeed.value = this.mouseSpeed
+    if (this.uniforms.velocityUniforms.uForce) this.uniforms.velocityUniforms.uForce.value = window.particleForce
     if (this.uniforms.velocityUniforms.uEntropy) this.uniforms.velocityUniforms.uEntropy.value = window.entropy
     if (this.uniforms.velocityUniforms.uWaveform) this.uniforms.velocityUniforms.uWaveform.value = window.waveform
     if (this.uniforms.velocityUniforms.uCodingMultiplier)
@@ -90,16 +92,14 @@ export default class GPGPUEvents {
 
     // On mouse move, gently nudge the camera
     const { x: mouseX, y: mouseY } = this.mouse.cursorPosition
-    this.camera.position.x = mouseX * 0.02
-    this.camera.position.y = mouseY * 0.02
+    this.camera.position.x = damp(this.camera.position.x, -mouseX * 0.05, 0.5, state.delta)
+    this.camera.position.y = damp(this.camera.position.y, -mouseY * 0.05, 0.5, state.delta)
 
     this.mouseSpeed *= 0.95
     this.scrollDrift *= 0.4
   }
 
   updateRaycasterMesh(mesh) {
-    // const isRaycasterPlane = true
-    console.log('updateRaycasterMesh', mesh)
     const isRaycasterPlane = mesh.userData.hasPlaneRaycast
     this.geometry = isRaycasterPlane ? new THREE.PlaneGeometry(20, 20) : mesh.geometry
 
