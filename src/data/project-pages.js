@@ -166,7 +166,7 @@ const delverData = {
       metadata: {
         client: 'Delver Music',
         roles: ['Design', 'Development'],
-        website: 'https://www.delver-music.com',
+        website: 'https://delver-music.vercel.app/',
       },
     },
     blocks: [
