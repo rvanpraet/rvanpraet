@@ -3,6 +3,11 @@ import type { HTMLAttributes } from 'astro/types'
 import Button from './Button.astro'
 import ButtonLink from './ButtonLink.astro'
 import { twMerge } from 'tailwind-merge'
+import OrientationPicture from './OrientationPicture.astro'
+// import reinaldImg from '@/assets/images/PRESS_KIT_SASEMOI_PORTRAIT.jpg'
+import reinaldImg from '@/assets/images/PRESS_KIT_SQUARE_SASEMOI_1.jpeg'
+// import reinaldImg from '@/assets/images/reinald_square_01.jpg'
+// import reinaldImg from '@/assets/images/reinald_square_01_bw.jpg'
 
 type Props = HTMLAttributes<'section'> & {
   hideTitle?: boolean
@@ -14,19 +19,31 @@ const classes = twMerge('main-grid-layout content-margins-y max-lg:px-4', classN
 ---
 
 <section class={classes} {...props}>
-  <div
-    class={`col-span-4 md:col-start-2 lg:col-start-4 lg:col-span-6 2xl:col-start-5 3xl:col-start-6 md:text-center h-fit self-end ${textContainerClass}`}
+  <!-- <div
+    class="relative lg:col-span-2 lg:mr-[25%] lg:col-start-3 2xl:col-start-4 rounded-full bottom-[15%] self-end overflow-hidden"
   >
-    {!hideTitle && <h2 class="text-heading-2">Let's connect</h2>}
-    <p class="text-paragraph mt-4">
-      I am currently available for new projects and collaborations. Whether you have a specific project in mind or just
-      want to say hello, feel free to reach out. I look forward to hearing from you!
-    </p>
-    <div class="flex items-center gap-4 md:justify-center mt-8">
-      <ButtonLink href="mailto:reinald@sovereigncreative.nl">Email me</ButtonLink>
-      <ButtonLink href="https://www.linkedin.com/in/reinald-van-praet-a32916b8/">LinkedIn</ButtonLink>
+    <OrientationPicture src={reinaldImg} alt="Profile picture Reinald" variant="square" />
+  </div> -->
+  <div
+    class={`col-span-4 md:col-start-2 lg:col-start-3 lg:col-span-8 2xl:col-start-4 3xl:col-start-5 h-fit self-end ${textContainerClass} flex max-lg:flex-col lg:items-end gap-2`}
+  >
+    <div class="w-1/4 h-fit rounded-full overflow-hidden 2xl:w-1/5">
+      <OrientationPicture src={reinaldImg} alt="Profile picture Reinald" variant="square" />
+    </div>
+
+    <div
+      class={'lg:w-3/4 2xl:w-4/5 lg:pl-[calc(100vw/12)] 2xl:pl-[calc(100vw/14)] 3xl:pl-[calc(100vw/16)]' +
+        (!hideTitle ? ' mt-4' : '')}
+    >
+      {!hideTitle && <h2 class="text-heading-2">Let's connect</h2>}
+      <p class="text-paragraph mt-4">
+        I am currently available for new projects and collaborations. Whether you have a specific project in mind or
+        just want to say hello, feel free to reach out. I look forward to hearing from you!
+      </p>
+      <div class="flex items-center gap-4 mt-8">
+        <ButtonLink href="mailto:reinald@sovereigncreative.nl">Email me</ButtonLink>
+        <ButtonLink href="https://www.linkedin.com/in/reinald-van-praet-a32916b8/">LinkedIn</ButtonLink>
+      </div>
     </div>
   </div>
 </section>
-
-<script></script>

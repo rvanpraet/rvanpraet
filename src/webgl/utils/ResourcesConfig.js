@@ -186,6 +186,7 @@ export const modelConfig = {
     },
     textContact: {
       ...baseConfig,
+      y: 1,
       scaleX: 0.5,
       scaleY: 0.5,
       scaleZ: 0.5,
