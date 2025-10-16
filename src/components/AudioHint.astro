@@ -68,13 +68,14 @@ const classes = twMerge('audio-hint', className)
   }}
 >
   .audio-hint {
+    position: relative;
+    left: 14px;
     display: flex;
     align-items: start;
     flex-direction: var(--flexDirection);
     white-space: nowrap;
     animation:
-      bounceDirection 2s ease-in-out infinite,
-      fadeOut 1.5s ease-in-out 10s forwards;
+      /* bounceDirection 2s ease-in-out infinite, */ fadeOut 1.5s ease-in-out 10s forwards;
   }
 
   .hint-text {
@@ -92,8 +93,6 @@ const classes = twMerge('audio-hint', className)
     align-items: center;
     justify-content: center;
     transform: rotate(var(--arrowRotation));
-    position: relative;
-    left: 14px;
   }
 
   .hint-arrow {

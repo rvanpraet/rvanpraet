@@ -1,33 +1,22 @@
 ---
-import NavMenu from '@/components/NavMenu.astro'
-import GenericContent from '@/components/GenericContent.astro'
 import ContentLayout from '@/layouts/ContentLayout.astro'
-import ImageDual from '@/components/ImageDual.astro'
 import ContentImage from '@/components/ContentImage.astro'
 import contentImage from '@/assets/images/PRESS_KIT_SASEMOI_PORTRAIT.jpg'
-import { Image } from 'astro:assets'
-import bgImage from '@/assets/images/RVP_BG.jpeg'
+import ContentBlock from '@/components/ContentBlock.astro'
 ---
 
-<!-- BG Image -->
-<div class="fixed w-screen h-screen z-0">
-  <Image
-    src={bgImage}
-    alt="Background Image"
-    layout="none"
-    fit="cover"
-    inferSize={true}
-    class="absolute inset-0 object-cover w-full h-full scale-200"
-  />
-</div>
-
-<ContentLayout>
-  <ContentImage variant="left" image={{ variant: 'square', src: contentImage, alt: 'Reinald portrait' }}>
-    <h1>Lorem Ipsum</h1>
+<ContentLayout title="About">
+  <ContentBlock>
+    <h1>More about me</h1>
 
     <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo aut illo beatae similique officia ducimus, ut porro,
-      optio, rem maxime soluta exercitationem sint odio atque dignissimos? Saepe praesentium nobis laudantium!
+      Hi there, so nice you've found your way here. I will add more info about myself soon. For now, keep exploring the
+      hidden pages of my website. ;)
     </p>
-  </ContentImage>
+  </ContentBlock>
+  <ContentImage
+    className="max-h-3/4"
+    variant="left"
+    image={{ variant: 'landscape', src: contentImage, alt: 'Reinald portrait' }}
+  />
 </ContentLayout>
