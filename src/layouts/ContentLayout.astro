@@ -47,14 +47,14 @@ const navLinks = [
     <meta name="generator" content={Astro.generator} />
 
     <SEO
-      title={title + ' -- ' + SITE.title}
+      title={title + ' - ' + SITE.title}
       description={description}
       canonical={canonicalURL}
       noindex={noindex}
       nofollow={nofollow}
       openGraph={{
         basic: {
-          title: title + ' -- ' + SITE.title,
+          title: title + ' - ' + SITE.title,
           type: ogType,
           image: ogImageURL,
           url: canonicalURL,
@@ -66,17 +66,17 @@ const navLinks = [
         },
         image: {
           url: ogImageURL,
-          alt: title + ' -- ' + SITE.title,
+          alt: title + ' - ' + SITE.title,
         },
       }}
       twitter={{
         card: 'summary_large_image',
         site: SITE.twitter,
         creator: SITE.twitter,
-        title: title + ' -- ' + SITE.title,
+        title: title + ' - ' + SITE.title,
         description: description,
         image: ogImageURL,
-        imageAlt: title + ' -- ' + SITE.title,
+        imageAlt: title + ' - ' + SITE.title,
       }}
       extend={{
         meta: [
