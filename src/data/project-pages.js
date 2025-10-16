@@ -97,7 +97,7 @@ const americanaData = {
         client: 'Agency - Fabrique',
         roles: ['Frontend Development'],
         // location: 'Dutch Design Week 2024',
-        website: 'https://www.americana.jcblibrary.org',
+        website: 'https://americana.jcblibrary.org/',
       },
     },
     blocks: [
