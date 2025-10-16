@@ -4,10 +4,33 @@ import NavMenu from '@/components/NavMenu.astro'
 import '@/styles/global.css'
 
 type Props = {
-  title: string
+  title?: string
+  description?: string
+  image?: string
+  canonical?: string
+  noindex?: boolean
+  nofollow?: boolean
+  ogType?: string
 }
 
-const { title } = Astro.props
+import { SEO } from 'astro-seo'
+import { SITE } from '@/config/site'
+
+const {
+  title,
+  description = SITE.description,
+  image = SITE.ogImage,
+  canonical,
+  noindex = false,
+  nofollow = false,
+  ogType = 'article',
+} = Astro.props
+
+const canonicalURL = canonical
+  ? new URL(canonical, SITE.url).toString()
+  : new URL(Astro.url.pathname, SITE.url).toString()
+
+const ogImageURL = image.startsWith('http') ? image : new URL(image, SITE.url).toString()
 
 const navLinks = [
   { text: 'contact', active: false, href: '#contact' },
@@ -22,7 +45,46 @@ const navLinks = [
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title} - Reinald Van Praet</title>
+
+    <SEO
+      title={title + ' -- ' + SITE.title}
+      description={description}
+      canonical={canonicalURL}
+      noindex={noindex}
+      nofollow={nofollow}
+      openGraph={{
+        basic: {
+          title: title + ' -- ' + SITE.title,
+          type: ogType,
+          image: ogImageURL,
+          url: canonicalURL,
+        },
+        optional: {
+          description: description,
+          locale: SITE.locale,
+          siteName: SITE.name,
+        },
+        image: {
+          url: ogImageURL,
+          alt: title + ' -- ' + SITE.title,
+        },
+      }}
+      twitter={{
+        card: 'summary_large_image',
+        site: SITE.twitter,
+        creator: SITE.twitter,
+        title: title + ' -- ' + SITE.title,
+        description: description,
+        image: ogImageURL,
+        imageAlt: title + ' -- ' + SITE.title,
+      }}
+      extend={{
+        meta: [
+          { name: 'author', content: SITE.author },
+          { name: 'theme-color', content: '#0d0d0d' },
+        ],
+      }}
+    />
   </head>
   <body class="bg-black">
     <NavMenu links={navLinks} />

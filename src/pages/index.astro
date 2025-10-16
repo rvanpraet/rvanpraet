@@ -14,19 +14,35 @@ import depthArrayImage from '@/assets/images/projects/depth-array/DDW_01.jpg'
 import delverImage from '@/assets/images/projects/delver/DELVER_01.jpg'
 import LoadingScreen from '@/components/LoadingScreen.astro'
 
+const links = [
+  { text: 'about', href: '#about' },
+  { text: 'projects', href: '#projects' },
+  { text: 'contact', href: '#contact' },
+]
+
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
+<Layout links={links}>
   <LoadingScreen />
   <Three />
 
-  <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="0"></section>
-  <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="1"></section>
-  <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="2"></section>
+  <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="0">
+    <h1 class="hidden">Hi, I'm Reinald</h1>
+  </section>
+  <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="1">
+    <h2 class="hidden">Creative Developer</h2>
+  </section>
+  <section class="introduction-dummy relative z-10 h-screen w-screen" data-model-id="2">
+    <h2 class="hidden">Sound Designer</h2>
+  </section>
 
-  <section class="introduction-entropy relative z-10 h-[200dvh] w-screen"></section>
+  <section class="introduction-entropy relative z-10 h-[200dvh] w-screen">
+    <p class="hidden">
+      Scroll down to explore my work as a creative developer and sound designer. An animation is playing as you scroll.
+    </p>
+  </section>
 
   <section
     id="about"
@@ -34,12 +50,12 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
     data-model-id="3"
   >
     <div class="main-grid-layout h-fit">
-      <h1
+      <h2
         id="igh"
         class="text-heading-1 col-start-1 col-span-4 md:col-start-4 md:col-span-3 max-lg:px-4 lg:col-start-7 lg:col-span-5 lg:pr-12 2xl:col-start-8 3xl:col-start-9 3xl:col-span-5 2xl:pr-0"
       >
         <span>AB<span class="wave-y-2 mx-4 text-salmon">O</span>UT</span>
-      </h1>
+      </h2>
 
       <p
         id="igt1"
@@ -68,12 +84,12 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
     data-model-id="4"
   >
     <div class="main-grid-layout h-fit">
-      <h1
+      <h2
         id="idh"
         class="text-heading-1 md:text-end col-start-1 col-span-4 md:col-start-1 md:col-span-3 max-lg:px-4 lg:col-start-1 lg:col-span-6 lg:pl-12 2xl:col-start-2 3xl:col-start-4 3xl:col-span-5 2xl:pl-0"
       >
         CO<span class="mx-4 wave-y-1 text-salmon">D</span>ING
-      </h1>
+      </h2>
 
       <p
         id="idt1"
@@ -102,12 +118,12 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
     data-model-id="5"
   >
     <div class="main-grid-layout h-fit">
-      <h1
+      <h2
         id="ish"
         class="text-heading-1 col-start-1 col-span-4 md:col-start-4 md:col-span-3 max-lg:px-4 lg:col-start-7 lg:col-span-5 lg:pr-12 2xl:col-start-8 3xl:col-start-9 3xl:col-span-5 2xl:pr-0"
       >
         <span>SO<span class="wave-y-2 mx-4 text-salmon">U</span>ND</span>
-      </h1>
+      </h2>
 
       <p
         id="ist1"
@@ -132,9 +148,9 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
   <section id="projects" class="relative z-10" data-model-id="6">
     <!-- <div class="h-[50dvh]"></div> -->
     <ContentBlock class="mb-8">
-      <h1 class="text-heading-1">
+      <h2 class="text-5xl! lg:text-6xl! xl:text-7xl! 3xl:text-8xl! font-bold! uppercase! mb-0!">
         PRO<span class="text-salmon mx-4 wave-y-2">J</span>ECTS
-      </h1>
+      </h2>
     </ContentBlock>
     <ProjectsPreview
       class="lg:col-start-2 lg:col-span-10 px-4 lg:px-12"
@@ -163,9 +179,9 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
 
   <section class="introduction-xp relative z-10" data-model-id="7">
     <ContentBlock class="mt-16 mb-8 md:mt-24 lg:mt-32">
-      <h1 class="text-heading-1">
+      <h2 class="text-5xl! lg:text-6xl! xl:text-7xl! 3xl:text-8xl! mb-4! md:mb-6! xl:mb-8! font-bold! uppercase!">
         EXP<span class="mx-4 wave-y-1 text-salmon">E</span>RIENCE
-      </h1>
+      </h2>
       <p class="text-paragraph">
         A selection of past and current roles that outline my professional experience and areas of focus.
       </p>
@@ -341,7 +357,6 @@ import LoadingScreen from '@/components/LoadingScreen.astro'
         start: 'center bottom',
         end: 'center top',
         onEnter: () => {
-          console.log('entering section', index)
           if (index === 0) return
 
           scrollToIntroSection(section)

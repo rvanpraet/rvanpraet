@@ -11,8 +11,6 @@ export default class GPGPUUtils {
 
     this.mesh = mesh
 
-    console.log('mesh in GPGPUUtils', this.mesh)
-
     this.sampler = new MeshSurfaceSampler(this.mesh).build()
 
     this.setupDataFromMesh()

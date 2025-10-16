@@ -2,22 +2,85 @@
 import Footer from '@/components/Footer.astro'
 import NavMenu from '@/components/NavMenu.astro'
 import '@/styles/global.css'
+import { SEO } from 'astro-seo'
+import { SITE } from '@/config/site'
 
-const links = [
-  { text: 'about', active: false, href: '#about' },
-  { text: 'projects', active: false, href: '#projects' },
-  { text: 'contact', active: false, href: '#contact' },
-]
+type Props = {
+  links?: { text: string; href: string; active?: boolean }[]
+  title?: string
+  description?: string
+  image?: string
+  canonical?: string
+  noindex?: boolean
+  nofollow?: boolean
+  ogType?: string
+}
+
+const {
+  links = [],
+  title = SITE.title,
+  description = SITE.description,
+  image = SITE.ogImage,
+  canonical,
+  noindex = false,
+  nofollow = false,
+  ogType = 'website',
+} = Astro.props
+
+const canonicalURL = canonical
+  ? new URL(canonical, SITE.url).toString()
+  : new URL(Astro.url.pathname, SITE.url).toString()
+
+const ogImageURL = image.startsWith('http') ? image : new URL(image, SITE.url).toString()
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
-    <title>Home - Reinald Van Praet</title>
+
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonicalURL}
+      noindex={noindex}
+      nofollow={nofollow}
+      openGraph={{
+        basic: {
+          title: title,
+          type: ogType,
+          image: ogImageURL,
+          url: canonicalURL,
+        },
+        optional: {
+          description: description,
+          locale: SITE.locale,
+          siteName: SITE.name,
+        },
+        image: {
+          url: ogImageURL,
+          alt: title,
+        },
+      }}
+      twitter={{
+        card: 'summary_large_image',
+        site: SITE.twitter,
+        creator: SITE.twitter,
+        title: title,
+        description: description,
+        image: ogImageURL,
+        imageAlt: title,
+      }}
+      extend={{
+        meta: [
+          { name: 'author', content: SITE.author },
+          { name: 'theme-color', content: '#0d0d0d' },
+        ],
+      }}
+    />
   </head>
   <body class="bg-black">
     <NavMenu links={links} />
