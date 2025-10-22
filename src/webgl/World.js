@@ -1,60 +1,22 @@
-import Experience from './Experience.js'
 import Handler from './abstract/Handler.js'
 import * as THREE from 'three'
 import GPGPU from './gpgpu/GPGPU.js'
 import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints.js'
+import { worldConfig } from './configs/world-config.js'
 
-const worldConfig = {
-  xs: {
-    force: 0.7,
-    particleSize: 14 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 64,
-  },
-  sm: {
-    force: 0.7,
-    particleSize: 14 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 64,
-  },
-  md: {
-    force: 0.7,
-    particleSize: 14 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 80,
-  },
-  lg: {
-    force: 0.7,
-    particleSize: 11 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 96,
-  },
-  xl: {
-    force: 0.7,
-    particleSize: 12 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 128,
-  },
-  xxl: {
-    force: 0.7,
-    particleSize: 13 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 150,
-  },
-  xxxl: {
-    force: 0.75,
-    particleSize: 14 + Math.ceil(devicePixelRatio * 2),
-    particleCount: 150,
-  },
-}
-
-export default class Mask extends Handler {
+export default class World extends Handler {
   static instance
 
   static getInstance() {
-    if (!Mask.instance) {
-      Mask.instance = new Mask()
+    if (!World.instance) {
+      World.instance = new World()
     }
 
-    return Mask.instance
+    return World.instance
   }
 
   constructor() {
-    super(Mask.id)
+    super(World.id)
 
     this.targetId = 0
     this.isScrolling = false
@@ -73,7 +35,6 @@ export default class Mask extends Handler {
 
     this.params = {
       color: new THREE.Color('#fff'),
-      // color: new THREE.Color(0xc18383),
       size: worldConfig[getCurrentBreakpoint()].particleSize,
       minAlpha: 0.7,
       maxAlpha: 1,
@@ -91,10 +52,7 @@ export default class Mask extends Handler {
   }
 
   setupModels() {
-    // const contactModel = this.resources.models.text.pop()
-    // const xpModel = this.resources.models.text.pop()
-    // const projectsModel = this.resources.models.text.pop()
-    // this.model = this.resources.models.text[0]
+    // Get the models
     let {
       reinald,
       coding,
@@ -108,18 +66,24 @@ export default class Mask extends Handler {
       textContact,
     } = this.resources.models.main
 
-    const actualCodingModel = isMaxMD() ? coding : textCoding
+    // Different coding model for smaller touch devices
+    const responsiveCodingModel = isMaxMD() ? coding : textCoding
+
+    // TODO: Could refactor this to use model names instead of relying on order
+    // Order of the models matters for the target swapping
     this.models = [
       textReinald,
       textCreative,
       textSound,
       reinald,
-      actualCodingModel,
+      responsiveCodingModel,
       waveform,
       textProjects,
       textXP,
       textContact,
     ]
+
+    // Set the initial model
     this.model = this.models[0]
   }
 

@@ -106,7 +106,7 @@ float easeInCirc(float x) {
 }
 
 varying vec2 vUv;
-varying vec3 vPosition;
+// varying vec3 vPosition;
 
 uniform float uParticleSize;
 uniform float uTime;
@@ -125,9 +125,10 @@ void main() {
 
   newpos.xyz = positionDT.xyz;
 
+  // Add some vertical noise displacement
   newpos.y += float(snoise(info.xyz * uTime * 0.1) * 2.0 - 1.0) * 0.05 * uResponsiveMultiplier * uCodingMultiplier;
 
-  vPosition = newpos;
+  // vPosition = newpos;
 
   vec4 mvPosition = modelViewMatrix * vec4(newpos, 1.0);
 

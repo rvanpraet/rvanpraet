@@ -88,7 +88,7 @@ export default class GPGPUEvents {
     if (this.uniforms.positionUniforms.uEntropy) this.uniforms.positionUniforms.uEntropy.value = window.entropy
 
     // Material uniform updates
-    if (this.materialUniforms.uCodingMultiplier) this.materialUniforms.uCodingMultiplier.value = window.codingMult
+    if (this.materialUniforms?.uCodingMultiplier) this.materialUniforms.uCodingMultiplier.value = window.codingMult
 
     // On mouse move, gently nudge the camera
     const { x: mouseX, y: mouseY } = this.mouse.cursorPosition

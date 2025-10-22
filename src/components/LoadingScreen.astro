@@ -16,9 +16,6 @@ const { class: className = '' } = Astro.props
     <p class="loading-percentage text-sm"><span class="progress-value">0</span>%</p>
   </div>
   <Button class="loading-button">Enter</Button>
-  <!-- <div class="loading-button flex flex-col items-center justify-center">
-    <p class="text-paragraph">It is adviced to not use low power mode for the best experience</p>
-  </div> -->
 </div>
 
 <style>
@@ -269,10 +266,12 @@ const { class: className = '' } = Astro.props
       duration: 1,
       ease: 'power1.out',
       onComplete: () => {
+        // Remove loading text and display button
         loadingText.style.display = 'none'
         loadingButton.style.display = 'block'
         loadingButton.style.pointerEvents = 'auto'
 
+        // Add click event listener to button
         loadingButton.addEventListener('click', () => {
           // User clicked the enter experience button
           const event = new Event('enter-experience-clicked')
@@ -293,6 +292,7 @@ const { class: className = '' } = Astro.props
           })
         })
 
+        // Fade in button
         gsap.to(loadingButton, {
           opacity: 1,
           duration: 1,

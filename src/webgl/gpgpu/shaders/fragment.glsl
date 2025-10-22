@@ -5,22 +5,16 @@ uniform sampler2D uMask;
 uniform vec3 uColor;
 uniform float uMinAlpha;
 uniform float uMaxAlpha;
-// uniform vec3 uColor = vec3(0.808, 0.647, 0.239);
-// uniform float uMinAlpha = 0.04;
-// uniform float uMaxAlpha = 0.8;
 
 void main() {
+  // Particle mask texture
   vec4 maskTexture = texture2D(uMask, gl_PointCoord);
 
-  float center = length(gl_PointCoord - 0.5);
-
+  // Get the velocity from the velocity texture
   vec3 velocity = texture2D(uVelocityTexture, vUv).xyz * 100.0;
 
+  // Increase alpha based on velocity magnitude
   float velocityAlpha = clamp(length(velocity.r), uMinAlpha, uMaxAlpha);
-
-  if (center > 0.5) {
-    discard;
-  }
 
   gl_FragColor = vec4(uColor, velocityAlpha);
   gl_FragColor.a *= maskTexture.r;

@@ -105,6 +105,14 @@ float easeInCirc(float x) {
   return 1.0 - sqrt(1.0 - pow(x, 2.0));
 }
 
+vec3 safeNormalize(vec3 v) {
+  float len = length(v);
+  float invLen = 1.0 / max(len, 1e-5); // epsilon value (adjust as needed)
+  return v * invLen;
+}
+
+//---------------------------------------------------------------------- MAIN
+
 uniform sampler2D uOriginalPosition;
 uniform sampler2D uTarget;
 uniform sampler2D uInfo;
@@ -127,14 +135,11 @@ void main() {
   vec3 target = texture2D(uTarget, vUv).xyz;
   vec4 info = texture2D(uInfo, vUv);
 
-  // Force relaxation
+  // Force relaxation prevents particles from overshooting their target position
   velocity *= uForce;
 
   // Noise -- Curl noise seems to be too taxing on the GPU for a web app with computation renderer
   vec3 noise = snoiseVec3(position) * 0.005;
-  // vec3 noise = curlNoise(vec3(position.x * 5.0, position.y * 1.0, position.z * 1.0)) * 0.001;
-  // vec3 transitionNoise = snoiseVec3(vec3(position.x * 1.0, position.y * 10.0, position.z * 1.0)) * 0.005;
-  // vec3 transitionNoise = curlNoise(vec3(position.x * 1.0, position.y * 10.0, position.z * 5.0) * info.w) * 0.005;
 
   // Entropy scene - particles move in a circle when entropy is > 0
   float entropyStep = step(0.0001, uEntropy);
@@ -165,11 +170,12 @@ void main() {
   // target.y += uVerticalDrift * 0.05;
 
   // Particle attraction to shape force
-  vec3 direction = normalize(target - position);
-  float dist = length(target - position);
+  vec3 offset = target - position;
+  vec3 direction = safeNormalize(offset); // Using safe normalize to avoid NaNs when normalizing zero-length vectors, which can be a rounding error when particles reach their target
+  float dist = length(offset);
 
   // Exponential or eased attraction
-  float maxDist = 2.0; // adjust to fit your system
+  float maxDist = 2.0;
   float normDist = clamp(dist / maxDist, 0.0, 1.0); // normalize dist to 0–1
   float falloff = easeInOutSine(normDist); // get easing-based force
 
@@ -178,6 +184,7 @@ void main() {
   float wiggle = cos(uTime * 1.2 + info.x * M_PI * 2.0) * falloff * 0.025 * uResponsiveMultiplier * (1.0 - entropyStep);
   velocity.x += wiggle * 0.05; // For now dis
 
+  //
   // Force that pushes particles towards their current target
   vec3 attractionStrength = direction * falloff * 0.05;
   vec3 noiseStrength = vec3(0.0, 0.0, 0.0);
@@ -186,6 +193,7 @@ void main() {
   vec3 attraction = (attractionStrength + noiseStrength) * distanceStep;
   velocity += attraction * (info.y * 0.25 + 0.75); // Force that pushes particles towards their current target
 
+  //
   // Mouse repel force
   float mouseDistance = abs(distance(position, uMouse)); // Distance between pixel and mouse
   float maxDistance = 1.0; // Max distance at which particles are affected by the mouse
@@ -193,7 +201,7 @@ void main() {
   vec3 pushDirection = normalize(position - uMouse); // Direction to push particle away from mouse
   vec3 mouseAttraction =
     (pushDirection * (1.0 - mouseDistance / maxDistance) * 0.035 + noise * 1.35) * uMouseSpeed * rangeStep;
-  velocity.x += wiggle;
+  velocity.x += wiggle * rangeStep;
   velocity += mouseAttraction;
 
   gl_FragColor = vec4(velocity, 1.0);

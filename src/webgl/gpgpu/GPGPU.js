@@ -170,6 +170,8 @@ export default class GPGPU {
     // Setup Points
 
     this.materialUniforms = this.material.uniforms
+
+    // this.material = new THREE.MeshBasicMaterial({ color: 0xffffff })
     this.mesh = new THREE.Points(geometry, this.material)
     this.scene.add(this.mesh)
   }
@@ -179,7 +181,7 @@ export default class GPGPU {
     this.events.update(state)
     this.uniforms.velocityUniforms.uTime.value = state.time
     this.uniforms.positionUniforms.uTime.value = state.time
-    this.material.uniforms.uTime.value = state.time
+    // this.material.uniforms.uTime.value = state.time
   }
 
   swapTarget(targetIndex) {

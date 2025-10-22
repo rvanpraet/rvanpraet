@@ -4,10 +4,6 @@ import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
 import { FontLoader } from 'three/addons/loaders/FontLoader.js'
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
-import { Line2 } from 'three/addons/lines/Line2.js'
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
-import { OBJExporter } from 'three/examples/jsm/Addons.js'
 import { GLTFExporter } from 'three/examples/jsm/Addons.js'
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js'
 import * as THREE from 'three'
@@ -23,10 +19,10 @@ import textProjects from '@/webgl/assets/models/text-projects.glb?url'
 import textXP from '@/webgl/assets/models/text-xp.glb?url'
 import textContact from '@/webgl/assets/models/text-contact.glb?url'
 
-import particleTexture from '@/webgl/assets/textures/particle1.png?url'
-import fontPath from '@/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
+import particleTexture from '@/webgl/assets/textures/particle3.png?url'
 import { getCurrentBreakpoint, isMaxMD } from '@/scripts/utils/breakpoints'
 import { modelConfig } from './ResourcesConfig'
+// import fontPath from '@/webgl/assets/fonts/DM_Sans_SemiBold.json?url'
 
 // Calculate total progress, total of all resource sizes
 const TOTAL_PROGRESS = 41896 + 83392 + 94912 + 1028448 + 9788 + 692352 + 60352 + 12340 + 64956
@@ -49,7 +45,6 @@ export default class Resources extends EventEmitter {
     const dracoLoader = new DRACOLoader().setDecoderPath(`${THREE_PATH}/examples/jsm/libs/draco/`)
 
     this.gltfLoader = new GLTFLoader().setDRACOLoader(dracoLoader)
-    this.objLoader = new OBJLoader()
     this.gltfExporter = new GLTFExporter()
 
     this.models = {
@@ -66,10 +61,8 @@ export default class Resources extends EventEmitter {
 
   // First load in fonts
   initResources() {
-    this.loadingPercentage = document.querySelector('.loading-percentage')
     this.loadedProgress = []
-    this.loadingProgress = 0
-    this.totalLoadingProgress = 300
+
     const fontLoader = new FontLoader()
     const textureLoader = new THREE.TextureLoader()
     this.textures = {
@@ -78,6 +71,8 @@ export default class Resources extends EventEmitter {
       }),
     }
 
+    // // Rendered text to models so no need for font loading anymore
+    // // Keeping font loading code in case we want to add dynamic text in future
     // fontLoader.load(
     //   fontPath,
     //   (font) => {
@@ -259,15 +254,11 @@ export default class Resources extends EventEmitter {
   }
 
   onModelLoad(name, mesh, config) {
-    const breakpoint = getCurrentBreakpoint()
-    // const config = modelConfig[breakpoint][name]
-    // const config = modelConfig[name]
-
     // Create a scaling matrix
     const scaleMatrix = new THREE.Matrix4().makeScale(config.scaleX, config.scaleY, config.scaleZ)
     mesh.geometry.applyMatrix4(scaleMatrix)
 
-    // Offset the geometry's vertex positions by half of its bounding box
+    // To center, offset the geometry's vertex positions by half of its bounding box
     const offset = new THREE.Vector3()
     const modelGeometry = mesh.geometry
 
@@ -290,8 +281,6 @@ export default class Resources extends EventEmitter {
     // Emit ready when all models are loaded
     if (this.loadingCount === 0) {
       this.emit('ready')
-      // const loaderBg = document.querySelector('.loading-bg')
-      // loaderBg.classList.remove('is-loading')
     }
   }
 
@@ -302,10 +291,6 @@ export default class Resources extends EventEmitter {
       const loadingPercent = Math.round((this.getLoadedProgress() / TOTAL_PROGRESS) * 100)
       const event = new CustomEvent('resource-load', { detail: { loadingPercent } })
       document.dispatchEvent(event)
-
-      // this.loadingPercentage.textContent = `${loadingPercent}`
-    } else {
-      // this.loadingPercentage.textContent = `${Math.round(((this.getLoadedProgress() + e.loaded) / TOTAL_PROGRESS) * 100)}`
     }
   }
 

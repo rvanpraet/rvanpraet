@@ -6,12 +6,6 @@
     import World from '@/webgl/World'
 
     document.addEventListener('loading-screen-shown', () => {
-      // const dummySection = document.querySelector('.introduction-dummy')
-
-      // setTimeout(() => {
-      //   dummySection?.scrollIntoView({ behavior: 'instant', block: 'start' })
-      // }, 100)
-
       new Experience(document.querySelector('canvas.experience__canvas'), World)
     })
   </script>
@@ -19,11 +13,8 @@
 
 <style>
   .experience {
-    /* width: 100vw;
-    height: 100vh; */
     overflow: hidden;
     position: fixed;
-    /* inset: 0; */
     z-index: 0;
   }
 
