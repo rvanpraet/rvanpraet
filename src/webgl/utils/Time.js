@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { Clock } from 'three';
+import { Timer } from 'three';
 
 export default class Time extends EventEmitter {
 
@@ -8,7 +8,8 @@ export default class Time extends EventEmitter {
   constructor() {
     super();
 
-    this.clock = new Clock()
+    this.timer = new Timer()
+    this.timer.connect(document)
 
     this.update();
   }
@@ -21,16 +22,18 @@ export default class Time extends EventEmitter {
     return Time.instance;
   }
 
-  update() {
-    const delta = this.clock.getDelta()
-    const time = this.clock.getElapsedTime()
+  update(timestamp) {
+    this.timer.update(timestamp)
+    const delta = this.timer.getDelta()
+    const time = this.timer.getElapsed()
 
     this.emit('update', time, delta,);
 
-    this.requestAnimtionFrameId = window.requestAnimationFrame(() => this.update());
+    this.requestAnimtionFrameId = window.requestAnimationFrame((t) => this.update(t));
   }
 
   dispose() {
     cancelAnimationFrame(this.requestAnimtionFrameId);
+    this.timer.dispose()
   }
 }
